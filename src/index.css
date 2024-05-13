@@ -1,3 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+
+
+  @layer base{
+    label {
+      @apply w-36
+    }
+  }
+
+  @layer components {
+    .max-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .half-a-border-on-top {
+      border-left: 1px solid;
+      border-image: linear-gradient(to bottom, #fff 50%, transparent 50%) 1 100%;
+    }
+  
+  
+  }
+
+
+
+  @layer utilities {
+    .padding {
+      @apply sm:px-16 px-8 sm:py-24 py-12;
+    }
+  
+    .padding-x {
+      @apply sm:px-16 px-8;
+    }
+  
+    .padding-y {
+      @apply sm:py-24 py-12;
+    }
+  
+    .padding-l {
+      @apply sm:pl-16 pl-8;
+    }
+  
+    .padding-r {
+      @apply sm:pr-16 pr-8;
+    }
+  
+    .padding-t {
+      @apply sm:pt-24 pt-12;
+    }
+  
+    .padding-b {
+      @apply sm:pb-24 pb-12;
+    }
+
+    .input-field {
+      @apply px-2 py-1 border rounded border-[#8D8D8D] w-full 
+    }
+  
+   
+  }
+
+  /* map container */
+  .leaflet-container {
+    height: 100dvh;
+    z-index: 1;
+  }

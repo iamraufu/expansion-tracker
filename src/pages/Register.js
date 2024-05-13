@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
-import userData from "../data/user.json";
 import toast, { Toaster } from "react-hot-toast";
 import loginIcon from "../assets/icons/expansionStore.svg"
 import ExpansionImage from "../assets/illustrations/expansion.svg"
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +16,7 @@ const Login = () => {
 
   let navigate = useNavigate();
   let location = useLocation();
-  let from = location.state?.from?.pathname || "/dashboard";
+  let from = location.state?.from?.pathname || "/";
   const { user, setUser } = useAuth();
 
 
@@ -32,25 +32,25 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(email,password);
-    const fetchData = async () => {
-          try {
-                const tempUser = userData.find(u => u.email === email && u.password === password) || {}
-                // post login info
-                console.log(tempUser)
-                if (tempUser.email) {
-                      setUser(tempUser)
-                      setError('')
-                      localStorage.setItem('uId', tempUser._id)
-                }
-                else {
-                      setError("Invalid Email or Password")
-                }
-          } catch (error) {
-                fetchData();
-          }
-    };
-    fetchData();
+    console.log(name,email,password);
+    // const fetchData = async () => {
+    //       try {
+    //             const tempUser = userData.find(u => u.email === email && u.password === password) || {}
+    //             // post login info
+    //             console.log(tempUser)
+    //             if (tempUser.email) {
+    //                   setUser(tempUser)
+    //                   setError('')
+    //                   localStorage.setItem('uId', tempUser._id)
+    //             }
+    //             else {
+    //                   setError("Invalid Email or Password")
+    //             }
+    //       } catch (error) {
+    //             fetchData();
+    //       }
+    // };
+    // fetchData();
   };
 
   return (
@@ -73,9 +73,16 @@ const Login = () => {
             <h1 className=" text-xl md:text-2xl  font-medium">Expansion Tracker App</h1>
           </div>
           <div className="shadow-md bg-slate-50/10 backdrop-blur-md  p-5 rounded-lg border-t-4 border-secondary w-[400px] sm:w-[500px]">
-            <h1 className="text-xl font-bold my-4">Sign In to your account</h1>
+            <h1 className="text-xl font-bold my-4">Register your account</h1>
             <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-3">
               {/* <input onChange={e=> setName(e.target.value)} type="text" value={name} placeholder="Name" /> */}
+              <input
+                className="w-full border border-gray-200 py-2 px-2 bg-zinc-100/40 rounded"
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                value={name}
+                placeholder="Name"
+              />
               <input
                 className="w-full border border-gray-200 py-2 px-2 bg-zinc-100/40 rounded"
                 onChange={(e) => setEmail(e.target.value)}
@@ -134,7 +141,7 @@ const Login = () => {
                 </div>
               </div>
               <button className="bg-secondary text-white py-2 font-bold rounded cursor-pointer">
-                <p>{loading ? "Loading..." : "Login"}</p>
+                <p>{loading ? "Loading..." : "Register"}</p>
               </button>
               {error && (
                 <div>
@@ -144,10 +151,10 @@ const Login = () => {
                 </div>
               )}
             </form>
-            <Link to={"/register"}>
+            <Link to={"/login"}>
               <p className="my-3">
-                Dont have an account?{" "}
-                <span className="text-primary font-medium">Register</span>{" "}
+                Already have an account?{" "}
+                <span className="text-primary font-medium">Sign In</span>{" "}
               </p>
             </Link>
           </div>
@@ -159,4 +166,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
