@@ -4,69 +4,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-// eslint-disable-next-line
-const contacts = [
-  {
-    id: 1234,
-    name: "John Doe",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "investor",
-  },
-  {
-    id: 5678,
-    name: "Alice Smith",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "landlord",
-  },
-  {
-    id: 9012,
-    name: "Bob Johnson",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "investor",
-  },
-  {
-    id: 3456,
-    name: "Emma Brown",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "landlord",
-  },
-  {
-    id: 7890,
-    name: "Michael Davis",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "investor",
-  },
-  {
-    id: 2345,
-    name: "Sophia Wilson",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "landlord",
-  },
-  {
-    id: 6789,
-    name: "David Martinez",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "investor",
-  },
-  {
-    id: 3123,
-    name: "Olivia Garcia",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "landlord",
-  },
-  {
-    id: 4567,
-    name: "James Rodriguez",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "investor",
-  },
-  {
-    id: 8901,
-    name: "Isabella Lopez",
-    phoneNumber: "+8801XXXXXXXXX",
-    type: "landlord",
-  },
-];
+
 
 const Partners = () => {
   const [data, setData] = useState(null); 
@@ -114,7 +52,7 @@ const Partners = () => {
 
 
   return (
-    <section className="partner accuisition text-sm  padding-x font-poppins">
+    <section className="partner accuisition text-sm  lg:px-1 sm:px-16 px-5;   font-poppins max-container ">
       <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
         <img
           src={partnerAcquisitionIcon}

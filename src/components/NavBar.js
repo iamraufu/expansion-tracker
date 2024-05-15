@@ -104,7 +104,7 @@ const NavBar = () => {
   return (
     <header className="sticky  z-40 top-0 text-sm">
       <div className="padding-x   py-4 w-full bg-primary">
-        <nav className="w-full relative flex justify-between items-center container max-container">
+        <nav className="w-full relative flex justify-between items-center  max-container">
           <div className="flex justify-center items-center gap-4 text-white">
             <button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
               <img src={hamburger} alt="hamburger icon" className="w-6 " />
