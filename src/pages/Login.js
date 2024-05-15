@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
-import userData from "../data/user.json";
+// import userData from "../data/user.json";
 import toast, { Toaster } from "react-hot-toast";
 import loginIcon from "../assets/icons/expansionStore.svg";
 import ExpansionImage from "../assets/illustrations/expansion.svg";
@@ -15,10 +15,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+
+
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/partners";
   const { user, setUser } = useAuth();
+
+
 
 
   const api_url = process.env.REACT_APP_API_URL
@@ -38,6 +42,7 @@ const Login = () => {
     e.preventDefault();
     console.log(email, password);
     const fetchData = async () => {
+      setLoading(true)
       try {
         const res = await fetch(`${api_url}/user/login`, {
           method: "POST",
@@ -51,20 +56,26 @@ const Login = () => {
         console.log(json);
 
         if (json.status) {
+          setLoading(false)
           setUser(json.user);
           setError("");
           localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
           navigate("/partners")
         } else {
+          setLoading(false)
+          toast.error(json.message)
           setError(json.message);
         }
       } catch (error) {
+        setLoading(false)
         console.log(error);
         setError("Something wait wrong");
       }
     };
     fetchData();
   };
+
+
 
   return (
     <>
