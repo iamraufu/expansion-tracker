@@ -20,6 +20,8 @@ const Register = () => {
   const { user, setUser } = useAuth();
 
 
+  const api_url = process.env.REACT_APP_API_URL
+
   // Added later for error debugging
   useEffect(() => {
     user?.email && navigate(from, { replace: true });
@@ -30,27 +32,33 @@ const Register = () => {
       setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     console.log(name,email,password);
-    // const fetchData = async () => {
-    //       try {
-    //             const tempUser = userData.find(u => u.email === email && u.password === password) || {}
-    //             // post login info
-    //             console.log(tempUser)
-    //             if (tempUser.email) {
-    //                   setUser(tempUser)
-    //                   setError('')
-    //                   localStorage.setItem('uId', tempUser._id)
-    //             }
-    //             else {
-    //                   setError("Invalid Email or Password")
-    //             }
-    //       } catch (error) {
-    //             fetchData();
-    //       }
-    // };
-    // fetchData();
+    try {
+      const res = await fetch(`${api_url}/user/register`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({name:name, email: email.trim(), password }),
+      });
+
+      const json = await res.json();
+      console.log(json);
+
+      if (json.status) {
+        // setUser(json.user);
+        setError("");
+        // localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
+        navigate("/login")
+      } else {
+        setError("Invalid Email or Password");
+      }
+    } catch (error) {
+      console.log(error);
+      setError("Something wait wrong");
+    }
   };
 
   return (

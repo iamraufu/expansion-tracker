@@ -59,6 +59,28 @@ const AddLandlord = () => {
     { label: "Sylhet", value: "sylhet" },
   ];
 
+  // const divisionOptions = [
+  //   { 
+  //     label: "Barisal", 
+  //   division: "barisal" 
+  // },
+  //   { 
+  //     label: "Chittagong", 
+  //     division: "chittagong" 
+  //   },
+  //   { 
+  //     label: "Dhaka",
+  //      division: "dhaka" 
+  //     },
+  //   { 
+      
+  //     label: "Khulna", 
+  //     division: "khulna" 
+  //   },
+  //   { label: "Rajshahi", division: "rajshahi" },
+  //   { label: "Rangpur", division: "rangpur" },
+  //   { label: "Sylhet", division: "sylhet" },
+  // ];
 
   const districtOptionsLabels = [
     "Barguna", "Barisal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur",
@@ -79,8 +101,6 @@ const AddLandlord = () => {
     value: district.toLowerCase().replace(/ /g, "_")
   })).sort((a, b) => a.label.localeCompare(b.label));;
 
-
-  
 
   const upazilaOptionsLabels = [
     "Amtali", "Bamna", "Barguna Sadar", "Betagi", "Patharghata", "Taltali",
