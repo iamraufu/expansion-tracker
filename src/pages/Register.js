@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
+// eslint-disable-next-line
 import toast, { Toaster } from "react-hot-toast";
 import loginIcon from "../assets/icons/expansionStore.svg"
 import ExpansionImage from "../assets/illustrations/expansion.svg"
@@ -12,11 +13,13 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
+  // eslint-disable-next-line
   const { user, setUser } = useAuth();
 
 

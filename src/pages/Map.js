@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// eslint-disable-next-line
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { TbCurrentLocation } from "react-icons/tb";
 
@@ -13,11 +14,13 @@ const customIcon = new Icon({
 
 const Map = ({ handleMapModal , setFormCoordinates, formCoordinates }) => {
   const [location, setLocation] = useState("");
+  // eslint-disable-next-line
   const [siteName, setSiteName] = useState("");
   const [coordinates, setCoordinates] = useState(formCoordinates? formCoordinates : {
     latitude: 23.7644025,
     longitude: 90.389015,
   });
+  // eslint-disable-next-line
   const [error, setError] = useState("");
   const [mapCenter, setMapCenter] = useState(formCoordinates?[formCoordinates.latitude, formCoordinates.longitude]:[23.7644025, 90.389015]);
 

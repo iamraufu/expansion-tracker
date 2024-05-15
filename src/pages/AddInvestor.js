@@ -36,6 +36,7 @@ const AddInvestor = () => {
   const [missingFields, setMissingFields] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  // eslint-disable-next-line
   const [selectedUpazila, setSelectedUpazila] = useState("");
 
 

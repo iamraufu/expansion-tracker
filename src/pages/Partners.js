@@ -4,6 +4,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
+// eslint-disable-next-line
 const contacts = [
   {
     id: 1234,
@@ -102,7 +103,7 @@ const Partners = () => {
 
     fetchData();
 
-
+// eslint-disable-next-line
 }, []);
 
 
