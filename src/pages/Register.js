@@ -53,7 +53,7 @@ const Register = () => {
         // localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
         navigate("/login")
       } else {
-        setError("Invalid Email or Password");
+        setError(json.message);
       }
     } catch (error) {
       console.log(error);
