@@ -7,6 +7,8 @@ const PrivateOutlet = () => {
       const { user } = useAuth();
       const location = useLocation();
 
+      // console.log({user});
+
       return user.email ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
 };
 

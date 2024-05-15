@@ -11,6 +11,7 @@ import NavBar from "./components/NavBar";
 import AddInvestor from "./pages/AddInvestor";
 import Map from "./pages/Map";
 import Partners from "./pages/Partners";
+import AddLandlord from "./pages/AddLandlord";
 
 function App() {
   const { pathname } = useLocation();
@@ -27,9 +28,10 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           <Route path="/" element={<PrivateOutlet />}>
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/partners" element={<Partners />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/addInvestor" element={<AddInvestor />} />
+            <Route path="/addLandlord" element={<AddLandlord />} />
             <Route path="/map" element={<Map />} />
           </Route>
         </Routes>

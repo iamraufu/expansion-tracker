@@ -11,15 +11,15 @@ const customIcon = new Icon({
   iconSize: [30, 38],
 });
 
-const Map = ({ handleMapModal , setFormCoordinates }) => {
+const Map = ({ handleMapModal , setFormCoordinates, formCoordinates }) => {
   const [location, setLocation] = useState("");
   const [siteName, setSiteName] = useState("");
-  const [coordinates, setCoordinates] = useState({
+  const [coordinates, setCoordinates] = useState(formCoordinates? formCoordinates : {
     latitude: 23.7644025,
     longitude: 90.389015,
   });
   const [error, setError] = useState("");
-  const [mapCenter, setMapCenter] = useState([23.7644025, 90.389015]);
+  const [mapCenter, setMapCenter] = useState(formCoordinates?[formCoordinates.latitude, formCoordinates.longitude]:[23.7644025, 90.389015]);
 
   const handleInputChange = (event) => {
     setLocation(event.target.value);
@@ -98,8 +98,9 @@ const Map = ({ handleMapModal , setFormCoordinates }) => {
     }
   };
 
-  const setData = () => {
+  const handleSave = () => {
     setFormCoordinates(coordinates)
+    handleMapModal()
   }
 
 
@@ -142,6 +143,9 @@ const Map = ({ handleMapModal , setFormCoordinates }) => {
             Latitude: {coordinates.latitude}, Longitude: {coordinates.longitude}
           </p>
         )} */}
+      </div>
+      <div className="w-full absolute  z-40   bottom-2 left-0 flex justify-center items-center">
+        <button onClick={()=>handleSave()} className=" mr-3 py-3 w-11/12 rounded bg-blue-600 text-white font-poppins font-medium mx-2">Save Marker Coordinates</button>
       </div>
       {coordinates && (
         <MapContainer

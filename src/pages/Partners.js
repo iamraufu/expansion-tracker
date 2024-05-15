@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import { IoMdAddCircle } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const contacts = [
   {
@@ -66,6 +68,50 @@ const contacts = [
 ];
 
 const Partners = () => {
+  const [data, setData] = useState(null); 
+  const navigate = useNavigate();
+  const api_url = process.env.REACT_APP_API_URL
+  const { user } = useAuth();
+
+  console.log(user);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`${api_url}/services/partners`, {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+                authorization: user.token,
+              },
+              body: JSON.stringify({  })
+            });
+            const json = await response.json();
+            console.log(json);
+            if (json.status) {
+                    setData(json.data)
+            }else{
+              setData([])
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+
+        }
+    };
+
+    fetchData();
+
+
+}, []);
+
+
+  if(data === null){
+    return <p>Loading...</p>
+  }
+
+
+
   return (
     <section className="partner accuisition text-sm  padding-x font-poppins">
       <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
@@ -90,27 +136,27 @@ const Partners = () => {
             </tr>
           </thead>
           <tbody className="font-medium ">
-            {contacts.map((contact) => (
-              <tr className="odd:bg-slate-100" key={contact.id}>
+            {data.map((contact) => (
+              <tr className="odd:bg-slate-100" key={contact._id}>
                 <td className=" px-4 py-2 text-secondary underline font-medium">
-                  {contact.id}
+                  {contact.customId}
                 </td>
                 <td className=" px-4 py-2">{contact.name}</td>
-                <td className=" px-4 py-2">{contact.phoneNumber}</td>
+                <td className=" px-4 py-2">{contact.phone}</td>
                 <td className=" px-4 py-2 capitalize">{contact.type}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="flex justify-evenly items-center gap-2 mt-4 ">
-        <button className="w-full px-3 py-3 rounded-md bg-green-600 text-white font-medium flex justify-center items-center gap-2">
+      <div className="flex justify-evenly items-center gap-2 mt-4 text-xs md:text-sm">
+        <button onClick={() => navigate("/addInvestor")} className="w-full px-3 py-3 rounded-md bg-green-600 text-white font-medium flex justify-center items-center gap-2">
           <IoMdAddCircle className="w-5 h-5" />
           <p>Add New Investor</p>
         </button>
-        <button className="w-full  px-3 py-3 rounded-md bg-blue-600 text-white font-medium flex justify-center items-center gap-2">
+        <button onClick={() => navigate("/addLandlord")} className="w-full  px-3 py-3 rounded-md bg-blue-600 text-white font-medium flex justify-center items-center gap-2">
           <IoMdAddCircle  className="w-5 h-5"/>
-          <p>Add New Investor</p>
+          <p>Add New Landlord</p>
         </button>
       </div>
     </section>

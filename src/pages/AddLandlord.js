@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from '../hooks/useAuth';
 
 
-const AddInvestor = () => {
+const AddLandlord = () => {
   const { user } = useAuth();
   const initialValues = {
    
@@ -17,14 +17,13 @@ const AddInvestor = () => {
     age: "",
     dob: "",
     gender: "",
-    profession: "",
-    education: "",
-    investmentBudget: "",
-    possibleInvestmentDate: "",
+    // profession: "",
+    // education: "",
+    // investmentBudget: "",
+    // possibleInvestmentDate: "",
     division: "",
     district: "",
     upazila: "",
-    // thana: "",
     address: "",
     createdBy: user._id,
     location: [],
@@ -47,21 +46,8 @@ const AddInvestor = () => {
     { label: "Other", value: "other" },
   ];
 
-  const professionOptions = [
-    { label: "Business Man", value: "business man" },
-    { label: "Service Holder", value: "service holder" },
-    { label: "N/A", value: "N/A" },
-  ];
+  
 
-  const educationOptions = [
-    { label: "JSC", value: "jsc" },
-    { label: "SSC", value: "ssc" },
-    { label: "HSC", value: "hsc" },
-    { label: "Bachelors", value: "bachelors" },
-    { label: "Masters", value: "masters" },
-    { label: "Diploma", value: "diploma" },
-    { label: "N/A", value: "N/A" },
-  ];
 
   const divisionOptions = [
     { label: "Barisal", value: "barisal" },
@@ -205,14 +191,6 @@ const AddInvestor = () => {
     label: upazila,
     value: upazila.toLowerCase().replace(/ /g, "_")
   })).sort((a, b) => a.label.localeCompare(b.label));
-  
-
-  // const thanaOptions = [
-  //   { label: "Gulshan-1", value: "gulshan_1" },
-  //   { label: "Gulshan-2", value: "gulshan_2" },
-  //   { label: "Mohammadpur", value: "mohammadpur" },
-  //   // Add more options as needed
-  // ];
 
   const toggleScroll = () => {
     setScrollEnabled(!scrollEnabled);
@@ -259,10 +237,7 @@ const AddInvestor = () => {
             "age",
             "dob",
             "gender",
-            "profession",
-            "education",
-            "investmentBudget",
-            "possibleInvestmentDate",
+           
             "division",
             "district",
             "upazila",
@@ -281,7 +256,7 @@ const AddInvestor = () => {
     
     try {
 
-        const response = await fetch(`${api_url}/Investor/register`, {
+        const response = await fetch(`${api_url}/Landlord/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -328,7 +303,7 @@ const isFieldMissing = (fieldName) => {
           className="md:w-8 md:h-8 w-6 h-6"
         />
         <p className="text-sm md:text-base font-semibold ">
-          Partner Acquisition - Add Investor
+          Partner Acquisition - Add Landlord
         </p>
       </div>
 
@@ -339,7 +314,7 @@ const isFieldMissing = (fieldName) => {
             <label htmlFor="type" className="mr-2">
               Type:
             </label>
-            <p className=" py-1  rounded  w-full">Investor</p>
+            <p className=" py-1  rounded  w-full">Landlord</p>
           </div>
           {/* name */}
           <div className="flex items-center">
@@ -399,7 +374,7 @@ const isFieldMissing = (fieldName) => {
               className={`input-field ${isFieldMissing('age') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
             />
           </div>
-          {/* investmentBudget */}
+          {/* dob */}
           <div className="flex items-center">
             <label htmlFor="dob" className="mr-2">
               Date of Birth:
@@ -433,75 +408,7 @@ const isFieldMissing = (fieldName) => {
               ))}
             </select>
           </div>
-          {/* profession */}
-          <div className="flex items-center">
-            <label htmlFor="profession" className="mr-2">
-              Profession:
-            </label>
-            <select
-              name="profession"
-              value={values.profession}
-              onChange={handleChange}
-              className={`input-field ${isFieldMissing('profession') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
-            >
-              <option value="">Select Profession</option>
-              {professionOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
 
-          {/* education */}
-          <div className="flex items-center">
-            <label htmlFor="education" className="mr-2">
-              Education:
-            </label>
-            <select
-              name="education"
-              value={values.education}
-              onChange={handleChange}
-              className={`input-field ${isFieldMissing('education') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
-            >
-              <option value="">Select Education</option>
-              {educationOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* investmentBudget */}
-          <div className="flex items-center">
-            <label htmlFor="investmentBudget" className="mr-2">
-              Investment Budget:
-            </label>
-            <input
-              type="number"
-              name="investmentBudget"
-              value={values.investmentBudget}
-              onChange={handleChange}
-              placeholder="Investment Budget"
-              className={`input-field ${isFieldMissing('investmentBudget') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
-            />
-          </div>
-
-          {/* investmentBudget */}
-          <div className="flex items-center">
-            <label htmlFor="possibleInvestmentDate" className="mr-2">
-              Possible Inv. Date:
-            </label>
-            <input
-              type="date"
-              name="possibleInvestmentDate"
-              value={values.possibleInvestmentDate}
-              onChange={handleChange}
-              placeholder="possibleInvestmentDate"
-              className={`input-field ${isFieldMissing('possibleInvestmentDate') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
-            />
-          </div>
 
           {/* division */}
           <div className="flex items-center">
@@ -514,7 +421,7 @@ const isFieldMissing = (fieldName) => {
               onChange={handleChange}
               className={`input-field ${isFieldMissing('division') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
             >
-              <option value="">Select division</option>
+              <option value="">Select Division</option>
               {divisionOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -534,7 +441,7 @@ const isFieldMissing = (fieldName) => {
               onChange={handleChange}
               className={`input-field ${isFieldMissing('district') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
             >
-              <option value="">Select district</option>
+              <option value="">Select District</option>
               {districtOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -563,25 +470,6 @@ const isFieldMissing = (fieldName) => {
             </select>
           </div>
 
-          {/* thana */}
-          {/* <div className="flex items-center">
-            <label htmlFor="thana" className="mr-2">
-              Thana:
-            </label>
-            <select
-              name="thana"
-              value={values.thana}
-              onChange={handleChange}
-              className={`input-field ${isFieldMissing('thana') ? 'border-red-500' : 'border-[#8D8D8D] '}`}
-            >
-              <option value="">Select thana</option>
-              {thanaOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div> */}
 
           <div className="flex items-center">
             <label htmlFor="address" className="mr-2">
@@ -652,4 +540,4 @@ const isFieldMissing = (fieldName) => {
   );
 };
 
-export default AddInvestor;
+export default AddLandlord;

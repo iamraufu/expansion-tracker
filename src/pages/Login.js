@@ -4,8 +4,9 @@ import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
 import userData from "../data/user.json";
 import toast, { Toaster } from "react-hot-toast";
-import loginIcon from "../assets/icons/expansionStore.svg"
-import ExpansionImage from "../assets/illustrations/expansion.svg"
+import loginIcon from "../assets/icons/expansionStore.svg";
+import ExpansionImage from "../assets/illustrations/expansion.svg";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,39 +17,51 @@ const Login = () => {
 
   let navigate = useNavigate();
   let location = useLocation();
-  let from = location.state?.from?.pathname || "/dashboard";
+  let from = location.state?.from?.pathname || "/partners";
   const { user, setUser } = useAuth();
 
+
+  const api_url = process.env.REACT_APP_API_URL
+
+  console.log(`API URL: ${api_url}`);
 
   // Added later for error debugging
   useEffect(() => {
     user?.email && navigate(from, { replace: true });
   }, [from, navigate, user?.email]);
 
-
   const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(email,password);
+    e.preventDefault();
+    console.log(email, password);
     const fetchData = async () => {
-          try {
-                const tempUser = userData.find(u => u.email === email && u.password === password) || {}
-                // post login info
-                console.log(tempUser)
-                if (tempUser.email) {
-                      setUser(tempUser)
-                      setError('')
-                      localStorage.setItem('uId', tempUser._id)
-                }
-                else {
-                      setError("Invalid Email or Password")
-                }
-          } catch (error) {
-                fetchData();
-          }
+      try {
+        const res = await fetch(`${api_url}/user/login`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ email: email.trim(), password }),
+        });
+
+        const json = await res.json();
+        console.log(json);
+
+        if (json.status) {
+          setUser(json.user);
+          setError("");
+          localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
+          navigate("/partners")
+        } else {
+          setError("Invalid Email or Password");
+        }
+      } catch (error) {
+        console.log(error);
+        setError("Something wait wrong");
+      }
     };
     fetchData();
   };
@@ -64,17 +77,17 @@ const Login = () => {
         />
         <div>
           <div className="flex justify-center  items-center gap-2 mb-4">
-            <img
-              src={loginIcon}
-              className="w-16 block"
-              alt=""
-              srcSet=""
-            />
-            <h1 className=" text-xl md:text-2xl  font-medium">Expansion Tracker App</h1>
+            <img src={loginIcon} className="w-16 block" alt="" srcSet="" />
+            <h1 className=" text-xl md:text-2xl  font-medium">
+              Expansion Tracker App
+            </h1>
           </div>
           <div className="shadow-md bg-slate-50/10 backdrop-blur-md  p-5 rounded-lg border-t-4 border-secondary w-[400px] sm:w-[500px]">
             <h1 className="text-xl font-bold my-4">Sign In to your account</h1>
-            <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-3">
+            <form
+              onSubmit={(e) => handleSubmit(e)}
+              className="flex flex-col gap-3"
+            >
               {/* <input onChange={e=> setName(e.target.value)} type="text" value={name} placeholder="Name" /> */}
               <input
                 className="w-full border border-gray-200 py-2 px-2 bg-zinc-100/40 rounded"
@@ -154,7 +167,6 @@ const Login = () => {
         </div>
         <Toaster position="top-right" reverseOrder={false} />
       </div>
-    
     </>
   );
 };

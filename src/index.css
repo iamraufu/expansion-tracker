@@ -40,7 +40,7 @@
     }
   
     .padding-x {
-      @apply sm:px-16 px-8;
+      @apply sm:px-16 px-5;
     }
   
     .padding-y {
@@ -64,7 +64,7 @@
     }
 
     .input-field {
-      @apply px-2 py-1 border rounded border-[#8D8D8D] w-full 
+      @apply px-2 py-1 border rounded w-full 
     }
   
    
