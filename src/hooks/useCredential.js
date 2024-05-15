@@ -1,10 +1,13 @@
+// eslint-disable-next-line
 import { useEffect, useState } from "react";
+// eslint-disable-next-line
 import userDetails from '../data/user.json'
 
 const useCredential = () => {
 
     // const id = localStorage.getItem('uId')
     const local_user = JSON.parse(localStorage.getItem('user'))
+    // eslint-disable-next-line
     const [user, setUser] = useState({});
 
     // getting userInfo from localStorage id and backend API
