@@ -28,7 +28,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           <Route path="/" element={<PrivateOutlet />}>
-            <Route path="/partners" element={<Partners />} />
+            <Route path="/" element={<Partners />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/addInvestor" element={<AddInvestor />} />
             <Route path="/addLandlord" element={<AddLandlord />} />

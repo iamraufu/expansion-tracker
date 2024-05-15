@@ -9,6 +9,8 @@ const PrivateOutlet = () => {
 
       // console.log({user});
 
+      console.log(location);
+
       return user.email ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
 };
 

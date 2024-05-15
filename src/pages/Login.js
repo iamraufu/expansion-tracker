@@ -19,7 +19,7 @@ const Login = () => {
 
   let navigate = useNavigate();
   let location = useLocation();
-  let from = location.state?.from?.pathname || "/partners";
+  let from = location.state?.from?.pathname || "/";
   const { user, setUser } = useAuth();
 
 
@@ -60,7 +60,7 @@ const Login = () => {
           setUser(json.user);
           setError("");
           localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
-          navigate("/partners")
+          navigate("/")
         } else {
           setLoading(false)
           toast.error(json.message)

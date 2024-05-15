@@ -27,7 +27,7 @@ const NavBar = () => {
     {
       text: "Partner Acquisition",
       icon: partnerAcquisitionIcon,
-      path: "/partners",
+      path: "/",
     },
 
     // {
