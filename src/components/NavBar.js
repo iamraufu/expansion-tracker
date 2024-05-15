@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import userProfileIcon from "../assets/icons/user.png";
 import hamburger from "../assets/icons/hamburger.svg";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
-import dailyActivityTrackerIcon from "../assets/icons/dailyActivityTrackerIcon.png";
-import siteStoreIcon from "../assets/icons/siteStoreIcon.png";
-import reportsIcon from "../assets/icons/reportsIcon.png";
-import ActiveTaskIcon from "../assets/icons/activeTaskIcon.png";
-import HistoryIcon from "../assets/icons/historyIcon.png";
+// import dailyActivityTrackerIcon from "../assets/icons/dailyActivityTrackerIcon.png";
+// import siteStoreIcon from "../assets/icons/siteStoreIcon.png";
+// import reportsIcon from "../assets/icons/reportsIcon.png";
+// import ActiveTaskIcon from "../assets/icons/activeTaskIcon.png";
+// import HistoryIcon from "../assets/icons/historyIcon.png";
 // import reportsIcon from "../assets/icons/reportsIcon.png";
 // eslint-disable-next-line
 import { NavLink, useLocation } from "react-router-dom";
@@ -30,39 +30,40 @@ const NavBar = () => {
       path: "/partners",
     },
 
-    {
-      text: "DailyActivity Tracker",
-      icon: dailyActivityTrackerIcon,
-      innerLinks: [
-        {
-          text: "Active Task",
-          icon: ActiveTaskIcon,
-          path: "/activeTask",
-        },
-        {
-          text: "History",
-          icon: HistoryIcon,
-          path: "/history",
-        },
-      ],
-      path: "/dailyActivityTracker",
-    },
-    {
-      text: "Site Status",
-      icon: siteStoreIcon,
-      path: "/dailyActivityTracker",
-    },
-    {
-      text: "Reports",
-      icon: reportsIcon,
-      path: "/dailyActivityTracker",
-    },
+    // {
+    //   text: "DailyActivity Tracker",
+    //   icon: dailyActivityTrackerIcon,
+    //   innerLinks: [
+    //     {
+    //       text: "Active Task",
+    //       icon: ActiveTaskIcon,
+    //       path: "/activeTask",
+    //     },
+    //     {
+    //       text: "History",
+    //       icon: HistoryIcon,
+    //       path: "/history",
+    //     },
+    //   ],
+    //   path: "/dailyActivityTracker",
+    // },
+    // {
+    //   text: "Site Status",
+    //   icon: siteStoreIcon,
+    //   path: "/dailyActivityTracker",
+    // },
+    // {
+    //   text: "Reports",
+    //   icon: reportsIcon,
+    //   path: "/dailyActivityTracker",
+    // },
   ];
 
   const NavLinkItem = ({ to, icon: Icon, text, isactivex, innerLinks }) => (
     <React.Fragment key={text}>
       <NavLink
         to={to}
+        onClick={() => setIsSideBarOpen(!isSideBarOpen)}
         className={`flex rounded-md hover:text-primary text-white py-5 pr-5 items-center justify-start  gap-4 ${
           isactivex ? "activex" : ""
         }`}
