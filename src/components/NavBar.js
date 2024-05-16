@@ -109,9 +109,9 @@ const NavBar = () => {
             <button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
               <img src={hamburger} alt="hamburger icon" className="w-6 " />
             </button>
-            <p className="uppercase font-medium font-poppins  text-base">
+            <NavLink to={`/`} className="uppercase font-medium font-poppins  text-base">
               Expansion Tracker
-            </p>
+            </NavLink>
           </div>
           <img
             src={userProfileIcon}

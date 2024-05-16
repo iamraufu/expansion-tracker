@@ -52,7 +52,7 @@ const Partners = () => {
 
 
   return (
-    <section className="partner accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
+    <section className="partner-accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
       <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
         <img
           src={partnerAcquisitionIcon}
