@@ -3,7 +3,7 @@ import userProfileIcon from "../assets/icons/user.png";
 import hamburger from "../assets/icons/hamburger.svg";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 // import dailyActivityTrackerIcon from "../assets/icons/dailyActivityTrackerIcon.png";
-// import siteStoreIcon from "../assets/icons/siteStoreIcon.png";
+import siteStoreIcon from "../assets/icons/siteStoreIcon.png";
 // import reportsIcon from "../assets/icons/reportsIcon.png";
 // import ActiveTaskIcon from "../assets/icons/activeTaskIcon.png";
 // import HistoryIcon from "../assets/icons/historyIcon.png";
@@ -28,6 +28,11 @@ const NavBar = () => {
       text: "Partner Acquisition",
       icon: partnerAcquisitionIcon,
       path: "/",
+    },
+    {
+      text: "Site List",
+      icon: siteStoreIcon,
+      path: "/siteList",
     },
 
     // {

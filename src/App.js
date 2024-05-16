@@ -4,7 +4,7 @@ import AuthProvider from "./context/AuthProvider";
 import Login from "./pages/Login";
 // import Home from "./pages/Home";
 // import Dashboard from "./pages/Dashboard";
-import NotFound from "./components/NotFound";
+// import NotFound from "./components/NotFound";
 import PrivateOutlet from "./components/PrivateOutlet";
 import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
@@ -14,6 +14,8 @@ import Partners from "./pages/Partners";
 import AddLandlord from "./pages/AddLandlord";
 import InvestorDetails from "./pages/InvestorDetails";
 import LandlordDetails from "./pages/LandlordDetails";
+import CreateSite from "./pages/CreateSite";
+import SiteList from "./pages/SiteList";
 
 function App() {
   const { pathname } = useLocation();
@@ -27,7 +29,7 @@ function App() {
           {/* <Route path="/" element={<Home />} /> */}
           <Route index path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Partners />} />
 
           <Route path="/" element={<PrivateOutlet />}>
             <Route path="/" element={<Partners />} />
@@ -36,6 +38,8 @@ function App() {
             {/* <Route path="/dashboard/" element={<Dashboard />} /> */}
             <Route path="/addInvestor" element={<AddInvestor />} />
             <Route path="/addLandlord" element={<AddLandlord />} />
+            <Route path="/addSite" element={<CreateSite />} />
+            <Route path="/siteList" element={<SiteList />} />
             <Route path="/map" element={<Map />} />
           </Route>
         </Routes>

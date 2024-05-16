@@ -3,11 +3,10 @@ import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { ImSpinner2 } from "react-icons/im";
 
 
 
-const Partners = () => {
+const SiteList = () => {
   const [data, setData] = useState(null); 
   const navigate = useNavigate();
   const api_url = process.env.REACT_APP_API_URL
@@ -18,7 +17,7 @@ const Partners = () => {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await fetch(`${api_url}/services/partners`, {
+            const response = await fetch(`${api_url}/site/`, {
               method: "POST",
               headers: {
                 "Content-type": "application/json",
@@ -29,7 +28,7 @@ const Partners = () => {
             const json = await response.json();
             console.log(json);
             if (json.status) {
-                    setData(json.data)
+                    setData(json.sites)
             }else{
               setData([])
             }
@@ -47,9 +46,7 @@ const Partners = () => {
 
 
   if(data === null){
-    return <div className="flex justify-center items-center h-[80dvh]">
-              <ImSpinner2 className="w-14 h-1/4 animate-spin " />
-            </div>
+    return <p>Loading...</p>
   }
 
 
@@ -63,7 +60,7 @@ const Partners = () => {
           className="md:w-8 md:h-8 w-6 h-6"
         />
         <p className="text-sm  md:text-base font-semibold ">
-          Partner Acquisition
+          Site List
         </p>
       </div>
 
@@ -73,36 +70,38 @@ const Partners = () => {
             <tr className="bg-secondary">
               <th className=" px-4 py-2">ID</th>
               <th className=" px-4 py-2">Name</th>
-              <th className=" px-4 py-2">Phone Number</th>
-              <th className=" px-4 py-2">Type</th>
+              <th className=" px-4 py-2">SQFT</th>
+              <th className=" px-4 py-2">Status</th>
             </tr>
           </thead>
           <tbody className="font-medium ">
             {data.map((partner) => (
               <tr className="odd:bg-slate-100" key={partner._id}>
-                <td onClick={() => {partner.type.toLowerCase() === "landlord"? navigate(`/landlord/${partner._id}`):(navigate(`/investor/${partner._id}`))}} className=" px-4 py-2 cursor-pointer text-secondary underline font-medium">
+                <td 
+                // onClick={() => {partner.type.toLowerCase() === "landlord"? navigate(`/landlord/${partner._id}`):(navigate(`/investor/${partner._id}`))}}
+                 className=" px-4 py-2 cursor-pointer text-secondary underline font-medium">
                   {partner.customId}
                 </td>
                 <td className=" px-4 py-2">{partner.name}</td>
-                <td className=" px-4 py-2">{partner.phone}</td>
-                <td className=" px-4 py-2 capitalize">{partner.type}</td>
+                <td className=" px-4 py-2">{partner.sqft}</td>
+                <td className=" px-4 py-2 capitalize">{partner.status}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className="flex justify-evenly items-center gap-2 mt-4 text-xs md:text-sm">
-        <button onClick={() => navigate("/addInvestor")} className="w-full px-3 py-3 rounded-md bg-green-600 text-white font-medium flex justify-center items-center gap-2">
+        <button onClick={() => navigate("/addSite")} className="w-full px-3 py-3 rounded-md bg-green-600 text-white font-medium flex justify-center items-center gap-2">
           <IoMdAddCircle className="w-5 h-5" />
-          <p>Add New Investor</p>
+          <p>Add New Site</p>
         </button>
-        <button onClick={() => navigate("/addLandlord")} className="w-full  px-3 py-3 rounded-md bg-blue-600 text-white font-medium flex justify-center items-center gap-2">
+        {/* <button onClick={() => navigate("/addLandlord")} className="w-full  px-3 py-3 rounded-md bg-blue-600 text-white font-medium flex justify-center items-center gap-2">
           <IoMdAddCircle  className="w-5 h-5"/>
           <p>Add New Landlord</p>
-        </button>
+        </button> */}
       </div>
     </section>
   );
 };
 
-export default Partners;
+export default SiteList;
