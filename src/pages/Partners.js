@@ -52,7 +52,7 @@ const Partners = () => {
 
 
   return (
-    <section className="partner accuisition text-sm  lg:px-1 sm:px-16 px-5;   font-poppins max-container ">
+    <section className="partner accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
       <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
         <img
           src={partnerAcquisitionIcon}
@@ -75,14 +75,14 @@ const Partners = () => {
             </tr>
           </thead>
           <tbody className="font-medium ">
-            {data.map((contact) => (
-              <tr className="odd:bg-slate-100" key={contact._id}>
-                <td className=" px-4 py-2 text-secondary underline font-medium">
-                  {contact.customId}
+            {data.map((partner) => (
+              <tr className="odd:bg-slate-100" key={partner._id}>
+                <td onClick={() => {partner.type.toLowerCase() === "landlord"? navigate(`/landlord/${partner._id}`):(navigate(`/investor/${partner._id}`))}} className=" px-4 py-2 cursor-pointer text-secondary underline font-medium">
+                  {partner.customId}
                 </td>
-                <td className=" px-4 py-2">{contact.name}</td>
-                <td className=" px-4 py-2">{contact.phone}</td>
-                <td className=" px-4 py-2 capitalize">{contact.type}</td>
+                <td className=" px-4 py-2">{partner.name}</td>
+                <td className=" px-4 py-2">{partner.phone}</td>
+                <td className=" px-4 py-2 capitalize">{partner.type}</td>
               </tr>
             ))}
           </tbody>

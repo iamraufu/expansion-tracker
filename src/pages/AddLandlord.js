@@ -40,7 +40,6 @@ const AddLandlord = () => {
 
   const [formCoordinates, setFormCoordinates] = useState(null);
 
-
   const genderOptions = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -56,7 +55,6 @@ const AddLandlord = () => {
   //   { label: "Rangpur", value: "rangpur" },
   //   { label: "Sylhet", value: "sylhet" },
   // ];
-
 
   // const districtOptionsLabels = [
   //   "Barguna",
@@ -769,7 +767,6 @@ const AddLandlord = () => {
   const isFieldMissing = (fieldName) => {
     return missingFields.includes(fieldName);
   };
-
 
   const jsonData = [
     {
@@ -3544,7 +3541,6 @@ const AddLandlord = () => {
     },
   ];
 
-
   // Filter districts based on selected division
   const filteredDistricts = jsonData.filter(
     (item) => item.Division === selectedDivision
@@ -3554,8 +3550,6 @@ const AddLandlord = () => {
   const filteredUpazilas = jsonData.filter(
     (item) => item.Zila === selectedDistrict
   );
-
-
 
   console.log(selectedDistrict);
 
@@ -3697,8 +3691,8 @@ const AddLandlord = () => {
               name="division"
               value={values.division}
               onChange={(e) => {
-                handleChange(e)
-                setSelectedDivision(e.target.value)
+                handleChange(e);
+                setSelectedDivision(e.target.value);
               }}
               className={`input-field ${
                 isFieldMissing("division")
@@ -3731,8 +3725,8 @@ const AddLandlord = () => {
               name="district"
               value={values.district}
               onChange={(e) => {
-                handleChange(e)
-                setSelectedDistrict(e.target.value)
+                handleChange(e);
+                setSelectedDistrict(e.target.value);
               }}
               className={`input-field ${
                 isFieldMissing("district")
@@ -3746,7 +3740,9 @@ const AddLandlord = () => {
                   {option.label}
                 </option>
               ))} */}
-              {Array.from(new Set(filteredDistricts.map((item) => item.Zila))).map((item, index) => (
+              {Array.from(
+                new Set(filteredDistricts.map((item) => item.Zila))
+              ).map((item, index) => (
                 <option key={index} value={item}>
                   {item}
                 </option>
@@ -3763,8 +3759,8 @@ const AddLandlord = () => {
               name="upazila"
               value={values.upazila}
               onChange={(e) => {
-                handleChange(e)
-                setSelectedUpazila(e.target.value)
+                handleChange(e);
+                setSelectedUpazila(e.target.value);
               }}
               className={`input-field ${
                 isFieldMissing("upazila")
@@ -3783,7 +3779,9 @@ const AddLandlord = () => {
                   {item.Upazila}
                 </option>
               ))} */}
-              {Array.from(new Set(filteredUpazilas.map((item) => item.Upazila))).map((item, index) => (
+              {Array.from(
+                new Set(filteredUpazilas.map((item) => item.Upazila))
+              ).map((item, index) => (
                 <option key={index} value={item}>
                   {item}
                 </option>
@@ -3807,7 +3805,8 @@ const AddLandlord = () => {
               }`}
             />
           </div>
-          <div
+
+          {/* <div
             onClick={() => handleMapModal()}
             className="flex items-center cursor-pointer"
           >
@@ -3837,7 +3836,7 @@ const AddLandlord = () => {
 
               <p>Set Location on Map</p>
             </div>
-          </div>
+          </div> */}
           <button
             onClick={(e) => handleSubmit(e)}
             className="bg-primary text-white p-3 font-medium rounded"

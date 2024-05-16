@@ -99,7 +99,7 @@ const NavBar = () => {
     </React.Fragment>
   );
 
-  console.log(isSideBarOpen);
+  // console.log(isSideBarOpen);
 
   return (
     <header className="sticky  z-40 top-0 text-sm">

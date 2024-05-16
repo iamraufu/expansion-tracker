@@ -3,7 +3,7 @@ import "./App.css";
 import AuthProvider from "./context/AuthProvider";
 import Login from "./pages/Login";
 // import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
+// import Dashboard from "./pages/Dashboard";
 import NotFound from "./components/NotFound";
 import PrivateOutlet from "./components/PrivateOutlet";
 import Register from "./pages/Register";
@@ -12,6 +12,8 @@ import AddInvestor from "./pages/AddInvestor";
 import Map from "./pages/Map";
 import Partners from "./pages/Partners";
 import AddLandlord from "./pages/AddLandlord";
+import InvestorDetails from "./pages/InvestorDetails";
+import LandlordDetails from "./pages/LandlordDetails";
 
 function App() {
   const { pathname } = useLocation();
@@ -29,7 +31,9 @@ function App() {
 
           <Route path="/" element={<PrivateOutlet />}>
             <Route path="/" element={<Partners />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/investor/:id" element={<InvestorDetails />} />
+            <Route path="/landlord/:id" element={<LandlordDetails />} />
+            {/* <Route path="/dashboard/" element={<Dashboard />} /> */}
             <Route path="/addInvestor" element={<AddInvestor />} />
             <Route path="/addLandlord" element={<AddLandlord />} />
             <Route path="/map" element={<Map />} />
