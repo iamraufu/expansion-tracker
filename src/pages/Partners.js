@@ -15,6 +15,8 @@ const Partners = () => {
 
   console.log(user);
 
+  const filter = user.role !== "manager"? user._id : user.employees
+
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -24,7 +26,7 @@ const Partners = () => {
                 "Content-type": "application/json",
                 authorization: user.token,
               },
-              body: JSON.stringify({  })
+              body: JSON.stringify({ createdBy: filter  })
             });
             const json = await response.json();
             console.log(json);

@@ -49,7 +49,7 @@ const Login = () => {
           headers: {
             "Content-type": "application/json",
           },
-          body: JSON.stringify({ email: email.trim(), password }),
+          body: JSON.stringify({ email: email.toLowerCase().trim(), password }),
         });
 
         const json = await res.json();
