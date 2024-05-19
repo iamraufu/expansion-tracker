@@ -131,10 +131,13 @@ const AddInvestor = () => {
         console.log(values);
         const missing = requiredFields.filter(field => !values[field]);
         console.log({missing});
-        if (missing.length > 0) {
-            setMissingFields(missing);
-            toast.error('Please fill in all required fields.');
-            return;
+        if (missing.length > 0 || !formCoordinates) {
+          setMissingFields(missing);
+          if(!formCoordinates){
+            toast.error("Please Enter Location Coordinates");
+          }
+          toast.error("Please fill in all required fields.");
+          return;
         }
     
     try {

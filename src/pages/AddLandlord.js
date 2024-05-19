@@ -80,6 +80,8 @@ const AddLandlord = () => {
     // Reset missingFields array
     setMissingFields([]);
 
+
+
     // Basic validation
     const requiredFields = [
       "name",
@@ -99,8 +101,11 @@ const AddLandlord = () => {
     console.log(values);
     const missing = requiredFields.filter((field) => !values[field]);
     console.log({ missing });
-    if (missing.length > 0) {
+    if (missing.length > 0 || !formCoordinates) {
       setMissingFields(missing);
+      if(!formCoordinates){
+        toast.error("Please Enter Location Coordinates");
+      }
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -3174,7 +3179,7 @@ const AddLandlord = () => {
             />
           </div>
 
-          {/* <div
+          <div
             onClick={() => handleMapModal()}
             className="flex items-center cursor-pointer"
           >
@@ -3204,7 +3209,7 @@ const AddLandlord = () => {
 
               <p>Set Location on Map</p>
             </div>
-          </div> */}
+          </div>
           <button
             onClick={(e) => handleSubmit(e)}
             className="bg-primary text-white p-3 font-medium rounded"

@@ -99,10 +99,10 @@ const LandlordDetails = () => {
             <h1 className="w-32 font-medium">Thana/Upazila:</h1>
             <p className="capitalize">{data.upazila}</p>
           </div>
-          {/* <div className="flex gap-2 w-full">
+          <div className="flex gap-2 w-full">
             <h1 className="w-32 font-medium">Location:</h1>
-            <p className="capitalize underline text-blue-700">{data.location.latitude}, {data.location.longitude}</p>
-          </div> */}
+            <p className="capitalize underline text-blue-700">{data?.location?.latitude}, {data?.location?.longitude}</p>
+          </div>
         </div>
       </div>
     </section>
