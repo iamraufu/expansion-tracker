@@ -85,10 +85,10 @@ const AddLandlord = () => {
     // Basic validation
     const requiredFields = [
       "name",
-      "email",
+      // "email",
       "phone",
-      "age",
-      "dob",
+      // "age",
+      // "dob",
       "gender",
 
       "division",

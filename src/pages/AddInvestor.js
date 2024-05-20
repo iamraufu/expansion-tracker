@@ -112,10 +112,10 @@ const AddInvestor = () => {
         // Basic validation
         const requiredFields = [
             "name",
-            "email",
+            // "email",
             "phone",
-            "age",
-            "dob",
+            // "age",
+            // "dob",
             "gender",
             "profession",
             "education",
