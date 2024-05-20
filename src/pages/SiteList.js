@@ -14,6 +14,11 @@ const SiteList = () => {
 
   console.log(user);
 
+  const filter = user.role === "admin"? {} : user.role !== "manager"?{ createdBy: user._id} :  {createdBy:user.employees}
+
+  console.log(filter);
+  
+
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -23,10 +28,11 @@ const SiteList = () => {
                 "Content-type": "application/json",
                 authorization: user.token,
               },
-              body: JSON.stringify({  })
+              body: JSON.stringify(filter)
             });
             const json = await response.json();
             console.log(json);
+            console.log(json.message);
             if (json.status) {
                     setData(json.sites)
             }else{
