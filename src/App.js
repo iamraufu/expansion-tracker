@@ -16,7 +16,7 @@ import InvestorDetails from "./pages/InvestorDetails";
 import LandlordDetails from "./pages/LandlordDetails";
 import CreateSite from "./pages/CreateSite";
 import SiteList from "./pages/SiteList";
-import SiteDetails from "./pages/SiteDetails";
+import SiteDetails from "./pages/Site/SiteDetails";
 
 function App() {
   const { pathname } = useLocation();

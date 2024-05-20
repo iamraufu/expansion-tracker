@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import partnerAcquisitionIcon from "../assets/icons/landmark.png";
+import useAuth from "../../hooks/useAuth";
+import partnerAcquisitionIcon from "../../assets/icons/landmark.png";
+import { ImSpinner2 } from "react-icons/im";
 
 
 const SiteDetails = () => {
@@ -9,6 +10,8 @@ const SiteDetails = () => {
     const [data, setData] = useState(null); 
     const api_url = process.env.REACT_APP_API_URL
     const { user } = useAuth();
+
+    // console.log(user);
     // const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,10 +43,13 @@ const SiteDetails = () => {
     // eslint-disable-next-line
     }, []);
 
-    if(!data){
-        return <p>Loading</p>
+    if (!data) {
+        return (
+          <div className="flex justify-center items-center h-[80dvh]">
+            <ImSpinner2 className="w-14 h-1/4 animate-spin " />
+          </div>
+        );
       }
-    
 
 
     console.log({data});

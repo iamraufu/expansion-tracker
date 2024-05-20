@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
+import { ImSpinner2 } from "react-icons/im";
 
 const LandlordDetails = () => {
   let { id } = useParams();
@@ -39,8 +40,12 @@ const LandlordDetails = () => {
   }, []);
 
   // console.log({data});
-  if(!data){
-    return <p>Loading</p>
+  if (!data) {
+    return (
+      <div className="flex justify-center items-center h-[80dvh]">
+        <ImSpinner2 className="w-14 h-1/4 animate-spin " />
+      </div>
+    );
   }
 
   return (
@@ -57,51 +62,71 @@ const LandlordDetails = () => {
       </div>
 
       <div className="details-tab mt-4">
-        <h1 className="underline underline-offset-2 text-base">Partner Details </h1>
-        <div className="details-section flex flex-col my-4 gap-2">
-          <div className="flex gap-2 w-full">
-            <h1 className="w-32 font-medium">Id:</h1>
+        <h1 className="underline underline-offset-2 text-base">
+          Partner Details{" "}
+        </h1>
+        <div className="details-section flex flex-col my-4 gap-2 p-1">
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Id:</h1>
             <p className="">{data.customId}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Name:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Name:</h1>
             <p className="capitalize">{data.name}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Phone:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Phone:</h1>
             <p className="capitalize">{data.phone}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Email:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Email:</h1>
             <p className="capitalize">{data.email}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Age:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Age:</h1>
             <p className="capitalize">{data.age}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Gender:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Gender:</h1>
             <p className="capitalize">{data.gender}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Address:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Address:</h1>
             <p className="capitalize">{data.address}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">Division:</h1>
-            <p className="capitalize" >{data.division}</p>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Division:</h1>
+            <p className="capitalize">{data.division}</p>
           </div>
-          <div className="flex gap-2">
-            <h1 className="w-32 font-medium">District:</h1>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">District:</h1>
             <p className="capitalize">{data.district}</p>
           </div>
-          <div className="flex gap-2 w-full">
-            <h1 className="w-32 font-medium">Thana/Upazila:</h1>
+          <div className="flex gap-2 p-1 w-full">
+            <h1 className="w-40 font-medium">Thana/Upazila:</h1>
             <p className="capitalize">{data.upazila}</p>
           </div>
-          <div className="flex gap-2 w-full">
-            <h1 className="w-32 font-medium">Location:</h1>
-            <p className="capitalize underline text-blue-700">{data?.location?.latitude}, {data?.location?.longitude}</p>
+          <div className="flex items-start gap-2 p-1 w-full">
+            <h1 className="w-40 font-medium">Location:</h1>
+            <div>
+              <p className="capitalize underline text-blue-700 text-sm">
+                {data?.location ? `${data?.location?.latitude},` : "N/A,"}
+              </p>
+              <p className="capitalize underline text-blue-700 text-sm">
+                {data?.location ? `${data?.location?.longitude}` : "N/A"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2 p-1 w-full">
+            <h1 className="w-40 font-medium">Created By:</h1>
+            <p className="capitalize">{data?.createdBy?.name}</p>
+          </div>
+          <div className="flex gap-2 p-1 w-full">
+            <h1 className="w-40 font-medium">Created On:</h1>
+            <p className="capitalize">
+              {new Date(data?.createdAt).toLocaleDateString()}
+            </p>
           </div>
         </div>
       </div>
