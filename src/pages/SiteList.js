@@ -84,7 +84,7 @@ const SiteList = () => {
             {data.map((partner) => (
               <tr className="odd:bg-slate-100" key={partner._id}>
                 <td 
-                // onClick={() => {partner.type.toLowerCase() === "landlord"? navigate(`/landlord/${partner._id}`):(navigate(`/investor/${partner._id}`))}}
+                onClick={() => {navigate(`/site/${partner._id}`)}}
                  className=" px-4 py-2 cursor-pointer text-secondary underline font-medium">
                   {partner.customId}
                 </td>

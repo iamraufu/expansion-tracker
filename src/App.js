@@ -16,6 +16,7 @@ import InvestorDetails from "./pages/InvestorDetails";
 import LandlordDetails from "./pages/LandlordDetails";
 import CreateSite from "./pages/CreateSite";
 import SiteList from "./pages/SiteList";
+import SiteDetails from "./pages/SiteDetails";
 
 function App() {
   const { pathname } = useLocation();
@@ -35,6 +36,7 @@ function App() {
             <Route path="/" element={<Partners />} />
             <Route path="/investor/:id" element={<InvestorDetails />} />
             <Route path="/landlord/:id" element={<LandlordDetails />} />
+            <Route path="/site/:id" element={<SiteDetails />} />
             {/* <Route path="/dashboard/" element={<Dashboard />} /> */}
             <Route path="/addInvestor" element={<AddInvestor />} />
             <Route path="/addLandlord" element={<AddLandlord />} />
