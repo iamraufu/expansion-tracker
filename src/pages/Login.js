@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import loginIcon from "../assets/icons/expansionStore.svg";
 import ExpansionImage from "../assets/illustrations/expansion.svg";
+import useActivity from "../hooks/useActivity";
 
 
 const Login = () => {
@@ -14,7 +15,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const { createActivity} = useActivity();
 
 
   let navigate = useNavigate();
@@ -59,6 +60,7 @@ const Login = () => {
           setLoading(false)
           setUser(json.user);
           setError("");
+          await createActivity(json.user._id, "login", `${json.user.name} logged in`);
           localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
           navigate("/")
         } else {

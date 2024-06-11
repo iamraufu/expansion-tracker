@@ -6,7 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Map from "./Map";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-
+import useActivity from "../hooks/useActivity";
 const jsonData = [
   {
     Division: "Barisal",
@@ -2811,6 +2811,8 @@ const CreateSite = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   // eslint-disable-next-line
   const [selectedUpazila, setSelectedUpazila] = useState("");
+  const { createActivity } = useActivity();
+
 
   const [values, setValues] = useState(initialValues);
 
@@ -2853,6 +2855,8 @@ const CreateSite = () => {
     });
   };
 
+
+  const filter = user.role === "admin"? {} : user.role !== "manager"?{ createdBy: user._id} :  {createdBy:user.employees}
   //   console.log(data);
 
   useEffect(() => {
@@ -2864,7 +2868,7 @@ const CreateSite = () => {
             "Content-type": "application/json",
             authorization: user.token,
           },
-          body: JSON.stringify({}),
+          body: JSON.stringify(filter),
         });
         const json = await response.json();
         console.log(json);
@@ -2916,7 +2920,7 @@ const CreateSite = () => {
       "address",
       //   "location",
     ];
-    console.log(values);
+    // console.log(values);
     let missing = requiredFields.filter((field) => !values[field]);
     // || values[field]?.length === 0 || !formCoordinates
     if (values["landlords"]?.length === 0) {
@@ -2926,7 +2930,7 @@ const CreateSite = () => {
       missing.push("location");
     }
 
-    console.log({ missing });
+    // console.log({ missing });
     if (missing.length > 0) {
       setMissingFields(missing);
       toast.error("Please fill in all required fields.");
@@ -2945,6 +2949,11 @@ const CreateSite = () => {
 
       const responseData = await response.json();
       if (responseData.status) {
+        await createActivity(
+          user._id,
+          "site_create",
+          `${user.name} created an site named: ${values.name}!`
+        );
         console.log(responseData);
         navigate(-1);
       } else {

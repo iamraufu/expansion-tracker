@@ -119,13 +119,22 @@ const InvestorDetails = () => {
           </div>
           <div className="flex items-start gap-2 p-1 w-full">
             <h1 className="w-40 font-medium">Location:</h1>
-            <div>
-              <p className="capitalize underline text-blue-700 text-sm">
-                {data?.location ? `${data?.location?.latitude},` : "N/A,"}
-              </p>
-              <p className="capitalize underline text-blue-700 text-sm">
-                {data?.location ? `${data?.location?.longitude}` : "N/A"}
-              </p>
+            <div className="text-blue-700 text-xs">
+              {data?.location ? (
+                <a
+                  href={`https://www.google.com/maps?q=${data.location.latitude},${data.location.longitude}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="capitalize underline"
+                >
+                  {`${data.location.latitude}, ${data.location.longitude}`}
+                </a>
+              ) : (
+                <>
+                  <p className="capitalize underline">N/A,</p>
+                  <p className="capitalize underline">N/A</p>
+                </>
+              )}
             </div>
           </div>
           <div className="flex gap-2 p-1 w-full">

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
+import landmark from "../../assets/icons/landmark.png";
 import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 
 
@@ -12,11 +12,11 @@ const SiteList = () => {
   const api_url = process.env.REACT_APP_API_URL
   const { user } = useAuth();
 
-  console.log(user);
+  // console.log(user);
 
   const filter = user.role === "admin"? {} : user.role !== "manager"?{ createdBy: user._id} :  {createdBy:user.employees}
 
-  console.log(filter);
+  // console.log(filter);
   
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const SiteList = () => {
     <section className="partner-accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
       <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
         <img
-          src={partnerAcquisitionIcon}
+          src={landmark}
           alt="partner Acquisition Icon"
           className="md:w-8 md:h-8 w-6 h-6"
         />
@@ -84,7 +84,7 @@ const SiteList = () => {
             {data.map((partner) => (
               <tr className="odd:bg-slate-100" key={partner._id}>
                 <td 
-                onClick={() => {navigate(`/site/${partner._id}`)}}
+                onClick={() => {navigate(`/site/${partner._id}/info`)}}
                  className=" px-4 py-2 cursor-pointer text-secondary underline font-medium">
                   {partner.customId}
                 </td>

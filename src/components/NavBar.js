@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import userProfileIcon from "../assets/icons/user.png";
 import hamburger from "../assets/icons/hamburger.svg";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
-// import dailyActivityTrackerIcon from "../assets/icons/dailyActivityTrackerIcon.png";
+import dailyActivityTrackerIcon from "../assets/icons/dailyActivityTrackerIcon.png";
 import siteStoreIcon from "../assets/icons/siteStoreIcon.png";
 // import reportsIcon from "../assets/icons/reportsIcon.png";
 // import ActiveTaskIcon from "../assets/icons/activeTaskIcon.png";
@@ -33,6 +33,11 @@ const NavBar = () => {
       text: "Site List",
       icon: siteStoreIcon,
       path: "/siteList",
+    },
+    {
+      text: "Task List",
+      icon: dailyActivityTrackerIcon,
+      path: "/taskList",
     },
 
     // {

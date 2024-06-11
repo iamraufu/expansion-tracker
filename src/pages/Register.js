@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import loginIcon from "../assets/icons/expansionStore.svg"
 import ExpansionImage from "../assets/illustrations/expansion.svg"
+import useActivity from "../hooks/useActivity";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ const Register = () => {
   let from = location.state?.from?.pathname || "/";
   // eslint-disable-next-line
   const { user, setUser } = useAuth();
-
+  const { createActivity} = useActivity();
 
   const api_url = process.env.REACT_APP_API_URL
 
@@ -53,6 +54,7 @@ const Register = () => {
       if (json.status) {
         // setUser(json.user);
         setError("");
+        await createActivity(json.user._id, "register", `${json.user.name} registered account!`);
         // localStorage.setItem("user", JSON.stringify({...json.user, token:json.token}));
         navigate("/login")
       } else {

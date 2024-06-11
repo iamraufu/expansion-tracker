@@ -15,8 +15,15 @@ import AddLandlord from "./pages/AddLandlord";
 import InvestorDetails from "./pages/InvestorDetails";
 import LandlordDetails from "./pages/LandlordDetails";
 import CreateSite from "./pages/CreateSite";
-import SiteList from "./pages/SiteList";
-import SiteDetails from "./pages/Site/SiteDetails";
+import SiteList from "./pages/Site/SiteList";
+import Site from "./pages/Site/Site";
+import SiteInfo from "./pages/Site/SiteTabs/SiteInfo";
+// import SiteHistory from "./pages/Site/SiteTabs/SiteHistory";
+import SiteDocuments from "./pages/Site/SiteTabs/SiteDocuments";
+import SiteTimeline from "./pages/Site/SiteTabs/SiteTimline";
+import TaskList from "./pages/Task/TaskList";
+import AddTask from "./pages/Task/AddTask";
+import TaskDetails from "./pages/Task/TaskDetails/TaskDetails";
 
 function App() {
   const { pathname } = useLocation();
@@ -36,12 +43,21 @@ function App() {
             <Route path="/" element={<Partners />} />
             <Route path="/investor/:id" element={<InvestorDetails />} />
             <Route path="/landlord/:id" element={<LandlordDetails />} />
-            <Route path="/site/:id" element={<SiteDetails />} />
-            {/* <Route path="/dashboard/" element={<Dashboard />} /> */}
-            <Route path="/addInvestor" element={<AddInvestor />} />
-            <Route path="/addLandlord" element={<AddLandlord />} />
+
             <Route path="/addSite" element={<CreateSite />} />
             <Route path="/siteList" element={<SiteList />} />
+            <Route path="/site/:id" element={<Site />} >
+              <Route path="info" element={<SiteInfo />} />
+              <Route path="history" element={<SiteTimeline />} />
+              <Route path="documents" element={<SiteDocuments />} />
+            </Route>
+
+            <Route path="/addInvestor" element={<AddInvestor />} />
+            <Route path="/addLandlord" element={<AddLandlord />} />
+
+            <Route path="/taskList" element={<TaskList />} />
+            <Route path="/addTask" element={<AddTask />} />
+            <Route path="/task/:id" element={<TaskDetails />} />
             <Route path="/map" element={<Map />} />
           </Route>
         </Routes>
