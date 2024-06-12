@@ -48,6 +48,8 @@ const AddTask = () => {
   const [details, setDetails] = useState("");
   const { createActivity } = useActivity();
   const [isMultiDropDownOpen, setIsMultiDropDownOpen] = useState(false);
+
+  const [submitLoad,setSubmitLoad] = useState(false)
   const navigate = useNavigate();
 
   // const toggleDropdown = () => {
@@ -243,7 +245,7 @@ const AddTask = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitLoad(true)
     if (validate()) {
       // Fetch user's current location
       // navigator.geolocation.getCurrentPosition(
@@ -326,16 +328,20 @@ const AddTask = () => {
             `${user.name} created an task : ${updatedValues.task}!`
           );
           navigate(-1);
+          setSubmitLoad(false)
           // Redirect or perform any other actions on successful creation
         } else {
           console.error("Error creating task:", json.message);
           toast.error(json.message);
+          setSubmitLoad(false)
         }
       } catch (error) {
         console.error("Error submitting form:", error);
+        setSubmitLoad(false)
         toast.error(error);
       }
     }
+    setSubmitLoad(false)
   };
 
   const renderAdditionalFields = () => {
@@ -679,8 +685,9 @@ const AddTask = () => {
           <button
             type="submit"
             className="bg-primary text-white p-3 font-medium rounded"
+            disabled={submitLoad}
           >
-            Add Task
+            {submitLoad?"Loading...":"Add Task"}
           </button>
         </div>
       </form>

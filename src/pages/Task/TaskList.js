@@ -100,6 +100,7 @@ const TaskList = () => {
           <thead className="bg-secondary text-white text-left">
             <tr className="bg-secondary">
               <th className=" px-4 py-2">Date</th>
+              <th className=" px-4 py-2">Created By</th>
               <th className=" px-4 py-2">District</th>
               <th className=" px-4 py-2">Upazila</th>
               <th className=" px-4 py-2">Type</th>
@@ -140,10 +141,13 @@ const TaskList = () => {
                     <p>{`${startTime} - ${endTime}`}</p>
                     <p>{`${endDate}`}</p>
                   </td>
+                  <td className="px-4 py-2">{task.createdBy.name}</td>
                   <td className="px-4 py-2">{task.district}</td>
                   <td className="px-4 py-2">{task.upazila}</td>
                   <td className="px-4 py-2">{task.task}</td>
-                  <td    onClick={() => {navigate(`/task/${task._id}/`)}} className="px-4 py-2 capitalize underline text-secondary cursor-pointer">
+                  <td    onClick={() => {
+                    navigate(`/task/${task._id}/`)
+                  }} className="px-4 py-2 capitalize underline text-secondary cursor-pointer">
                     Details
                   </td>
                   {/* <td className="px-4 py-2">

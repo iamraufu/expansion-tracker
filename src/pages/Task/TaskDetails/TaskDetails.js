@@ -76,6 +76,8 @@ const TaskDetails = () => {
     day: "numeric",
   });
 
+
+
   if (!data) {
     return (
       <div className="flex justify-center items-center h-[80dvh]">
@@ -84,12 +86,14 @@ const TaskDetails = () => {
     );
   }
 
+
+
   const renderAdditionalFields = (data) => {
     switch (data.task) {
       case "new site search":
         return (
           <div className="flex gap-2 items-center mb-4 ">
-           {data.documents.length !== 0 &&
+           {(data.documents[0] !== null && data.documents.length !== 0) &&
            <> 
             <label htmlFor="investor" className="w-28 font-medium">
               Image:
