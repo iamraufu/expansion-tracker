@@ -688,6 +688,18 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
                 {data.investors[0]?.investorId.name}
               </p>
             </div>
+            <div className="mt-4 flex flex-col">
+              <label htmlFor="document" className="block font-medium mb-2 whitespace-nowrap">
+                Document upload:
+              </label>
+              <input
+                id="document"
+                type="file"
+                className="px-2 py-3 w-full border rounded"
+                // disabled={status === newStatus}
+                onChange={(e) => setDocument(e.target.files[0])}
+              />
+            </div>
           </>
         );
       case "docs collected":
