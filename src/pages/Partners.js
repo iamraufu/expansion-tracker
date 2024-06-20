@@ -4,6 +4,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { ImSpinner2 } from "react-icons/im";
+import ExportToExcel from "../components/ExportToExcel";
 
 const Partners = () => {
   const [data, setData] = useState(null);
@@ -21,6 +22,8 @@ const Partners = () => {
       : { createdBy: user.employees };
 
   // console.log(filter);
+
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,15 +63,20 @@ const Partners = () => {
 
   return (
     <section className="partner-accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
-      <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
-        <img
-          src={partnerAcquisitionIcon}
-          alt="partner Acquisition Icon"
-          className="md:w-8 md:h-8 w-6 h-6"
-        />
-        <p className="text-sm  md:text-base font-semibold ">
-          Partner Acquisition
-        </p>
+      <div className="page-title pb-3 border-b border-b-slate-600  flex justify-between items-center font-medium font-poppins mt-5 gap-3">
+        <div className="flex justify-center items-center gap-3">
+          <img
+            src={partnerAcquisitionIcon}
+            alt="partner Acquisition Icon"
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+          <p className="text-sm  md:text-base font-semibold ">
+            Partner Acquisition
+          </p>
+        </div>
+
+        <ExportToExcel data={data} headers = {["customId","name", "phone", "email", "type","createdBy", "createdAt"]} fileName={"Partners"}  />
+        
       </div>
 
       <div className="overflow-x-auto text-xs md:text-sm rounded-md mt-4 border-2 border-slate-900 h-[60dvh]">

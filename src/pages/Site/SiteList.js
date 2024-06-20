@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import landmark from "../../assets/icons/landmark.png";
+import landmarkIcon from "../../assets/icons/landmark.png";
 import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import ExportToExcel from "../../components/ExportToExcel";
 
 
 
@@ -59,15 +60,20 @@ const SiteList = () => {
 
   return (
     <section className="partner-accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
-      <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
-        <img
-          src={landmark}
-          alt="partner Acquisition Icon"
-          className="md:w-8 md:h-8 w-6 h-6"
-        />
-        <p className="text-sm  md:text-base font-semibold ">
-          Site List
-        </p>
+      <div className="page-title pb-3 border-b border-b-slate-600  flex justify-between items-center font-medium font-poppins mt-5 gap-3">
+        <div className="flex justify-center items-center gap-3">
+          <img
+            src={landmarkIcon}
+            alt="partner Acquisition Icon"
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+          <p className="text-sm  md:text-base font-semibold ">
+            Site List
+          </p>
+        </div>
+
+        <ExportToExcel data={data} headers = {["customId","name", "createdBy", "createdAt", "statusDetails"]} fileName={"Sites"}  />
+        
       </div>
 
       <div className="overflow-x-auto text-xs md:text-sm rounded-md mt-4 border-2 border-slate-900 h-[60dvh]">

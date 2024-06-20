@@ -3,6 +3,7 @@ import activeTaskIcon from "../../assets/icons/activeTaskIcon.png";
 import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import ExportToExcel from "../../components/ExportToExcel";
 
 const TaskList = () => {
   const [data, setData] = useState(null);
@@ -70,15 +71,20 @@ const TaskList = () => {
 
   return (
     <section className="partner-accuisition text-xs lg:px-1 sm:px-16 px-5 font-poppins max-container ">
-      <div className="page-title pb-3 border-b-2 border-b-slate-700 flex justify-start items-center font-medium  font-poppins mt-5 gap-3">
-        <img
-          src={activeTaskIcon}
-          alt="partner Acquisition Icon"
-          className="md:w-8 md:h-8 w-6 h-6"
-        />
-        <p className="text-sm md:text-base font-semibold ">
-          Daily Activity Tracker
-        </p>
+      <div className="page-title pb-3 border-b border-b-slate-600  flex justify-between items-center font-medium font-poppins mt-5 gap-3">
+        <div className="flex justify-center items-center gap-3">
+          <img
+            src={activeTaskIcon}
+            alt="partner Acquisition Icon"
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+          <p className="text-sm  md:text-base font-semibold ">
+            Daily Activity Tracker
+          </p>
+        </div>
+
+        <ExportToExcel data={data} headers = {["task", "remarks", "isComplete", "startDateTime","endDateTime","createdBy", "createdAt"]} fileName={"Tasks"}  />
+        
       </div>
 
       <div className="flex justify-between items-center mt-4">
