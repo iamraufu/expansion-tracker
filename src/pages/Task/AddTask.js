@@ -224,9 +224,9 @@ const AddTask = () => {
       tempErrors.investor = true;
       tempErrors.landlord = true;
     }
-    // if (values.task === "equipment order" && values.equipment.length === 0) {
-    //   tempErrors.equipment = true;
-    // }
+    if (values.task === "equipment order" && !values.site) {
+      tempErrors.site = true;
+    }
     if (
       [
         "outlet opening",

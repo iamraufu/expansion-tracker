@@ -113,7 +113,7 @@ const TaskModal = ({
                   }}
                   className={`input-field border-[#b1b1b1]`}
                 >
-                  <option value="">Did Investor Agree?</option>
+                  {/* <option value="">Did Investor Agree?</option> */}
                   {taskStatusOption.map((task) => (
                     <option key={task.value} value={task.value}>
                       {task.label}
@@ -170,7 +170,7 @@ const TaskModal = ({
                   }}
                   className={`input-field border-[#b1b1b1]`}
                 >
-                  <option value="">Did Investor Agree?</option>
+                  {/* <option value="">Did Investor Agree?</option> */}
                   {taskStatusOption.map((task) => (
                     <option key={task.value} value={task.value}>
                       {task.label}
@@ -228,7 +228,7 @@ const TaskModal = ({
                   }}
                   className={`input-field border-[#b1b1b1]`}
                 >
-                  <option value="">Did Landlord Agree?</option>
+                  {/* <option value="">Did Landlord Agree?</option> */}
                   {taskStatusOption.map((task) => (
                     <option key={task.value} value={task.value}>
                       {task.label}
@@ -281,7 +281,7 @@ const TaskModal = ({
                 }}
                 className={`input-field border-[#b1b1b1]`}
               >
-                <option value="">Did both Agree?</option>
+                {/* <option value="">Did both Agree?</option> */}
                 {taskStatusOption.map((task) => (
                   <option key={task.value} value={task.value}>
                     {task.label}
@@ -368,7 +368,7 @@ const TaskModal = ({
                 }}
                 className={`input-field border-[#b1b1b1]`}
               >
-                <option value="">Is Outlet Oppened?</option>
+                {/* <option value="">Is Outlet Oppened?</option> */}
                 {taskStatusOption.map((task) => (
                   <option key={task.value} value={task.value}>
                     {task.label}

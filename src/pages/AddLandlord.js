@@ -10,6 +10,7 @@ import useActivity from "../hooks/useActivity";
 
 const AddLandlord = () => {
   const { user } = useAuth();
+  const [submitLoad, setSubmitLoad] = useState(false)
   const initialValues = {
     name: "",
     email: "",
@@ -88,7 +89,7 @@ const AddLandlord = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitLoad(true)
     // Basic validation
     // Reset missingFields array
     setMissingFields([]);
@@ -128,6 +129,7 @@ const AddLandlord = () => {
         toast.error("Please Enter Location Coordinates");
       }
       toast.error("Please fill in all required fields.");
+      setSubmitLoad(false)
       return;
     }
 
@@ -149,19 +151,22 @@ const AddLandlord = () => {
           `${user.name} created an landlord named: ${values.name}!`
         );
         console.log(responseData);
+        setSubmitLoad(false)
         navigate(-1);
       } else {
         console.log(response);
         console.error("Failed to submit form");
+        setSubmitLoad(false)
         toast.error(responseData.message);
       }
     } catch (error) {
       console.log(error);
+      setSubmitLoad(false)
       toast.error("There is a problem with the server!");
     }
   };
 
-  console.log(missingFields);
+  // console.log(missingFields);
 
   const isFieldMissing = (fieldName) => {
     return missingFields.includes(fieldName);
@@ -482,9 +487,10 @@ const AddLandlord = () => {
           </div>
           <button
             onClick={(e) => handleSubmit(e)}
+            disabled={submitLoad}
             className="bg-primary text-white p-3 font-medium rounded"
           >
-            Save & Continue
+            {submitLoad?"Loading...":"Save and Continue"}
           </button>
           <Toaster position="top-right" reverseOrder={false} />
         </div>

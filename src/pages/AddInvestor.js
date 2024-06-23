@@ -10,6 +10,7 @@ import useActivity from "../hooks/useActivity";
 
 const AddInvestor = () => {
   const { user } = useAuth();
+  const [submitLoad,setSubmitLoad] = useState(false)
   const initialValues = {
     name: "",
     email: "",
@@ -94,6 +95,7 @@ const AddInvestor = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     setValues({
       ...values,
       [name]: value,
@@ -102,6 +104,7 @@ const AddInvestor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitLoad(true)
     setMissingFields([]);
 
     // Basic validation
@@ -142,6 +145,7 @@ const AddInvestor = () => {
       //   toast.error("Please Enter Location Coordinates");
       // }
       toast.error("Please fill in all required fields.");
+      setSubmitLoad(true)
       return;
     }
 
@@ -163,19 +167,22 @@ const AddInvestor = () => {
           `${user.name} created an investor named: ${values.name}!`
         );
         console.log(responseData);
+        setSubmitLoad(true)
         navigate(-1);
       } else {
         console.log(response);
         console.error("Failed to submit form");
         toast.error(responseData.message);
+        setSubmitLoad(true)
       }
     } catch (error) {
       console.log(error);
       toast.error("There is a problem with the server!");
+      setSubmitLoad(true)
     }
   };
 
-  console.log(missingFields);
+  // console.log(missingFields);
 
   const isFieldMissing = (fieldName) => {
     return missingFields.includes(fieldName);
@@ -564,9 +571,10 @@ const AddInvestor = () => {
 
           <button
             onClick={(e) => handleSubmit(e)}
+            disabled={submitLoad}
             className="bg-primary text-white p-3 font-medium rounded"
           >
-            Save & Continue
+            {submitLoad?"Loading...":"Save and Continue"}
           </button>
           <Toaster position="top-right" reverseOrder={false} />
         </div>

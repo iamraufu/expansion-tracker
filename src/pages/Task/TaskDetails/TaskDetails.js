@@ -238,7 +238,7 @@ const TaskDetails = () => {
                   navigate(`/site/${data.site._id}/info`);
                 }}
               >
-                {data.site.customId} - {data.site.name}
+                {data?.site?.customId} - {data?.site?.name}
               </p>
             </div>
             <div className="flex gap-2 items-center">
