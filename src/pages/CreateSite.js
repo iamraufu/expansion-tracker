@@ -3284,7 +3284,15 @@ const CreateSite = () => {
                   />
                 </svg>
 
-                <p>Set Location on Map</p>
+                <p> {formCoordinates
+                  ? `Long ${formCoordinates?.longitude
+                      ?.toString()
+                      .slice(0, 7)}... Lat 
+                      ${formCoordinates.latitude
+                         ?.toString()
+                      .slice(0, 7)}...
+                      `
+                  : "Set Location on Map"}</p>
               </div>
             </div>
             <button
