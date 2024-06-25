@@ -108,7 +108,7 @@ const Map = ({ handleMapModal , setFormCoordinates, formCoordinates }) => {
 
 
   return (
-    <div className="w-full h-screen bg-white rounded text-sm relative overscroll-none">
+    <div className="w-full h-[100dvh] bg-white rounded text-sm relative overscroll-none">
       <div className="flex absolute z-40 w-full bg-white top-0 left-0 justify-between items-center ">
         <div className="flex justify-center items-center">   
           <form onSubmit={handleSubmit}>
