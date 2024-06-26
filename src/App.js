@@ -24,6 +24,7 @@ import SiteTimeline from "./pages/Site/SiteTabs/SiteTimline";
 import TaskList from "./pages/Task/TaskList";
 import AddTask from "./pages/Task/AddTask";
 import TaskDetails from "./pages/Task/TaskDetails/TaskDetails";
+import UpdateInvestor from "./pages/investor/updateInvestor";
 
 function App() {
   const { pathname } = useLocation();
@@ -46,6 +47,8 @@ function App() {
 
             <Route path="/addSite" element={<CreateSite />} />
             <Route path="/siteList" element={<SiteList />} />
+
+            <Route path="/site/update/:id" element={<UpdateInvestor />} />
             <Route path="/site/:id" element={<Site />} >
               <Route path="info" element={<SiteInfo />} />
               <Route path="history" element={<SiteTimeline />} />

@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import { ImSpinner2 } from "react-icons/im";
@@ -52,6 +53,7 @@ const InvestorDetails = () => {
   return (
     <section className="partner accuisition text-sm  lg:px-1 sm:px-16 px-5 font-poppins max-container ">
       <div className="page-title pb-3 border-b-2 border-b-slate-700  flex justify-start items-center font-medium text-base  mt-5 gap-3">
+        
         <img
           src={partnerAcquisitionIcon}
           alt="partner Acquisition Icon"
@@ -148,6 +150,7 @@ const InvestorDetails = () => {
             </p>
           </div>
         </div>
+        {/* <NavLink to={`/site/update/${id}`}  className="w-full block text-center my-4 bg-teal-500 py-3 rounded text-white">Update</NavLink> */}
       </div>
     </section>
   );
