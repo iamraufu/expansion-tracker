@@ -10,7 +10,7 @@ import useActivity from "../hooks/useActivity";
 
 const AddInvestor = () => {
   const { user } = useAuth();
-  const [submitLoad,setSubmitLoad] = useState(false)
+  const [submitLoad, setSubmitLoad] = useState(false);
   const initialValues = {
     name: "",
     email: "",
@@ -72,7 +72,6 @@ const AddInvestor = () => {
     document.body.style.overflow = scrollEnabled ? "hidden" : "auto";
   };
 
-
   const isValidPhoneNumber = (phone) => {
     // Regex for Bangladeshi phone numbers
     const phoneRegex = /^(?:\+?88)?01[3-9]\d{8}$/;
@@ -95,7 +94,7 @@ const AddInvestor = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     setValues({
       ...values,
       [name]: value,
@@ -104,7 +103,7 @@ const AddInvestor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitLoad(true)
+    setSubmitLoad(true);
     setMissingFields([]);
 
     // Basic validation
@@ -131,21 +130,20 @@ const AddInvestor = () => {
     const isValidPhone = isValidPhoneNumber(values.phone);
 
     if (!isValidPhone) {
-      toast.error('Invalid phone number');
+      toast.error("Invalid phone number");
+      setSubmitLoad(false);
+      return;
     }
-  
-
-
 
     const missing = requiredFields.filter((field) => !values[field]);
-    console.log({ missing });
+
     if (missing.length > 0) {
       setMissingFields(missing);
       // if (!formCoordinates) {
       //   toast.error("Please Enter Location Coordinates");
       // }
       toast.error("Please fill in all required fields.");
-      setSubmitLoad(true)
+      setSubmitLoad(false);
       return;
     }
 
@@ -167,18 +165,18 @@ const AddInvestor = () => {
           `${user.name} created an investor named: ${values.name}!`
         );
         console.log(responseData);
-        setSubmitLoad(true)
+        setSubmitLoad(true);
         navigate(-1);
       } else {
         console.log(response);
         console.error("Failed to submit form");
         toast.error(responseData.message);
-        setSubmitLoad(true)
+        setSubmitLoad(false);
       }
     } catch (error) {
       console.log(error);
       toast.error("There is a problem with the server!");
-      setSubmitLoad(true)
+      setSubmitLoad(false);
     }
   };
 
@@ -560,13 +558,50 @@ const AddInvestor = () => {
                   ? `Long ${formCoordinates?.longitude
                       ?.toString()
                       .slice(0, 7)}... Lat 
-                      ${formCoordinates.latitude
-                         ?.toString()
-                      .slice(0, 7)}...
+                      ${formCoordinates.latitude?.toString().slice(0, 7)}...
                       `
                   : "Set Location on Map"}
               </p>
             </div>
+          </div>
+
+          <div className="flex items-center">
+            <label htmlFor="name" className="mr-2">
+              Longitude:
+            </label>
+            <input
+              type="text"
+              id="longitude"
+              name="longitude"
+              value={formCoordinates?.longitude}
+              onChange={(e) =>
+                setFormCoordinates({
+                  ...formCoordinates,
+                  longitude: e.target.value,
+                })
+              }
+              placeholder="longitude"
+              className={`input-field border-[#8D8D8D]`}
+            />
+          </div>
+          <div className="flex items-center">
+            <label htmlFor="name" className="mr-2">
+              Latitude:
+            </label>
+            <input
+              type="text"
+              id="latitude"
+              name="latitude"
+              value={formCoordinates?.latitude}
+              onChange={(e) =>
+                setFormCoordinates({
+                  ...formCoordinates,
+                  latitude: e.target.value,
+                })
+              }
+              placeholder="latitude"
+              className={`input-field border-[#8D8D8D]`}
+            />
           </div>
 
           <button
@@ -574,7 +609,7 @@ const AddInvestor = () => {
             disabled={submitLoad}
             className="bg-primary text-white p-3 font-medium rounded"
           >
-            {submitLoad?"Loading...":"Save and Continue"}
+            {submitLoad ? "Loading..." : "Save and Continue"}
           </button>
           <Toaster position="top-right" reverseOrder={false} />
         </div>
