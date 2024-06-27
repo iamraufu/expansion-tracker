@@ -9,16 +9,21 @@ const ExportToExcel = ({ data, headers, fileName }) => {
       headers.forEach((header) => {
         if (header === "createdBy") {
           filteredItem[header] = item[header].name;
+          filteredItem["manager"] = item[header]?.managers[0]?.name
         } else if (header === "statusDetails") {
           let val = "";
 
           item[header].map((item) => {
-            return filteredItem[item.status] = item["updatedAt"];
+            return filteredItem[item.status] = new Date(item["updatedAt"])?new Date(item["updatedAt"]).toLocaleDateString():"";
           });
 
           return val;
-        } else {
-          filteredItem[header] = item[header];
+        } else if(header === "isComplete"){
+          filteredItem[header] = item[header]
+        } else if(header === "createdAt" || header === "updatedAt" || header === "startDateTime" || header === "endDateTime"  ) {
+          filteredItem[header] = new Date(item[header])?new Date(item[header]).toLocaleDateString():"";
+        }else{
+          filteredItem[header] = item[header]
         }
       });
       return filteredItem;
