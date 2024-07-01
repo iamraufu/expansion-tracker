@@ -9,11 +9,11 @@ import useAuth from "../../hooks/useAuth";
 import useActivity from "../../hooks/useActivity";
 import { ImSpinner2 } from "react-icons/im";
 
-const UpdateInvestor = () => {
+const UpdateLandlord = () => {
+  const { user } = useAuth();
   let { id } = useParams();
   const [data, setData] = useState(null);
-  const { user } = useAuth();
-  const [submitLoad, setSubmitLoad] = useState(false);
+  const [submitLoad, setSubmitLoad] = useState(false)
   const initialValues = {
     name: "",
     email: "",
@@ -21,23 +21,21 @@ const UpdateInvestor = () => {
     age: "",
     dob: "",
     gender: "",
-    profession: "",
-    education: "",
-    investmentBudget: "",
-    possibleInvestmentDate: "",
+    // profession: "",
+    // education: "",
+    // investmentBudget: "",
+    // possibleInvestmentDate: "",
     division: "",
     district: "",
     upazila: "",
-    // thana: "",
     address: "",
     createdBy: user._id,
     location: [],
   };
-
   const api_url = process.env.REACT_APP_API_URL;
   const [scrollEnabled, setScrollEnabled] = useState(true);
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const [values, setValues] = useState(initialValues);
+  const [isMapOpen, setIsMapOpen] = useState(false);
   const [missingFields, setMissingFields] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
@@ -49,18 +47,29 @@ const UpdateInvestor = () => {
 
   const [formCoordinates, setFormCoordinates] = useState(null);
 
-  const formatDate = (date) => {
-    const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
+  const genderOptions = [
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+    { label: "Other", value: "other" },
+  ];
+
+  const toggleScroll = () => {
+    setScrollEnabled(!scrollEnabled);
+    document.body.style.overflow = scrollEnabled ? "hidden" : "auto";
   };
+
+
+  const isValidPhoneNumber = (phone) => {
+    // Regex for Bangladeshi phone numbers
+    const phoneRegex = /^(?:\+?88)?01[3-9]\d{8}$/;
+    return phoneRegex.test(phone);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${api_url}/investor/${id}`, {
+        const response = await fetch(`${api_url}/landlord/${id}`, {
           method: "GET",
           headers: {
             "Content-type": "application/json",
@@ -70,37 +79,35 @@ const UpdateInvestor = () => {
         });
         const json = await response.json();
         console.log(json);
+
         if (json.status) {
-          setData(json.investor);
+          setData(json.landlord);
           setValues({
-            name: json.investor.name,
-            email: json.investor.email,
-            phone: json.investor.phone,
-            age: json.investor.age,
-            dob: json.investor.dob,
-            gender: json.investor.gender,
-            profession: json.investor.profession,
-            education: json.investor.education,
-            investmentBudget: json.investor.investmentBudget,
-            possibleInvestmentDate: formatDate(
-              new Date(json.investor.possibleInvestmentDate)
-            ),
-            division: json.investor.division,
-            district: json.investor.district,
-            upazila: json.investor.upazila,
-            // thana: json.investor.name,
-            address: json.investor.address,
+            name: json.landlord.name,
+            email: json.landlord.email,
+            phone: json.landlord.phone,
+            age: json.landlord.age,
+            dob: json.landlord.dob,
+            gender: json.landlord.gender,
+            profession: json.landlord.profession,
+            education: json.landlord.education,
+            investmentBudget: json.landlord.investmentBudget,
+            division: json.landlord.division,
+            district: json.landlord.district,
+            upazila: json.landlord.upazila,
+            // thana: json.landlord.name,
+            address: json.landlord.address,
             location: [],
           });
 
           setFormCoordinates({
-            latitude: json.investor.location.latitude,
-            longitude: json.investor.location.longitude,
+            latitude: json.landlord.location.latitude,
+            longitude: json.landlord.location.longitude,
           });
 
-          setSelectedDivision(json.investor.division)
-          setSelectedDistrict(json.investor.district)
-          setSelectedUpazila(json.investor.upazila)
+          setSelectedDivision(json.landlord.division)
+          setSelectedDistrict(json.landlord.district)
+          setSelectedUpazila(json.landlord.upazila)
         } else {
           setData([]);
         }
@@ -114,49 +121,19 @@ const UpdateInvestor = () => {
     // eslint-disable-next-line
   }, []);
 
-  if (!data) {
-    return (
-      <div className="flex justify-center items-center h-[80dvh]">
-        <ImSpinner2 className="w-14 h-1/4 animate-spin " />
-      </div>
-    );
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  const genderOptions = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Other", value: "other" },
-  ];
 
-  const professionOptions = [
-    { label: "Business Man", value: "business man" },
-    { label: "Service Holder", value: "service holder" },
-    { label: "N/A", value: "N/A" },
-  ];
-
-  const educationOptions = [
-    { label: "JSC", value: "jsc" },
-    { label: "SSC", value: "ssc" },
-    { label: "HSC", value: "hsc" },
-    { label: "Bachelors", value: "bachelors" },
-    { label: "Masters", value: "masters" },
-    { label: "Diploma", value: "diploma" },
-    { label: "N/A", value: "N/A" },
-  ];
-
-  const toggleScroll = () => {
-    setScrollEnabled(!scrollEnabled);
-    document.body.style.overflow = scrollEnabled ? "hidden" : "auto";
-  };
-
-  const isValidPhoneNumber = (phone) => {
-    // Regex for Bangladeshi phone numbers
-    const phoneRegex = /^(?:\+?88)?01[3-9]\d{8}$/;
-    return phoneRegex.test(phone);
+    
+    setValues({
+      ...values,
+      [name]: value,
+    });
   };
 
   const handleMapModal = () => {
-    // console.log("clicked");
+    console.log("clicked");
     scrollToTop();
     toggleScroll();
     setIsMapOpen(!isMapOpen);
@@ -169,18 +146,11 @@ const UpdateInvestor = () => {
     });
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitLoad(true);
+    setSubmitLoad(true)
+    // Basic validation
+    // Reset missingFields array
     setMissingFields([]);
 
     // Basic validation
@@ -191,41 +161,41 @@ const UpdateInvestor = () => {
       // "age",
       // "dob",
       "gender",
-      "profession",
-      "education",
-      "investmentBudget",
-      "possibleInvestmentDate",
+
       "division",
       "district",
       "upazila",
       // "thana",
       "address",
-      // "location",
+      "location",
     ];
     // console.log(values);
+    // console.log({ missing });
 
+    
+ 
     const isValidPhone = isValidPhoneNumber(values.phone);
 
-    if (!isValidPhone) {
-      toast.error("Invalid phone number");
-      setSubmitLoad(false);
-      return;
-    }
+      if (!isValidPhone) {
+        toast.error('Invalid phone number');
+        setSubmitLoad(false)
+        return
+      }
+    
 
     const missing = requiredFields.filter((field) => !values[field]);
-
-    if (missing.length > 0) {
+    if (missing.length > 0 || !formCoordinates) {
       setMissingFields(missing);
-      // if (!formCoordinates) {
-      //   toast.error("Please Enter Location Coordinates");
-      // }
+      if (!formCoordinates) {
+        toast.error("Please Enter Location Coordinates");
+      }
       toast.error("Please fill in all required fields.");
-      setSubmitLoad(false);
+      setSubmitLoad(false)
       return;
     }
 
     try {
-      const response = await fetch(`${api_url}/Investor/${id}`, {
+      const response = await fetch(`${api_url}/Landlord/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -238,22 +208,22 @@ const UpdateInvestor = () => {
       if (responseData.status) {
         await createActivity(
           user._id,
-          "investor_create",
-          `${user.name} created an investor named: ${values.name}!`
+          "landlord_create",
+          `${user.name} created an landlord named: ${values.name}!`
         );
         console.log(responseData);
-        setSubmitLoad(true);
+        setSubmitLoad(false)
         navigate(-1);
       } else {
         console.log(response);
         console.error("Failed to submit form");
+        setSubmitLoad(false)
         toast.error(responseData.message);
-        setSubmitLoad(false);
       }
     } catch (error) {
       console.log(error);
+      setSubmitLoad(false)
       toast.error("There is a problem with the server!");
-      setSubmitLoad(false);
     }
   };
 
@@ -281,15 +251,25 @@ const UpdateInvestor = () => {
 
   const maxDate = calculateMaxDate();
 
+  if (!data) {
+    return (
+      <div className="flex justify-center items-center h-[80dvh]">
+        <ImSpinner2 className="w-14 h-1/4 animate-spin " />
+      </div>
+    );
+  }
+
   return (
-    <section className="updateInvestor   lg:px-1 sm:px-16 px-5 font-poppins max-container ">
+    <section className="addInvestor   lg:px-1 sm:px-16 px-5 font-poppins max-container ">
       <div className="page-title pb-3 border-b-2 border-b-slate-500  flex justify-start items-center font-medium text-base font-poppins mt-5 gap-3">
         <img
           src={partnerAcquisitionIcon}
           alt="partner Acquisition Icon"
           className="md:w-8 md:h-8 w-6 h-6"
         />
-        <p className="text-sm md:text-base font-semibold ">Update Investor</p>
+        <p className="text-sm md:text-base font-semibold ">
+          Partner Acquisition - Add Landlord
+        </p>
       </div>
 
       <form className="w-full max-w-lg mx-auto my-4 text-sm ">
@@ -299,12 +279,12 @@ const UpdateInvestor = () => {
             <label htmlFor="type" className="mr-2">
               Type:
             </label>
-            <p className=" py-1  rounded  w-full">Investor</p>
+            <p className=" py-1  rounded  w-full">Landlord</p>
           </div>
           {/* name */}
           <div className="flex items-center">
             <label htmlFor="name" className="mr-2">
-              Name:
+              Name:*
             </label>
             <input
               type="text"
@@ -337,10 +317,10 @@ const UpdateInvestor = () => {
           {/* phone */}
           <div className="flex items-center">
             <label htmlFor="phone" className="mr-2">
-              Phone:
+              Phone:*
             </label>
             <input
-              type="number"
+              type="tel"
               name="phone"
               value={values.phone}
               onChange={handleChange}
@@ -367,7 +347,7 @@ const UpdateInvestor = () => {
               }`}
             />
           </div>
-          {/* investmentBudget */}
+          {/* dob */}
           <div className="flex items-center">
             <label htmlFor="dob" className="mr-2">
               Date of Birth:
@@ -377,8 +357,8 @@ const UpdateInvestor = () => {
               name="dob"
               value={values.dob}
               onChange={handleChange}
-              max={maxDate} // Set the max attribute to the date 10 years ago
               placeholder="dob"
+              max={maxDate}
               className={`input-field ${
                 isFieldMissing("dob") ? "border-red-500" : "border-[#8D8D8D] "
               }`}
@@ -387,7 +367,7 @@ const UpdateInvestor = () => {
           {/* gender */}
           <div className="flex items-center">
             <label htmlFor="gender" className="mr-2">
-              Gender:
+              Gender:*
             </label>
             <select
               id="gender"
@@ -408,96 +388,11 @@ const UpdateInvestor = () => {
               ))}
             </select>
           </div>
-          {/* profession */}
-          <div className="flex items-center">
-            <label htmlFor="profession" className="mr-2">
-              Profession:
-            </label>
-            <select
-              name="profession"
-              value={values.profession}
-              onChange={handleChange}
-              className={`input-field ${
-                isFieldMissing("profession")
-                  ? "border-red-500"
-                  : "border-[#8D8D8D] "
-              }`}
-            >
-              <option value="">Select Profession</option>
-              {professionOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* education */}
-          <div className="flex items-center">
-            <label htmlFor="education" className="mr-2">
-              Education:
-            </label>
-            <select
-              name="education"
-              value={values.education}
-              onChange={handleChange}
-              className={`input-field ${
-                isFieldMissing("education")
-                  ? "border-red-500"
-                  : "border-[#8D8D8D] "
-              }`}
-            >
-              <option value="">Select Education</option>
-              {educationOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* investmentBudget */}
-          <div className="flex items-center">
-            <label htmlFor="investmentBudget" className="mr-2">
-              Investment Budget:
-            </label>
-            <input
-              type="number"
-              name="investmentBudget"
-              value={values.investmentBudget}
-              onChange={handleChange}
-              placeholder="Investment Budget"
-              className={`input-field ${
-                isFieldMissing("investmentBudget")
-                  ? "border-red-500"
-                  : "border-[#8D8D8D] "
-              }`}
-            />
-          </div>
-
-          {/* investmentBudget */}
-          <div className="flex items-center">
-            <label htmlFor="possibleInvestmentDate" className="mr-2">
-              Possible Inv. Date:
-            </label>
-            <input
-              type="date"
-              name="possibleInvestmentDate"
-              value={values.possibleInvestmentDate}
-              onChange={handleChange}
-              placeholder="possibleInvestmentDate"
-              className={`input-field ${
-                isFieldMissing("possibleInvestmentDate")
-                  ? "border-red-500"
-                  : "border-[#8D8D8D] "
-              }`}
-            />
-          </div>
 
           {/* division */}
           <div className="flex items-center">
             <label htmlFor="division" className="mr-2">
-              Division:
+              Division:*
             </label>
             <select
               name="division"
@@ -513,7 +408,11 @@ const UpdateInvestor = () => {
               }`}
             >
               <option value="">Select Division</option>
-
+              {/* {divisionOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))} */}
               {Array.from(
                 new Set(LocationsData.map((item) => item.Division))
               ).map((division, index) => (
@@ -527,7 +426,7 @@ const UpdateInvestor = () => {
           {/* district */}
           <div className="flex items-center">
             <label htmlFor="district" className="mr-2">
-              District:
+              District:*
             </label>
             <select
               name="district"
@@ -543,7 +442,11 @@ const UpdateInvestor = () => {
               }`}
             >
               <option value="">Select District</option>
-
+              {/* {districtOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))} */}
               {Array.from(
                 new Set(filteredDistricts.map((item) => item.Zila))
               ).map((item, index) => (
@@ -557,7 +460,7 @@ const UpdateInvestor = () => {
           {/* upazila */}
           <div className="flex items-center">
             <label htmlFor="upazila" className="mr-2">
-              Upazila/Thana:
+              Upazila/Thana:*
             </label>
             <select
               name="upazila"
@@ -573,7 +476,16 @@ const UpdateInvestor = () => {
               }`}
             >
               <option value="">Select Upazila/Thana</option>
-
+              {/* {upazilaOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))} */}
+              {/* {filteredUpazilas.map((item, index) => (
+                <option key={index} value={item.Upazila}>
+                  {item.Upazila}
+                </option>
+              ))} */}
               {Array.from(
                 new Set(filteredUpazilas.map((item) => item.Upazila))
               ).map((item, index) => (
@@ -586,7 +498,7 @@ const UpdateInvestor = () => {
 
           <div className="flex items-center">
             <label htmlFor="address" className="mr-2">
-              Address:
+              Address:*
             </label>
             <textarea
               name="address"
@@ -600,12 +512,13 @@ const UpdateInvestor = () => {
               }`}
             />
           </div>
+
           <div
             onClick={() => handleMapModal()}
             className="flex items-center cursor-pointer"
           >
             <label htmlFor="location" className="mr-2">
-              Location:
+              Location:*
             </label>
             <div className="flex items-center justify-center rounded text-white gap-1 bg-green-500 w-full p-2">
               <svg
@@ -629,11 +542,13 @@ const UpdateInvestor = () => {
               </svg>
 
               <p>
-                {formCoordinates
+              {formCoordinates
                   ? `Long ${formCoordinates?.longitude
                       ?.toString()
                       .slice(0, 7)}... Lat 
-                      ${formCoordinates.latitude?.toString().slice(0, 7)}...
+                      ${formCoordinates.latitude
+                         ?.toString()
+                      .slice(0, 7)}...
                       `
                   : "Set Location on Map"}
               </p>
@@ -678,13 +593,12 @@ const UpdateInvestor = () => {
               className={`input-field border-[#8D8D8D]`}
             />
           </div>
-
           <button
             onClick={(e) => handleSubmit(e)}
             disabled={submitLoad}
             className="bg-primary text-white p-3 font-medium rounded"
           >
-            {submitLoad ? "Loading..." : "Save and Continue"}
+            {submitLoad?"Loading...":"Save and Continue"}
           </button>
           <Toaster position="top-right" reverseOrder={false} />
         </div>
@@ -706,4 +620,4 @@ const UpdateInvestor = () => {
   );
 };
 
-export default UpdateInvestor;
+export default UpdateLandlord;

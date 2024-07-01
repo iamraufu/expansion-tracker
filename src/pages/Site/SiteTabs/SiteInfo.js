@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useOutletContext } from "react-router-dom";
+import { NavLink, useOutletContext, useParams } from "react-router-dom";
 
 // import partnerAcquisitionIcon from "../../../assets/icons/landmark.png";
 import { ImSpinner2 } from "react-icons/im";
@@ -11,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 // import SiteStatusModal from "../../../components/Site/SiteStatusModal";
 
 const SiteInfo = () => {
+  let { id } = useParams();
   const {
     outletData: data,
     investors,
@@ -126,7 +127,7 @@ const SiteInfo = () => {
             className="w-full py-2 shadow  border-2 rounded-md border-rose-600 font-medium text-rose-600 flex justify-center items-center gap-3 mt-4 hover:bg-rose-600 hover:text-white"
           >
             <BiEdit className="h-6 w-6 " />
-            <p className="font-semibold text-sm">Change Status</p>
+            <p className="font-semibold text-xs">Change Status</p>
           </button>
           {isModalOpen && (
             <>
@@ -142,6 +143,7 @@ const SiteInfo = () => {
           )}
         </div>
       </div>
+      <NavLink to={`/site/update/${id}`}  className="w-full block text-center my-4 bg-teal-500 py-3 rounded text-white">Update Site</NavLink>
       <Toaster position="top-right" reverseOrder={false} />
     </section>
   );

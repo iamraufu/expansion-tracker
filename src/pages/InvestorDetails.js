@@ -150,7 +150,7 @@ const InvestorDetails = () => {
             </p>
           </div>
         </div>
-        {/* <NavLink to={`/site/update/${id}`}  className="w-full block text-center my-4 bg-teal-500 py-3 rounded text-white">Update</NavLink> */}
+        <NavLink to={`/investor/update/${id}`}  className="w-full block text-center my-4 bg-teal-500 py-3 rounded text-white">Update</NavLink>
       </div>
     </section>
   );

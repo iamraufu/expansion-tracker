@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import { ImSpinner2 } from "react-icons/im";
@@ -139,6 +139,7 @@ const LandlordDetails = () => {
           </div>
         </div>
       </div>
+      <NavLink to={`/landlord/update/${id}`}  className="w-full block text-center my-4 bg-teal-500 py-3 rounded text-white">Update</NavLink>
     </section>
   );
 };
