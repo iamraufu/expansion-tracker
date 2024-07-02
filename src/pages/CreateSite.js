@@ -3297,20 +3297,6 @@ const CreateSite = () => {
             </div>
             <div className="flex items-center">
               <label htmlFor="name" className="mr-2">
-                Longitude:
-              </label>
-              <input
-                type="text"
-                id="longitude"
-                name="longitude"
-                value={formCoordinates?.longitude}
-                onChange={(e)=>setFormCoordinates({...formCoordinates, longitude:e.target.value})}
-                placeholder="longitude"
-                className={`input-field border-[#8D8D8D]`}
-              />
-            </div>
-            <div className="flex items-center">
-              <label htmlFor="name" className="mr-2">
                 Latitude:
               </label>
               <input
@@ -3323,6 +3309,21 @@ const CreateSite = () => {
                 className={`input-field border-[#8D8D8D]`}
               />
             </div>
+            <div className="flex items-center">
+              <label htmlFor="name" className="mr-2">
+                Longitude:
+              </label>
+              <input
+                type="text"
+                id="longitude"
+                name="longitude"
+                value={formCoordinates?.longitude}
+                onChange={(e)=>setFormCoordinates({...formCoordinates, longitude:e.target.value})}
+                placeholder="longitude"
+                className={`input-field border-[#8D8D8D]`}
+              />
+            </div>
+
             <button
               onClick={(e) => handleSubmit(e)}
               className="bg-primary text-white p-3 font-medium rounded"

@@ -108,7 +108,7 @@ const AddLandlord = () => {
       "upazila",
       // "thana",
       "address",
-      "location",
+      // "location",
     ];
     // console.log(values);
     // console.log({ missing });
@@ -127,9 +127,9 @@ const AddLandlord = () => {
     const missing = requiredFields.filter((field) => !values[field]);
     if (missing.length > 0 || !formCoordinates) {
       setMissingFields(missing);
-      if (!formCoordinates) {
-        toast.error("Please Enter Location Coordinates");
-      }
+      // if (!formCoordinates) {
+      //   toast.error("Please Enter Location Coordinates");
+      // }
       toast.error("Please fill in all required fields.");
       setSubmitLoad(false)
       return;
@@ -451,7 +451,7 @@ const AddLandlord = () => {
             className="flex items-center cursor-pointer"
           >
             <label htmlFor="location" className="mr-2">
-              Location:*
+              Location:
             </label>
             <div className="flex items-center justify-center rounded text-white gap-1 bg-green-500 w-full p-2">
               <svg
@@ -487,26 +487,6 @@ const AddLandlord = () => {
               </p>
             </div>
           </div>
-
-          <div className="flex items-center">
-            <label htmlFor="name" className="mr-2">
-              Longitude:
-            </label>
-            <input
-              type="text"
-              id="longitude"
-              name="longitude"
-              value={formCoordinates?.longitude}
-              onChange={(e) =>
-                setFormCoordinates({
-                  ...formCoordinates,
-                  longitude: e.target.value,
-                })
-              }
-              placeholder="longitude"
-              className={`input-field border-[#8D8D8D]`}
-            />
-          </div>
           <div className="flex items-center">
             <label htmlFor="name" className="mr-2">
               Latitude:
@@ -526,6 +506,28 @@ const AddLandlord = () => {
               className={`input-field border-[#8D8D8D]`}
             />
           </div>
+
+          <div className="flex items-center">
+            
+            <label htmlFor="name" className="mr-2">
+              Longitude:
+            </label>
+            <input
+              type="text"
+              id="longitude"
+              name="longitude"
+              value={formCoordinates?.longitude}
+              onChange={(e) =>
+                setFormCoordinates({
+                  ...formCoordinates,
+                  longitude: e.target.value,
+                })
+              }
+              placeholder="longitude"
+              className={`input-field border-[#8D8D8D]`}
+            />
+          </div>
+          
           <button
             onClick={(e) => handleSubmit(e)}
             disabled={submitLoad}

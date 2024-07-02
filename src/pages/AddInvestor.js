@@ -229,7 +229,7 @@ const AddInvestor = () => {
           {/* name */}
           <div className="flex items-center">
             <label htmlFor="name" className="mr-2">
-              Name:
+              Name:*
             </label>
             <input
               type="text"
@@ -246,7 +246,7 @@ const AddInvestor = () => {
           {/* email */}
           <div className="flex items-center">
             <label htmlFor="name" className="mr-2">
-              Email:
+              Email:*
             </label>
             <input
               type="email"
@@ -262,7 +262,7 @@ const AddInvestor = () => {
           {/* phone */}
           <div className="flex items-center">
             <label htmlFor="phone" className="mr-2">
-              Phone:
+              Phone:*
             </label>
             <input
               type="number"
@@ -312,7 +312,7 @@ const AddInvestor = () => {
           {/* gender */}
           <div className="flex items-center">
             <label htmlFor="gender" className="mr-2">
-              Gender:
+              Gender:*
             </label>
             <select
               id="gender"
@@ -336,7 +336,7 @@ const AddInvestor = () => {
           {/* profession */}
           <div className="flex items-center">
             <label htmlFor="profession" className="mr-2">
-              Profession:
+              Profession:*
             </label>
             <select
               name="profession"
@@ -360,7 +360,7 @@ const AddInvestor = () => {
           {/* education */}
           <div className="flex items-center">
             <label htmlFor="education" className="mr-2">
-              Education:
+              Education:*
             </label>
             <select
               name="education"
@@ -384,7 +384,7 @@ const AddInvestor = () => {
           {/* investmentBudget */}
           <div className="flex items-center">
             <label htmlFor="investmentBudget" className="mr-2">
-              Investment Budget:
+              Investment Budget:*
             </label>
             <input
               type="number"
@@ -403,7 +403,7 @@ const AddInvestor = () => {
           {/* investmentBudget */}
           <div className="flex items-center">
             <label htmlFor="possibleInvestmentDate" className="mr-2">
-              Possible Inv. Date:
+              Possible Inv. Date:*
             </label>
             <input
               type="date"
@@ -422,7 +422,7 @@ const AddInvestor = () => {
           {/* division */}
           <div className="flex items-center">
             <label htmlFor="division" className="mr-2">
-              Division:
+              Division:*
             </label>
             <select
               name="division"
@@ -452,7 +452,7 @@ const AddInvestor = () => {
           {/* district */}
           <div className="flex items-center">
             <label htmlFor="district" className="mr-2">
-              District:
+              District:*
             </label>
             <select
               name="district"
@@ -482,7 +482,7 @@ const AddInvestor = () => {
           {/* upazila */}
           <div className="flex items-center">
             <label htmlFor="upazila" className="mr-2">
-              Upazila/Thana:
+              Upazila/Thana:*
             </label>
             <select
               name="upazila"
@@ -511,7 +511,7 @@ const AddInvestor = () => {
 
           <div className="flex items-center">
             <label htmlFor="address" className="mr-2">
-              Address:
+              Address:*
             </label>
             <textarea
               name="address"
@@ -567,25 +567,6 @@ const AddInvestor = () => {
 
           <div className="flex items-center">
             <label htmlFor="name" className="mr-2">
-              Longitude:
-            </label>
-            <input
-              type="text"
-              id="longitude"
-              name="longitude"
-              value={formCoordinates?.longitude}
-              onChange={(e) =>
-                setFormCoordinates({
-                  ...formCoordinates,
-                  longitude: e.target.value,
-                })
-              }
-              placeholder="longitude"
-              className={`input-field border-[#8D8D8D]`}
-            />
-          </div>
-          <div className="flex items-center">
-            <label htmlFor="name" className="mr-2">
               Latitude:
             </label>
             <input
@@ -603,6 +584,27 @@ const AddInvestor = () => {
               className={`input-field border-[#8D8D8D]`}
             />
           </div>
+
+          <div className="flex items-center">
+            <label htmlFor="name" className="mr-2">
+              Longitude:
+            </label>
+            <input
+              type="text"
+              id="longitude"
+              name="longitude"
+              value={formCoordinates?.longitude}
+              onChange={(e) =>
+                setFormCoordinates({
+                  ...formCoordinates,
+                  longitude: e.target.value,
+                })
+              }
+              placeholder="longitude"
+              className={`input-field border-[#8D8D8D]`}
+            />
+          </div>
+          
 
           <button
             onClick={(e) => handleSubmit(e)}
