@@ -124,8 +124,10 @@ const AddLandlord = () => {
       }
     
 
+
     const missing = requiredFields.filter((field) => !values[field]);
-    if (missing.length > 0 || !formCoordinates) {
+    if (missing.length > 0) {
+      console.log({missing})
       setMissingFields(missing);
       // if (!formCoordinates) {
       //   toast.error("Please Enter Location Coordinates");
