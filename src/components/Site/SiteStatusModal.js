@@ -238,13 +238,13 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
 
   useEffect(() => {
     const statusesRequiringDocument = [
-      "feasibility waiting for approval",
+      // "feasibility waiting for approval",
       // "feasibility done by operations",
       // "feasibility approved",
-      "docs collected",
-      "layout approved",
-      "site ready",
-      "product arrived",
+      // "docs collected",
+      // "layout approved",
+      // "site ready",
+      // "product arrived",
     ];
 
     const statusesRequiringApproval = [
