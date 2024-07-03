@@ -772,6 +772,11 @@
     {
       "Division": "Dhaka",
       "Zila": "Dhaka",
+      "Upazila": "Hatirjheel"
+    },
+    {
+      "Division": "Dhaka",
+      "Zila": "Dhaka",
       "Upazila": "Badda"
     },
     {
@@ -1083,6 +1088,11 @@
       "Division": "Dhaka",
       "Zila": "Gazipur",
       "Upazila": "Gazipur Sadar"
+    },
+    {
+      "Division": "Dhaka",
+      "Zila": "Gazipur",
+      "Upazila": "Kashimpur"
     },
     {
       "Division": "Dhaka",
