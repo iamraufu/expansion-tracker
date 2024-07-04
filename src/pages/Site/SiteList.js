@@ -81,7 +81,7 @@ const SiteList = () => {
           <thead className="bg-secondary text-white text-left">
             <tr className="bg-secondary">
               <th className=" px-4 py-2">ID</th>
-              <th className=" px-4 py-2">Name</th>
+              <th className=" px-4 py-2">Site Name</th>
               <th className=" px-4 py-2">SQFT</th>
               <th className=" px-4 py-2">Status</th>
             </tr>

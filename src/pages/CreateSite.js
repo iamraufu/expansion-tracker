@@ -3015,7 +3015,7 @@ const CreateSite = () => {
             {/* name */}
             <div className="flex items-center">
               <label htmlFor="name" className="mr-2">
-                Name:
+                Site Name:
               </label>
               <input
                 type="text"
