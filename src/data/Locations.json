@@ -1097,6 +1097,21 @@
     {
       "Division": "Dhaka",
       "Zila": "Gazipur",
+      "Upazila": "Gacha"
+    },
+    {
+      "Division": "Dhaka",
+      "Zila": "Gazipur",
+      "Upazila": "Tongi East"
+    },
+    {
+      "Division": "Dhaka",
+      "Zila": "Gazipur",
+      "Upazila": "Tongi West"
+    },
+    {
+      "Division": "Dhaka",
+      "Zila": "Gazipur",
       "Upazila": "Kaliakair"
     },
     {
