@@ -1,0 +1,23 @@
+<svg
+                  width="120"
+                  height="80"
+                  viewBox="0 0 161 70"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="customArrow">
+                    <rect
+                      id="tail"
+                      x="46"
+                      y="24"
+                      width="115"
+                      height="23"
+                      fill="#9CA3AF"
+                    />
+                    <path
+                      id="head"
+                      d="M-1.5299e-06 35L52.5 4.68911L52.5 65.3109L-1.5299e-06 35Z"
+                      fill="#9CA3AF"
+                    />
+                  </g>
+                </svg>

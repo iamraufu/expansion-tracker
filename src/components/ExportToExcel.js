@@ -14,6 +14,7 @@ const ExportToExcel = ({ data, headers, fileName }) => {
           let val = "";
 
           item[header].map((item) => {
+            console.log(item);
             return filteredItem[item.status] = new Date(item["updatedAt"])?new Date(item["updatedAt"]).toLocaleDateString():"";
           });
 

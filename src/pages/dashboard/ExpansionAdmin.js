@@ -83,8 +83,8 @@ const ExpansionAdmin = () => {
   }
 
   return (
-    <div>
-      <div className="bg-white overflow-hidden sm:rounded-lg container mx-auto">
+    <div  className="bg-white overflow-hidden sm:rounded-lg max-container mx-auto">
+      <div className="p-3">
         <p className="font-medium font-poppins text-lg p-4 ">Users Table</p>
         <div className="p-4">
           <label htmlFor="role" className="mr-2">
@@ -102,8 +102,8 @@ const ExpansionAdmin = () => {
             <option value="manager">Manager</option>
           </select>
         </div>
-        <div className="p-3 overflow-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+        <div className=" overflow-auto shadow">
+          <table className="min-w-full shadow-md p-3 divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th

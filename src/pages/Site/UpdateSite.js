@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import siteStoreIcon from "../../assets/icons/landmark.png";
 import toast, { Toaster } from "react-hot-toast";
 import LocationsData from "../../data/Locations.json";
-// import { useParams } from "react-router-dom";
 import Map from ".././Map";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";

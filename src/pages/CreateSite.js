@@ -2937,6 +2937,38 @@ const CreateSite = () => {
       return;
     }
 
+
+    // for (let i = 1; i <= 30; i++) {
+    //   try {
+    //     const response = await fetch(`${api_url}/site/register`, {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         authorization: user.token,
+    //       },
+    //       body: JSON.stringify({ ...values, location: formCoordinates, name: values.name + `${i}` }),
+    //     });
+  
+    //     const responseData = await response.json();
+    //     if (responseData.status) {
+    //       // await createActivity(
+    //       //   user._id,
+    //       //   "site_create",
+    //       //   `${user.name} created an site named: ${values.name}!`
+    //       // );
+    //       console.log(responseData);
+    //       // navigate(-1);
+    //     } else {
+    //       console.log(response);
+    //       console.error("Failed to submit form");
+    //       toast.error(responseData.message);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //     toast.error("There is a problem with the server!");
+    //   }
+    // }
+
     try {
       const response = await fetch(`${api_url}/site/register`, {
         method: "POST",
@@ -3132,6 +3164,7 @@ const CreateSite = () => {
                 name="estimatedHandoverDate"
                 value={values.estimatedHandoverDate}
                 onChange={handleChange}
+                min={new Date().toISOString().split('T')[0]}
                 placeholder="Estimated Handover Date"
                 className={`input-field ${
                   isFieldMissing("estimatedHandoverDate")

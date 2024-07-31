@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import { IoMdAddCircle } from "react-icons/io";
@@ -11,15 +12,25 @@ const Partners = () => {
   const navigate = useNavigate();
   const api_url = process.env.REACT_APP_API_URL;
   const { user } = useAuth();
+  const [selectedPartner,setSelectedPartner] = useState("investor")
 
   // console.log(user);
 
   const filter =
     user.role === "admin"
-      ? {}
+      ? {
+          type: selectedPartner
+        }
       : user.role !== "manager"
-      ? { createdBy: user._id }
-      : { createdBy: user.employees };
+      ? { 
+          createdBy: user._id,
+          type: selectedPartner
+        }
+      : { 
+            createdBy: user.employees ,
+            type: selectedPartner
+
+        };
 
   // console.log(filter);
 
@@ -51,7 +62,7 @@ const Partners = () => {
     fetchData();
 
     // eslint-disable-next-line
-  }, []);
+  }, [selectedPartner]);
 
   if (data === null) {
     return (
@@ -77,6 +88,11 @@ const Partners = () => {
 
         <ExportToExcel data={data} headers = {["customId","name", "phone", "email", "type","createdBy", "createdAt"]} fileName={"Partners"}  />
         
+      </div>
+
+      <div className="flex w-full justify-between my-4 bg-slate-200 rounded-md p-1 font-medium">
+        <button onClick={()=>setSelectedPartner("investor")} className={`text-center w-full  p-2 cursor-pointer rounded-md ${selectedPartner==="investor" ? "bg-white text-slate-900": "text-slate-800"}`}>Investor</button>
+        <button onClick={()=>setSelectedPartner("landlord")} className={`text-center w-full  p-2 cursor-pointer rounded-md  ${selectedPartner==="landlord" ? "bg-white text-slate-900" : "text-slate-800"}`}>Landlord</button>
       </div>
 
       <div className="overflow-x-auto text-xs md:text-sm rounded-md mt-4 border-2 border-slate-900 h-[60dvh]">

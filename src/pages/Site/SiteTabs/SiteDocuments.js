@@ -24,6 +24,7 @@ const SiteDocuments = () => {
   ];
 
   const { user } = useAuth();
+  console.log({data});
   let { id } = useParams();
   const api_url = process.env.REACT_APP_API_URL;
 
@@ -38,37 +39,39 @@ const SiteDocuments = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const statusOptions = [
-    {
-      label: "feasibility waiting for approval",
-      value: "feasibility waiting for approval",
-    },
-    {
-      label: "feasibility done by operations",
-      value: "feasibility done by operations",
-    },
-    {
-      label: "feasibility approved",
-      value: "feasibility approved",
-    },
+  const [statusOptions,setStatusOptions] = useState(data?.statusDetails) 
 
-    {
-      label: "docs collected",
-      value: "docs collected",
-    },
-    {
-      label: "layout approved",
-      value: "layout approved",
-    },
-    {
-      label: "site ready",
-      value: "site ready",
-    },
-    {
-      label: "product arrived",
-      value: "product arrived",
-    },
-  ];
+  // const statusOptions = [
+  //   {
+  //     label: "feasibility waiting for approval",
+  //     value: "feasibility waiting for approval",
+  //   },
+  //   {
+  //     label: "feasibility done by operations",
+  //     value: "feasibility done by operations",
+  //   },
+  //   {
+  //     label: "feasibility approved",
+  //     value: "feasibility approved",
+  //   },
+
+  //   {
+  //     label: "docs collected",
+  //     value: "docs collected",
+  //   },
+  //   {
+  //     label: "layout approved",
+  //     value: "layout approved",
+  //   },
+  //   {
+  //     label: "site ready",
+  //     value: "site ready",
+  //   },
+  //   {
+  //     label: "product arrived",
+  //     value: "product arrived",
+  //   },
+  // ];
 
   const documentTypes = [
     {
@@ -215,7 +218,7 @@ const SiteDocuments = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `${user.token}`,
         },
         body: JSON.stringify(updatedData),
       });
@@ -235,6 +238,7 @@ const SiteDocuments = () => {
   };
 
   const handleDocumentChange = async (file) => {
+
     if (file) {
       setIsUploading(true); // Set upload status to true
       const documentName = `${new Date().getTime()}_${file.name}`;
@@ -287,7 +291,7 @@ const SiteDocuments = () => {
     <div className="text-xs md:text-sm lg:px-1 sm:px-16 px-4 font-poppins max-container mt-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-base font-bold ">Documents</h1>
-        {documents.length > 0 && <button
+        {<button
           onClick={() => handleModalSwitch()}
           className=" px-3 py-2 shadow   border-2 rounded-md border-green-600 font-medium flex justify-center items-center gap-3 bg-green-600  hover:bg-green-700 text-white"
         >
@@ -298,7 +302,7 @@ const SiteDocuments = () => {
         </button>}
       </div>
 
-      {documents.length > 0 ? (
+      
         <>
           <div className="mb-4">
             <label htmlFor="filter" className="block text-sm font-medium mb-2">
@@ -327,6 +331,7 @@ const SiteDocuments = () => {
               >
                 <FaFileAlt className="w-6 h-6 mr-4" />
                 <div>
+                  
                   <a
                     href={doc.url}
                     target="_blank"
@@ -335,8 +340,9 @@ const SiteDocuments = () => {
                   >
                     {doc.status} - {getFileName(doc.url)}
                   </a>
+                  <p className="text-xs my-2">{doc.fileType}</p>
                   {/* <p className="text-sm text-gray-500">{}</p> */}
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500 ">
                     {new Date(doc.createdAt).toDateString()} -
                     {new Date(doc.createdAt).toLocaleTimeString()}
                   </p>
@@ -375,11 +381,11 @@ const SiteDocuments = () => {
                       <option value="">Select Status</option>
                       {statusOptions.map((option) => (
                         <option
-                          key={option.value}
+                          key={option.status}
                           className="p-3 text-xs flex-wrap"
-                          value={option.value}
+                          value={option.status}
                         >
-                          {option.label}
+                          {option.status}
                         </option>
                       ))}
                     </select>
@@ -446,9 +452,7 @@ const SiteDocuments = () => {
             </>
           )}
         </>
-      ) : (
-        <p>No documents available.</p>
-      )}
+      
     </div>
   );
 };

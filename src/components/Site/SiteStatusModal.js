@@ -24,6 +24,9 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
   const { user } = useAuth();
   let { id } = useParams();
   const api_url = process.env.REACT_APP_API_URL;
+  const [warning, setWarning] = useState("");
+
+  console.log({ data });
 
   const [selectedInvestor, setSelectedInvestor] = useState(
     data.investors.length > 0 ? data.investors[0]?.investorId._id : ""
@@ -40,7 +43,8 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
   );
 
   const [approvedBy, setApprovedBy] = useState(
-    data?.statusDetails?.find((option) => option.status === newStatus)?.approvedBy
+    data?.statusDetails?.find((option) => option.status === newStatus)
+      ?.approvedBy
   );
   const [document, setDocument] = useState(null);
   const [documentType, setDocumentType] = useState("");
@@ -52,7 +56,9 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
     (option) => option.status === newStatus
   );
   const { createActivity } = useActivity();
-  const selectedStatusEquipments = selectedStatusDetails? selectedStatusDetails[0]?.equipmentOptions : [];
+  const selectedStatusEquipments = selectedStatusDetails
+    ? selectedStatusDetails[0]?.equipmentOptions
+    : [];
 
   // console.log({selectedStatusEquipments});
   const [equipmentOptions, setEquipmentOptions] = useState(
@@ -62,6 +68,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
   const [remarks, setRemarks] = useState(
     selectedStatusDetails[0]?.remarks ? selectedStatusDetails[0].remarks : ""
   );
+  const [sapCode, setSapCode] = useState(data.sapCode ? data.sapCode : "");
 
   const getFileName = (url) => {
     const parts = url.split("%2F");
@@ -100,83 +107,101 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
     },
     {
       level: 2,
-      label: "landlord verbally agreed",
-      value: "landlord verbally agreed",
+      label: "site negotiation",
+      value: "site negotiation",
     },
     {
       level: 3,
-      label: "investor found",
-      value: "investor found",
+      label: "investor & site confirmation",
+      value: "investor and site confirmation",
     },
     {
       level: 4,
-      label: "investor verbally agreed",
-      value: "investor verbally agreed",
+      label: "feasibility study",
+      value: "feasibility study",
     },
     {
       level: 5,
-      label: "feasibility waiting for approval",
-      value: "feasibility waiting for approval",
+      label: "RMIA Validation",
+      value: "RMIA validation",
     },
+
+    // {
+    //   level: 6,
+    //   label: "feasibility done by operations",
+    //   value: "feasibility done by operations",
+    // },
     {
       level: 6,
-      label: "feasibility done by operations",
-      value: "feasibility done by operations",
+      label: "GMD approval",
+      value: "GMD approval",
     },
     {
       level: 7,
-      label: "feasibility approved",
-      value: "feasibility approved",
+      label: "premises agreement",
+      value: "premises agreement",
     },
     {
       level: 8,
-      label: "agreement complete b/w franchise and landlord",
-      value: "agreement complete b/w franchise and landlord",
-    },
-    {
-      level: 9,
       label: "docs collected",
       value: "docs collected",
     },
+
     {
-      level: 10,
+      level: 9,
       label: "layout approved",
       value: "layout approved",
     },
     {
+      level: 10,
+      label: "franchise agreement",
+      value: "franchise agreement",
+    },
+
+    {
       level: 11,
-      label: "agreement complete b/w shwapno and franchise",
-      value: "agreement complete b/w shwapno and franchise",
+      label: "civil work",
+      value: "civil work",
     },
     {
       level: 12,
-      label: "site ready",
-      value: "site ready",
-    },
-    {
-      level: 13,
       label: "equipment order",
       value: "equipment order",
     },
     {
-      level: 14,
-      label: "equipment landed",
-      value: "equipment landed",
+      level: 13,
+      label: "equipment installation",
+      value: "equipment installation",
     },
     {
-      level: 15,
+      level: 14,
       label: "hr ready",
       value: "hr ready",
     },
     {
+      level: 15,
+      label: "product receiving",
+      value: "product receiving",
+    },
+    {
       level: 16,
-      label: "product arrived",
-      value: "product arrived",
+      label: "merchandising",
+      value: "merchandising",
     },
     {
       level: 17,
-      label: "ready to open",
-      value: "ready to open",
+      label: "branding",
+      value: "branding",
+    },
+    {
+      level: 18,
+      label: "inauguration",
+      value: "inauguration",
+    },
+    {
+      level: 19,
+      label: "site complete",
+      value: "site complete",
     },
   ];
 
@@ -236,25 +261,30 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
     { label: "furniture", value: "furniture" },
   ];
 
+
+
   useEffect(() => {
     const statusesRequiringDocument = [
-      // "feasibility waiting for approval",
+      // "feasibility study",
       // "feasibility done by operations",
-      // "feasibility approved",
+      // "GMD approval",
       // "docs collected",
       // "layout approved",
-      // "site ready",
-      // "product arrived",
+      // "civil work",
+      // "product receiving",
     ];
 
     const statusesRequiringApproval = [
-      "feasibility waiting for approval",
+      "feasibility study",
       "feasibility done by operations",
-      "feasibility approved",
+      // "GMD approval",
       "layout approved",
     ];
 
-    const equiptmentRequiredOptions = ["equipment order", "equipment landed"];
+    const equiptmentRequiredOptions = [
+      "equipment order",
+      "equipment installation",
+    ];
 
     const checkRequiredData = () => {
       if (statusesRequiringDocument.includes(newStatus) && !document) {
@@ -455,7 +485,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
       };
     }
 
-    if (newStatus === "investor found") {
+    if (newStatus === "investor and site confirmation") {
       updatedData = {
         ...updatedData,
         investors: [
@@ -470,7 +500,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
 
     console.log({ updatedData });
 
-    console.log({user});
+    console.log({ user });
 
     try {
       const response = await fetch(`${api_url}/site/update/${id}`, {
@@ -479,7 +509,10 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
           "Content-Type": "application/json",
           Authorization: `${user.token}`,
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify({
+          ...updatedData,
+          sapCode: sapCode === "" ? "" : sapCode,
+        }),
       });
 
       const responseData = await response.json();
@@ -574,7 +607,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
             </div>
           </>
         );
-      case "feasibility waiting for approval":
+      case "feasibility study":
         return (
           <div className="text-xs">
             <div className="mt-4 flex flex-col">
@@ -610,8 +643,42 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
             </div>
           </div>
         );
+      case "RMIA validation":
+        return (
+          <>
+            <div className="mt-4 flex flex-col">
+              <label htmlFor="remarks" className="block font-medium mb-2">
+                Remarks:
+              </label>
+              <textarea
+                id="remarks"
+                className="px-2 py-3 w-full border border-slate-500 rounded"
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+              />
+            </div>
+          </>
+        );
       case "feasibility done by operations":
-      case "feasibility approved":
+      case "GMD approval":
+        return (
+          <>
+            <div className="mt-4 flex flex-col">
+              <label
+                htmlFor="document"
+                className="block font-medium whitespace-nowrap mb-2"
+              >
+                Document upload
+              </label>
+              <input
+                id="document"
+                type="file"
+                className="px-2 py-3 w-full border rounded"
+                onChange={(e) => setDocument(e.target.files[0])}
+              />
+            </div>
+          </>
+        );
       case "layout approved":
         return (
           <>
@@ -649,8 +716,8 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
             </div>
           </>
         );
-      case "agreement complete b/w franchise and landlord":
-      case "agreement complete b/w shwapno and franchise":
+      case "premises agreement":
+      case "franchise agreement":
         return (
           <>
             {/* <div className="mt-4 flex flex-col">
@@ -689,7 +756,10 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
               </p>
             </div>
             <div className="mt-4 flex flex-col">
-              <label htmlFor="document" className="block font-medium mb-2 whitespace-nowrap">
+              <label
+                htmlFor="document"
+                className="block font-medium mb-2 whitespace-nowrap"
+              >
                 Document upload:
               </label>
               <input
@@ -745,12 +815,12 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
             </div>
           </>
         );
-      case "site ready":
-      case "product arrived":
+      case "civil work":
+      case "product receiving":
       case "hr ready":
         return (
           <>
-            {newStatus !== "ready to open" && newStatus !== "hr ready" && (
+            {newStatus !== "inauguration" && newStatus !== "hr ready" && (
               <div className="mt-4 flex flex-col">
                 <label htmlFor="document" className="block font-medium mb-2">
                   Upload picture:
@@ -763,7 +833,8 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
                 />
               </div>
             )}
-            {(newStatus === "product arrived" || newStatus === "hr ready") && (
+            {(newStatus === "product receiving" ||
+              newStatus === "hr ready") && (
               <div className="mt-4 flex flex-col">
                 <label htmlFor="remarks" className="block font-medium mb-2">
                   Remarks:
@@ -778,8 +849,59 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
             )}
           </>
         );
+
+      case "branding":
+      case "merchandising":
+        return (
+          <>
+            <div className="mt-4 flex flex-col">
+              <label htmlFor="remarks" className="block font-medium mb-2">
+                Remarks:
+              </label>
+              <textarea
+                id="remarks"
+                className="px-2 py-3 w-full border border-slate-500 rounded"
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+              />
+            </div>
+          </>
+        );
+      case "site complete":
+        return (
+          <>
+            <div className="mt-4 flex flex-col">
+              <label htmlFor="remarks" className="block font-medium mb-2">
+                SAP Site Code:
+              </label>
+              
+              <input
+                id="sapCode"
+                type="text"
+                className="px-2 py-3 w-full border border-slate-500 rounded"
+                value={sapCode}
+                onChange={(e) => {
+                  const regex = /^[A-Za-z][A-Za-z0-9]{3,}$/;
+                  if (!regex.test(e.target.value.toUpperCase().trim())) {
+                    setWarning(
+                      "It must start with an alphabet and be at least 4 characters long."
+                    );
+                  } else {
+                    setWarning("");
+                  }
+                  setSapCode(e.target.value.toUpperCase().trim());
+                }}
+              />
+              {warning && (
+                <p className="my-4 px-3 bg-red-100 py-2 border border-red-600 rounded-md font-medium">
+                  {warning}
+                </p>
+              )}
+            </div>
+          </>
+        );
       case "equipment order":
-      case "equipment landed":
+      case "equipment installation":
         return (
           <>
             <div className="relative">
@@ -811,10 +933,10 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
             </div>
           </>
         );
-      case "ready to open":
+      case "inauguration":
         return (
           <>
-            <label className="block font-medium text-gray-700 mb-2">
+            <label className="block font-medium text-gray-700 mb-2 whitespace-nowrap">
               Select Opening Date
             </label>
             <input
@@ -866,6 +988,14 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
           <p className="">Current Status: </p>
           <p className="uppercase">{data.status}</p>
         </div>
+        <div>
+          {newStatus === "RMIA validation" &&
+            !data.feasibilityDoneByOperations && (
+              <p className="my-4 px-3 bg-red-100 py-2 border border-red-600 rounded-md font-medium">
+                ⚠️ Feasibility by Operations Must be checked first!
+              </p>
+            )}
+        </div>
         <div className="flex flex-col justify-start mb-4">
           <label
             htmlFor="status"
@@ -893,7 +1023,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
           </select>
         </div>
 
-        {newStatus === "landlord verbally agreed" && (
+        {newStatus === "site negotiation" && (
           <div className="mt-4 flex flex-col">
             <label className="block font-medium mb-2">Landlord:</label>
             <p className="capitalize w-full">
@@ -902,7 +1032,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
           </div>
         )}
 
-        {newStatus === "investor found" && (
+        {newStatus === "investor and site confirmation" && (
           <div className="mt-4 flex flex-col justify-start">
             <label htmlFor="investor" className="block font-medium mb-2">
               Select Investor:
@@ -945,7 +1075,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
           </div>
         )}
 
-        {newStatus === "investor verbally agreed" && (
+        {/* {newStatus === "investor and site confirmation" && (
           <div className="mt-4 flex flex-col">
             <label className="block font-medium mb-2">Investor:</label>
             <p className="capitalize w-full">
@@ -959,7 +1089,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
               )}
             </p>
           </div>
-        )}
+        )} */}
 
         {renderAdditionalFields()}
         {selectedStatusDocs.length > 0 && (
@@ -981,6 +1111,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
                     >
                       {doc.status} - {getFileName(doc.url)}
                     </a>
+                    <p className="text-xs my-2">{doc.fileType}</p>
                     {/* <p className=" text-gray-500">{getFileName(doc.url)}</p> */}
                     <p className=" text-gray-500">
                       {new Date(doc.createdAt).toLocaleString()}
@@ -997,7 +1128,15 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
           <button
             onClick={handleSubmit}
             className={`mt-4 rounded w-full bg-green-500 text-white p-4 disabled:bg-slate-500`}
-            disabled={documentRequired || isApprovalRequired || isUploading}
+            disabled={
+              documentRequired ||
+              isApprovalRequired ||
+              isUploading ||
+              (newStatus === "RMIA validation" &&
+                !data.feasibilityDoneByOperations) ||
+              (newStatus === "site complete" && sapCode === "") ||
+              warning
+            }
           >
             {isUploading ? "Saving File..." : "Submit"}
           </button>

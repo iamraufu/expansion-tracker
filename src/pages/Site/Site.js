@@ -74,7 +74,7 @@ const Site = () => {
           className="md:w-8 md:h-8 w-6 h-6"
         />
         <p className="text-sm  md:text-base font-semibold ">
-          Site: <span className="capitalize">{data?.customId} - {data?.name}</span>
+          Site Details: <span className="capitalize">{data?.customId} - {data?.name}</span>
         </p>
       </div>
 

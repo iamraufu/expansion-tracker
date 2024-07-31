@@ -28,6 +28,7 @@ import UpdateInvestor from "./pages/investor/updateInvestor";
 import UpdateLandlord from "./pages/landlord/updateLandlord";
 import UpdateSite from "./pages/Site/UpdateSite";
 import ExpansionAdmin from "./pages/dashboard/ExpansionAdmin";
+import ExpansionFunnel from "./pages/dashboard/ExpansionFunnel/ExpansionFunnel";
 
 function App() {
   const { pathname } = useLocation();
@@ -66,7 +67,10 @@ function App() {
             <Route path="/taskList" element={<TaskList />} />
             <Route path="/addTask" element={<AddTask />} />
             <Route path="/task/:id" element={<TaskDetails />} />
-            <Route path="/dashboard" element={<ExpansionAdmin />} />
+            <Route path="/dashboard" element={<ExpansionAdmin />} >
+              <Route path="user-table" element={<SiteInfo />} />
+            </Route>
+            <Route path="/funnel" element={<ExpansionFunnel />} />
             <Route path="/map" element={<Map />} />
           </Route>
         </Routes>

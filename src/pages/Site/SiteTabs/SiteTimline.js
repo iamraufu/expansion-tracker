@@ -7,7 +7,7 @@ const SiteTimeline = () => {
   const [expanded, setExpanded] = useState(null);
   const { outletData: data } = useOutletContext();
 
-  console.log({ data });
+
 
   const statuses = data.statusDetails;
 
@@ -66,7 +66,7 @@ const SiteTimeline = () => {
               <div className="flex items-center">
                 <FaFile className="w-8 h-8 mr-4 text-blue-500" />
                 <div>
-                  <p className="text-sm font-semibold">{status.status}</p>
+                  <p className="text-sm font-semibold uppercase">{status.status}</p>
                   <p className="text-gray-500">
                     Created At: {new Date(status.createdAt).toLocaleString()}
                   </p>

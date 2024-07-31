@@ -1,17 +1,19 @@
 /* eslint-disable no-unused-vars */
 import { NavLink, useOutletContext, useParams } from "react-router-dom";
-
+import toast, { Toaster } from "react-hot-toast";
 // import partnerAcquisitionIcon from "../../../assets/icons/landmark.png";
 import { ImSpinner2 } from "react-icons/im";
 import { BiEdit } from "react-icons/bi";
 import { useState } from "react";
 // import { RxCross2 } from "react-icons/rx";
 import SiteStatusModal from "../../../components/Site/SiteStatusModal";
-import { Toaster } from "react-hot-toast";
-// import SiteStatusModal from "../../../components/Site/SiteStatusModal";
+import useAuth from "../../../hooks/useAuth";
+// import SiteStatusModal from "../../../components/Site/SiteStatusModal"; 
 
 const SiteInfo = () => {
   let { id } = useParams();
+  const { user } = useAuth();
+  const api_url = process.env.REACT_APP_API_URL;
   const {
     outletData: data,
     investors,
@@ -26,6 +28,41 @@ const SiteInfo = () => {
   const handleModalSwitch = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  const updateSite = async (value) => {
+    console.log(data.status);
+
+    if(data.feasibilityDoneByOperations === true && data.statusDetails.find(item => item.status ==="RMIA validation")){
+      toast.error("Status Locked for this")
+      return
+    }
+     
+  
+      try {
+        const response = await fetch(`${api_url}/site/update/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: user.token,
+          },
+          body: JSON.stringify({ feasibilityDoneByOperations: value }),
+        });
+  
+        const responseData = await response.json();
+        if (responseData.status) {
+          toast.success(responseData.message);
+          fetchData()
+          console.log(responseData);
+        } else {
+          console.log(response);
+          console.error("Failed to submit form");
+          toast.error(responseData.message);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("There is a problem with the server!");
+      }
+  }
 
   if (!data) {
     return (
@@ -43,11 +80,15 @@ const SiteInfo = () => {
             <h1 className="w-40 font-medium">Id:</h1>
             <p className="">{data?.customId}</p>
           </div>
+          {data.sapCode !== "" && <div className="flex gap-2 w-full">
+            <h1 className="w-40 font-medium">Sap Code:</h1>
+            <p className="">{data?.sapCode}</p>
+          </div>}
           <div className="flex gap-2">
-            <h1 className="w-40 font-medium">Name:</h1>
+            <h1 className="w-40 font-medium">Site Name:</h1>
             <p className="capitalize">{data?.name}</p>
           </div>
-          <div className="flex gap-2 w-full">
+          {/* <div className="flex gap-2 w-full">
             <h1 className="w-40 font-medium">Created By:</h1>
             <p className="capitalize">{data?.createdBy?.name}</p>
           </div>
@@ -56,7 +97,7 @@ const SiteInfo = () => {
             <p className="capitalize">
               {new Date(data?.createdAt).toLocaleDateString()}
             </p>
-          </div>
+          </div> */}
           <div className="flex gap-2">
             <h1 className="w-40 font-medium">Sqft:</h1>
             <p className="capitalize">{data?.sqft}</p>
@@ -81,6 +122,11 @@ const SiteInfo = () => {
           </div>
 
           <div className="flex gap-2">
+            <h1 className="w-40 font-medium">Feasibility by Ops:</h1>
+            <p><input type="checkbox" checked={data.feasibilityDoneByOperations} onChange={(e) => updateSite(e.target.checked)} /></p>
+            {/* <p className="capitalize">{data?.feasibilityDoneByOperations}</p> */}
+          </div>
+          <div className="flex gap-2">
             <h1 className="w-40 font-medium">Address:</h1>
             <p className="capitalize">{data?.address}</p>
           </div>
@@ -99,6 +145,14 @@ const SiteInfo = () => {
           <div className="flex gap-2 w-full">
             <h1 className="w-40 font-medium">Status:</h1>
             <p className="capitalize">{data?.status}</p>
+          </div>
+          <div className="flex gap-2 w-full">
+            <h1 className="w-40 font-medium">Created By:</h1>
+            <p className="capitalize">{data?.createdBy.name}</p>
+          </div>
+          <div className="flex gap-2 w-full">
+            <h1 className="w-40 font-medium">Created At:</h1>
+            <p className="capitalize">{new Date(data?.createdAt).toLocaleDateString()}</p>
           </div>
 
           <div className="flex items-start gap-2 w-full">
@@ -122,13 +176,14 @@ const SiteInfo = () => {
             </div>
           </div>
 
-          <button
+         {data?.status !== "site complete" &&  <button
             onClick={() => handleModalSwitch()}
-            className="w-full py-2 shadow  border-2 rounded-md border-rose-600 font-medium text-rose-600 flex justify-center items-center gap-3 mt-4 hover:bg-rose-600 hover:text-white"
+            // disabled={data?.status === "site complete"}
+            className="w-full py-2 shadow  border-2 disabled:border-gray-600 disabled:text-gray-600 disabled:hover:bg-slate-200 disabled:bg-slate-200 rounded-md border-rose-600 font-medium text-rose-600 flex justify-center items-center gap-3 mt-4 hover:bg-rose-600 hover:text-white"
           >
             <BiEdit className="h-6 w-6 " />
             <p className="font-semibold text-xs">Change Status</p>
-          </button>
+          </button>}
           {isModalOpen && (
             <>
               <SiteStatusModal

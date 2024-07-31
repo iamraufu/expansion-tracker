@@ -3,6 +3,7 @@ import userProfileIcon from "../assets/icons/user.png";
 import hamburger from "../assets/icons/hamburger.svg";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import dailyActivityTrackerIcon from "../assets/icons/dailyActivityTrackerIcon.png";
+import funnelIcon from "../assets/icons/funnel.png";
 import siteStoreIcon from "../assets/icons/siteStoreIcon.png";
 // import reportsIcon from "../assets/icons/reportsIcon.png";
 // import ActiveTaskIcon from "../assets/icons/activeTaskIcon.png";
@@ -38,6 +39,11 @@ const NavBar = () => {
       text: "Task List",
       icon: dailyActivityTrackerIcon,
       path: "/taskList",
+    },
+    {
+      text: "Funnel",
+      icon: funnelIcon,
+      path: "/funnel",
     },
 
     // {
