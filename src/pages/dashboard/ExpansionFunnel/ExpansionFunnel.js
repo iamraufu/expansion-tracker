@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import funnelIcon from "../../../assets/icons/funnel.png";
+import FunnelCard from "../../../components/Funnel/FunnelCard";
 // import { MdArrowRightAlt } from "react-icons/md";
 
 const ExpansionFunnel = () => {
@@ -145,8 +146,8 @@ const ExpansionFunnel = () => {
   ]);
   const [individualSiteOpenings, setIndividualSiteOpenings] = useState([]);
   const [siteOpenings, setSiteOpenings] = useState([]);
-  const [totalInv,setTotalInv] = useState(null)
-  const [InvLed,setInvLed] = useState(null)
+  const [totalInv, setTotalInv] = useState(null);
+  const [InvLed, setInvLed] = useState(null);
   const { user } = useAuth();
 
   // console.log(user);
@@ -174,8 +175,8 @@ const ExpansionFunnel = () => {
         setData(json.data);
         setFunnelData(json.funnelData);
         setSiteData(json.allSites);
-        setTotalInv(json.allIvestors)
-        setInvLed(json.aggreedInvestors)
+        setTotalInv(json.allIvestors);
+        setInvLed(json.aggreedInvestors);
       } else {
         setData([]);
       }
@@ -272,6 +273,7 @@ const ExpansionFunnel = () => {
             return {
               name: item.name,
               status: item.status,
+              createdAt: item.createdAt,
               openingDate: newDate,
             };
           });
@@ -296,6 +298,7 @@ const ExpansionFunnel = () => {
             return {
               name: item.name,
               status: item.status,
+              createdAt: item.createdAt,
               openingDate: newDate,
             };
           });
@@ -360,6 +363,7 @@ const ExpansionFunnel = () => {
       }
 
       const getMonthlySiteOpenings = (siteData) => {
+        console.log({ siteData });
         setIndividualSiteOpenings(siteData);
 
         // Function to group sites by opening month
@@ -472,7 +476,7 @@ const ExpansionFunnel = () => {
     return <p>Loading...</p>;
   }
 
-  console.log({siteOpenings});
+  console.log({ siteOpenings });
 
   const getSiteLeftForNextStatus = (status, days) => {
     let siteLeftAfterTimeOver = 0;
@@ -520,14 +524,29 @@ const ExpansionFunnel = () => {
   };
 
   function parseMonth(monthString) {
-    const [month, year] = monthString.split(' ');
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const [month, year] = monthString.split(" ");
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     const monthIndex = monthNames.indexOf(month);
     return new Date(parseInt(year, 10), monthIndex);
   }
-  
+
   // Sort the siteOpenings array by month
-  const sortedSiteOpenings = siteOpenings.sort((a, b) => parseMonth(a.month) - parseMonth(b.month));
+  const sortedSiteOpenings = siteOpenings.sort(
+    (a, b) => parseMonth(a.month) - parseMonth(b.month)
+  );
 
   return (
     <div className="p-4 px-5 font-poppins mx-auto">
@@ -613,7 +632,13 @@ const ExpansionFunnel = () => {
                 {/* start card */}
                 <div className="bg-gray-400 w-full flex flex-col justify-between items-center px-5 py-2 rounded-md">
                   <p className="font-medium text-yellow-300">
-                    {getCountByStatus("site found")}
+                    {getCountByStatus("site found")}{" "}
+                    {getSiteLeftForNextStatus("site found", 20) !== 0 && (
+                      <span className="text-slate-800">
+                        {" "}
+                        ({getSiteLeftForNextStatus("site found", 10)})
+                      </span>
+                    )}
                   </p>
                   <p className="font-medium text-white my-4">
                     Site <br /> Found
@@ -659,10 +684,9 @@ const ExpansionFunnel = () => {
                 <div className="bg-gray-400 flex flex-col justify-between items-center px-5 py-2 rounded-md w-full">
                   <p className="font-medium text-yellow-300">
                     {getCountByStatus("site negotiation")}{" "}
-                    {getSiteLeftForNextStatus("site found", 20) !== 0 && (
+                    {getSiteLeftForNextStatus("site negotiation", 15) !== 0 && (
                       <span className="text-slate-800">
-                        {" "}
-                        ({getSiteLeftForNextStatus("site found", 10)})
+                        ({getSiteLeftForNextStatus("site negotiation", 15)})
                       </span>
                     )}
                   </p>
@@ -673,12 +697,16 @@ const ExpansionFunnel = () => {
                 </div>
               </div>
             </div>
-            <p className="text-slate-900 font-medium text-base mt-4 capitalize">Upcoming Months Projection:</p>
+            <p className="text-slate-900 font-medium text-base mt-4 capitalize">
+              Upcoming Months Projection:
+            </p>
             <div className="bg-emerald-700 p-3">
               <table className="table-fixed  ">
                 <thead className="bg-slate-200">
                   <tr>
-                    <th className="px-4 py-4 whitespace-nowrap border border-x-slate-300">Month</th>
+                    <th className="px-4 py-4 whitespace-nowrap border border-x-slate-300">
+                      Month
+                    </th>
                     <th className="px-4 py-4 border border-x-slate-300  whitespace-nowrap">
                       Actual Sites
                     </th>
@@ -700,7 +728,9 @@ const ExpansionFunnel = () => {
                         {item.totalSites.toString().padStart(2, "0")}
                       </td>
                       <td className="border px-4 py-2 text-red-700 font-semibold">
-                        {getTotalCountForMonth(item.month).toString().padStart(2, "0")}
+                        {getTotalCountForMonth(item.month)
+                          .toString()
+                          .padStart(2, "0")}
                       </td>
                     </tr>
                   ))}
@@ -748,10 +778,17 @@ const ExpansionFunnel = () => {
           <div className="bg-lime-100 shadow text-center flex flex-col justify-center items-center px-5 py-2 rounded-xl">
             <p className="font-bold text-yellow-700">
               {getCountByStatus("investor and site confirmation")}{" "}
-              {getSiteLeftForNextStatus("site negotiation", 15) !== 0 && (
+              {getSiteLeftForNextStatus(
+                "investor and site confirmation",
+                15
+              ) !== 0 && (
                 <span className="text-slate-800">
-                  {" "}
-                  ({getSiteLeftForNextStatus("site negotiation", 15)})
+                  (
+                  {getSiteLeftForNextStatus(
+                    "investor and site confirmation",
+                    15
+                  )}
+                  )
                 </span>
               )}
             </p>
@@ -798,28 +835,12 @@ const ExpansionFunnel = () => {
           {/* col 3 */}
           <div className="bg-slate-300 flex flex-col justify-between rounded-xl text-center p-4">
             {/* small card 1 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("feasibility study")}{" "}
-                {getSiteLeftForNextStatus(
-                  "investor and site confirmation",
-                  15
-                ) !== 0 && (
-                  <span className="text-slate-800">
-                    (
-                    {getSiteLeftForNextStatus(
-                      "investor and site confirmation",
-                      15
-                    )}
-                    )
-                  </span>
-                )}
-              </p>
-              <p className="font-medium text-black my-4">
-                Feasibility <br /> Study
-              </p>
-              <p className="invisible ">Feasibility</p>
-            </div>
+            <FunnelCard
+              duration={3}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"feasibility study"}
+            />
             {/* middle arrow */}
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center">
@@ -857,20 +878,12 @@ const ExpansionFunnel = () => {
               </div>
             </div>
             {/* small card 2 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-8 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("RMIA validation")}
-                {getSiteLeftForNextStatus("feasibility study", 3) !== 0 && (
-                  <span className="text-slate-800">
-                    ({getSiteLeftForNextStatus("feasibility study", 3)})
-                  </span>
-                )}
-              </p>
-              <p className="font-medium text-black my-4">
-                RMIA <br /> Validation
-              </p>
-              <p className="invisible ">RMIA Validation</p>
-            </div>
+            <FunnelCard
+              duration={1}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"RMIA validation"}
+            />
 
             {/* middle arrow */}
             <div className="middleArrow self-center">
@@ -909,20 +922,12 @@ const ExpansionFunnel = () => {
               </div>
             </div>
             {/* small card 3 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("GMD approval")}{" "}
-                {getSiteLeftForNextStatus("RMIA validation", 1) !== 0 && (
-                  <span className="text-slate-800">
-                    ({getSiteLeftForNextStatus("RMIA validation", 1)})
-                  </span>
-                )}
-              </p>
-              <p className="font-semibold text-black my-4">
-                GMD <br /> Approval
-              </p>
-              <p className="invisible ">RMIA Validation</p>
-            </div>
+            <FunnelCard
+              duration={10}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"GMD approval"}
+            />
           </div>
 
           <div className="middleArrow self-center">
@@ -960,32 +965,21 @@ const ExpansionFunnel = () => {
             </div>
           </div>
           {/* col 4 */}
-          <div className="bg-slate-300 flex flex-col rounded-xl text-center p-4">
+          <div className="bg-slate-300 flex flex-col gap-2 rounded-xl text-center p-4">
             {/* small card 1 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-7 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("premises agreement")}{" "}
-                {getSiteLeftForNextStatus("GMD approval", 10) !== 0 && (
-                  <span className="text-slate-800">
-                    {" "}
-                    ({getSiteLeftForNextStatus("GMD approval", 10)})
-                  </span>
-                )}
-              </p>
-              <p className="font-medium text-black my-4">
-                Premises <br /> Aggrement
-              </p>
-              <p className="invisible ">Premises</p>
-            </div>
-            <div className="bg-white w-[130px] mt-4 flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("docs collected")}
-              </p>
-              <p className="font-medium text-black my-4">
-                Docs <br /> Collected
-              </p>
-              <p className="invisible ">Docs</p>
-            </div>
+            <FunnelCard
+              duration={0}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"premises agreement"}
+            />
+
+            <FunnelCard
+              duration={3}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"docs collected"}
+            />
             {/* middle arrow */}
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center my-3">
@@ -1023,20 +1017,12 @@ const ExpansionFunnel = () => {
               </div>
             </div>
             {/* small card 2 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("layout approved")}
-                {getSiteLeftForNextStatus("docs collected", 3) !== 0 && (
-                  <span className="text-slate-800">
-                    ({getSiteLeftForNextStatus("docs collected", 3)})
-                  </span>
-                )}
-              </p>
-              <p className="font-medium text-black my-4">
-                Layout <br /> Approval
-              </p>
-              <p className="invisible ">Layout</p>
-            </div>
+            <FunnelCard
+              duration={2}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"layout approved"}
+            />
 
             {/* middle arrow */}
             <div className="middleArrow self-center mt-2">
@@ -1075,21 +1061,12 @@ const ExpansionFunnel = () => {
               </div>
             </div>
             {/* small card 3 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("franchise agreement")}{" "}
-                {getSiteLeftForNextStatus("layout approved", 2) !== 0 && (
-                  <span className="text-slate-800">
-                    {" "}
-                    ({getSiteLeftForNextStatus("layout approved", 2)})
-                  </span>
-                )}
-              </p>
-              <p className="font-semibold text-black my-4">
-                Franchise <br /> Aggrement
-              </p>
-              <p className="invisible ">Franchise</p>
-            </div>
+            <FunnelCard
+              duration={15}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"franchise agreement"}
+            />
           </div>
 
           <div className="middleArrow self-start mt-20">
@@ -1128,36 +1105,25 @@ const ExpansionFunnel = () => {
           </div>
 
           {/* col 5 */}
-          <div className="flex flex-col justify-start gap-4">
-            <div className="bg-slate-300 flex flex-col rounded-xl text-center p-4">
+          <div className="flex flex-col  justify-between h-full gap-4">
+            <div className="bg-slate-300 flex flex-col  rounded-xl text-center p-4 gap-2">
               {/* small card 1 */}
-              <div className="bg-white flex flex-col justify-between items-center w-[130px] py-2 rounded-md">
-                <p className="font-semibold text-yellow-600 text-base">
-                  {getCountByStatus("civil work")}
-                  {getSiteLeftForNextStatus("franchise agreement", 15) !==
-                    0 && (
-                    <span className="text-slate-800">
-                      ({getSiteLeftForNextStatus("franchise agreement", 15)})
-                    </span>
-                  )}
-                </p>
-                <p className="font-medium text-black my-4">
-                  Civil <br /> Work
-                </p>
-                <p className="invisible ">Civil</p>
-              </div>
+              <FunnelCard
+                duration={20}
+                getCountByStatus={getCountByStatus}
+                getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+                status={"civil work"}
+              />
 
               {/* small card 2 */}
-              <div className="bg-white w-[130px] flex mt-4 flex-col justify-between items-center px-2 py-2 rounded-md">
-                <p className="font-semibold text-yellow-600 text-base">
-                  {getCountByStatus("equipment order")}
-                </p>
-                <p className="font-medium text-black my-4">
-                  Equipment <br /> Order
-                </p>
-                <p className="invisible ">Equipment</p>
-              </div>
+              <FunnelCard
+                duration={20}
+                getCountByStatus={getCountByStatus}
+                getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+                status={"equipment order"}
+              />
             </div>
+
             {/* middle arrow */}
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center ">
@@ -1194,31 +1160,15 @@ const ExpansionFunnel = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-slate-300 flex flex-col h-full rounded-xl text-center p-4">
+            <div className="bg-slate-300 flex flex-col self-end rounded-xl text-center p-4">
               {/* small card 1 */}
-              <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-                <p className="font-semibold text-yellow-600 text-base">
-                  {getCountByStatus("equipment installation")}{" "}
-                  {getSiteLeftForNextStatus(
-                    "franchise agreementequipment order",
-                    20
-                  ) !== 0 && (
-                    <span className="text-slate-800">
-                      {" "}
-                      (
-                      {getSiteLeftForNextStatus(
-                        "franchise agreementequipment order",
-                        20
-                      )}
-                      )
-                    </span>
-                  )}
-                </p>
-                <p className="font-medium text-black my-4">
-                  Equipment <br /> Installation
-                </p>
-                <p className="invisible ">Equipment</p>
-              </div>
+
+              <FunnelCard
+                duration={6}
+                getCountByStatus={getCountByStatus}
+                getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+                status={"equipment installation"}
+              />
             </div>
           </div>
 
@@ -1260,50 +1210,33 @@ const ExpansionFunnel = () => {
           {/* col 6 */}
           <div className="bg-slate-300 flex flex-col justify-between rounded-xl text-center p-4">
             {/* small card 0 */}
-            <div className="bg-white w-[130px] mt-4 flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("hr ready")}{" "}
-                {getSiteLeftForNextStatus("equipment installation", 6) !==
-                  0 && (
-                  <span className="text-slate-800">
-                    {" "}
-                    ({getSiteLeftForNextStatus("equipment installation", 6)})
-                  </span>
-                )}
-              </p>
-              <p className="font-medium text-black my-4">
-                Hr <br /> Ready
-              </p>
-              <p className="invisible ">Hr</p>
-            </div>
+            <FunnelCard
+              duration={1}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"hr ready"}
+            />
             {/* small card 1 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("product receiving")}
-              </p>
-              <p className="font-medium text-black my-4">
-                Product <br /> Receivinng
-              </p>
-              <p className="invisible ">Product</p>
-            </div>
-
+            <FunnelCard
+              duration={1}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"product receiving"}
+            />
             {/* small card 2 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("merchandising")}
-              </p>
-              <p className="font-medium text-black my-4">Merchandising</p>
-              <p className="invisible ">Layout</p>
-            </div>
-
+            <FunnelCard
+              duration={1}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"merchandising"}
+            />
             {/* small card 3 */}
-            <div className="bg-white w-[130px] flex flex-col justify-between items-center px-2 py-2 rounded-md">
-              <p className="font-semibold text-yellow-600 text-base">
-                {getCountByStatus("branding")}
-              </p>
-              <p className="font-semibold text-black my-4">Branding</p>
-              <p className="invisible ">Branding</p>
-            </div>
+            <FunnelCard
+              duration={1}
+              getCountByStatus={getCountByStatus}
+              getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+              status={"branding"}
+            />
           </div>
           <div className="middleArrow self-center mr-3">
             <div className="flex flex-col justify-center items-center">
@@ -1340,7 +1273,7 @@ const ExpansionFunnel = () => {
             </div>
           </div>
           <div className="flex  justify-center items-center">
-            <div className=" self-center flex flex-col justify-center items-center rotate-90 uppercase font-medium text-lime-600 text-lg">
+            {/* <div className=" self-center flex flex-col justify-center items-center rotate-90 uppercase font-medium text-lime-600 text-lg">
               <p className="font-semibold text-yellow-600 text-base">
                 {getCountByStatus("inauguration")}
                 {getSiteLeftForNextStatus("branding", 1) !== 0 && (
@@ -1351,31 +1284,19 @@ const ExpansionFunnel = () => {
                 )}
               </p>
               <p>inauguration</p>
-            </div>
-            {/* prediction div */}
-            {/* <div className="flex-1 p-4 pt-0 ml-1 capitalize space-y-4">
-              <p className="text-lg font-bold ">
-                Upcoming months (As Per Funnel)
-              </p>
-              <div className="flex flex-col-reverse gap-3">
-                {siteOpenings.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex ml-2 justify-start items-center gap-3 font-medium"
-                  >
-                    <p className="font-bold uppercase">{item.month} </p> :
-                    <p className="text-red-700 font-semibold">
-                      {item.totalSites.toString().padStart(2, "0")} -{" "}
-                      {getTotalCountForMonth(item.month)}
-                    </p>
-                  </div>
-                ))}
-              </div>
             </div> */}
+            <div className="bg-slate-300 flex flex-col justify-between rounded-xl text-center p-4">
+              <FunnelCard
+                duration={1}
+                getCountByStatus={getCountByStatus}
+                getSiteLeftForNextStatus={getSiteLeftForNextStatus}
+                status={"inauguration"}
+              />
+            </div>
           </div>
         </div>
       </section>
-      {/* <section className="my-8">
+      <section className="my-8">
         <h2 className="p-4 text-xl font-medium">Expected Site Opening Date</h2>
         <hr className="mb-4 mt-2" />
         <div className="overflow-auto h-[80dvh] border rounded-md border-slate-300">
@@ -1387,6 +1308,9 @@ const ExpansionFunnel = () => {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Created At
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   Opening Date
@@ -1403,6 +1327,13 @@ const ExpansionFunnel = () => {
                     {site.status}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(site.createdAt).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(site.openingDate).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
@@ -1414,7 +1345,7 @@ const ExpansionFunnel = () => {
             </tbody>
           </table>
         </div>
-      </section> */}
+      </section>
     </div>
   );
 };
