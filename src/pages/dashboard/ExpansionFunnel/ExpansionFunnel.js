@@ -266,8 +266,21 @@ const ExpansionFunnel = () => {
         if (status === "site found") {
           const sites = siteData.filter((item) => item.status === status);
           const statusWiseSites = sites.map((item) => {
+            let hasPastOrgDate = false
+            // Add totalDays to statDate
             // Add totalDays to statDate
             const newDate = new Date(item.createdAt);
+            // console.log({newDate});
+            newDate.setDate(newDate.getDate() + totalDays);
+            // console.log({newDate});
+
+            // Check if the newDate is in the past
+            const currentDate = new Date();
+            if (newDate < currentDate) {
+              newDate.setTime(currentDate.getTime());
+              hasPastOrgDate = true
+            }
+
             newDate.setDate(newDate.getDate() + totalDays);
 
             return {
@@ -275,11 +288,13 @@ const ExpansionFunnel = () => {
               status: item.status,
               createdAt: item.createdAt,
               openingDate: newDate,
+              hasPastOrgDate,
             };
           });
 
           return statusWiseSites;
         } else {
+          let hasPastOrgDate = false
           const sites = siteData.filter((item) => item.status === status);
           // console.log({sites});
           const statusWiseSites = sites.map((item) => {
@@ -287,19 +302,27 @@ const ExpansionFunnel = () => {
               (item) => item.status === status
             );
 
-            // console.log({ stat });
-
             // Add totalDays to statDate
             const newDate = new Date(stat.createdAt);
             // console.log({newDate});
             newDate.setDate(newDate.getDate() + totalDays);
             // console.log({newDate});
 
+            // Check if the newDate is in the past
+            const currentDate = new Date();
+            if (newDate < currentDate) {
+              newDate.setTime(currentDate.getTime());
+              hasPastOrgDate = true
+            }
+
+            newDate.setDate(newDate.getDate() + totalDays);
+
             return {
               name: item.name,
               status: item.status,
               createdAt: item.createdAt,
               openingDate: newDate,
+              hasPastOrgDate
             };
           });
 
@@ -1296,56 +1319,66 @@ const ExpansionFunnel = () => {
           </div>
         </div>
       </section>
-      { user.role === "admin" && <section className="my-8">
-        <h2 className="p-4 text-xl font-medium">Expected Site Opening Date</h2>
-        <hr className="mb-4 mt-2" />
-        <div className="overflow-auto h-[80dvh] border rounded-md border-slate-300">
-          <table className="min-w-full divide-y divide-gray-200 ">
-            <thead className="bg-emerald-600 text-white sticky top-0 left-0">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Created At
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                  Opening Date
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {individualSiteOpenings.map((site, index) => (
-                <tr key={index}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {site.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {site.status}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(site.createdAt).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(site.openingDate).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </td>
+      {user.role === "admin" && (
+        <section className="my-8">
+          <h2 className="p-4 text-xl font-medium">
+            Expected Site Opening Date
+          </h2>
+          <hr className="mb-4 mt-2" />
+          <div className="overflow-auto h-[80dvh] border rounded-md border-slate-300">
+            <table className="min-w-full divide-y divide-gray-200 ">
+              <thead className="bg-emerald-600 text-white sticky top-0 left-0">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Target Date Crossed
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Created At
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Opening Date
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>}
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {individualSiteOpenings.map((site, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {site.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {site.status}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {site.hasPastOrgDate? "Yes" : "No"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(site.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(site.openingDate).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
