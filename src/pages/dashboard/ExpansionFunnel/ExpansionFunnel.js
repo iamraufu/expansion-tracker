@@ -1296,7 +1296,7 @@ const ExpansionFunnel = () => {
           </div>
         </div>
       </section>
-      <section className="my-8">
+      { user.role === "admin" && <section className="my-8">
         <h2 className="p-4 text-xl font-medium">Expected Site Opening Date</h2>
         <hr className="mb-4 mt-2" />
         <div className="overflow-auto h-[80dvh] border rounded-md border-slate-300">
@@ -1345,7 +1345,7 @@ const ExpansionFunnel = () => {
             </tbody>
           </table>
         </div>
-      </section>
+      </section>}
     </div>
   );
 };
