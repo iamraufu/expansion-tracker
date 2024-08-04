@@ -3090,7 +3090,7 @@ const CreateSite = () => {
           `${user.name} created an site named: ${values.name}!`
         );
         console.log(responseData);
-        // navigate(-1);
+        navigate(-1);
       } else {
         console.log(response);
         console.error("Failed to submit form");
