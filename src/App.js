@@ -29,6 +29,9 @@ import UpdateLandlord from "./pages/landlord/updateLandlord";
 import UpdateSite from "./pages/Site/UpdateSite";
 import ExpansionAdmin from "./pages/dashboard/ExpansionAdmin";
 import ExpansionFunnel from "./pages/dashboard/ExpansionFunnel/ExpansionFunnel";
+import FeasibiltyForm from "./pages/FeasibiltyForm/FeasibiltyForm";
+import SiteFesibilty from "./pages/Site/SiteTabs/SiteFesibilty";
+import UpdateFeasibility from "./pages/FeasibiltyForm/UpdateFeasibility";
 
 function App() {
   const { pathname } = useLocation();
@@ -55,8 +58,10 @@ function App() {
             <Route path="/investor/update/:id" element={<UpdateInvestor />} />
             <Route path="/landlord/update/:id" element={<UpdateLandlord />} />
             <Route path="/site/update/:id" element={<UpdateSite />} />
+            <Route path="/site/updateFeasibilty/:id" element={<UpdateFeasibility />} />
             <Route path="/site/:id" element={<Site />} >
               <Route path="info" element={<SiteInfo />} />
+              <Route path="feasibility" element={<SiteFesibilty />} />
               <Route path="history" element={<SiteTimeline />} />
               <Route path="documents" element={<SiteDocuments />} />
             </Route>
@@ -71,6 +76,7 @@ function App() {
               <Route path="user-table" element={<SiteInfo />} />
             </Route>
             <Route path="/funnel" element={<ExpansionFunnel />} />
+            <Route path="/fesForm" element={<FeasibiltyForm />} />
             <Route path="/map" element={<Map />} />
           </Route>
         </Routes>

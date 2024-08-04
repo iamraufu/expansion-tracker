@@ -78,12 +78,12 @@ const Site = () => {
         </p>
       </div>
 
-      <nav className="text-sm font-medium text-center text-gray-500 border-b-2 border-slate-900 mt-4">
+      <nav className="text-xs md:text-sm font-medium text-center text-gray-500 border-b-2 border-slate-900 mt-4">
         <ul className="flex flex-wrap">
-          <div className="me-2">
+          <div className="">
             <NavLink
               to={`/site/${id}/info`}
-              className={`inline-block py-3 px-4 ${
+              className={`inline-block py-3 px-3 md:px-4 ${
                 pathname.includes("info")
                   ? "text-white text-xs bg-secondary border-2 border-b-secondary border-slate-900"
                   : ""
@@ -92,10 +92,22 @@ const Site = () => {
               Info
             </NavLink>
           </div>
-          <div className="me-2">
+          <div className="">
+            <NavLink
+              to={`/site/${id}/feasibility`}
+              className={`inline-block py-3 px-3 md:px-4 ${
+                pathname.includes("feasibility")
+                  ? "text-white text-xs bg-secondary border-2 border-b-secondary border-slate-900"
+                  : ""
+              } border-b-2  rounded-t-lg uppercase`}
+            >
+              Feasibility
+            </NavLink>
+          </div>
+          <div className="">
             <NavLink
               to={`/site/${id}/history`}
-              className={`inline-block py-3 px-4 ${
+              className={`inline-block py-3 px-3 md:px-4 ${
                 pathname.includes("history")
                   ? "text-white text-xs bg-secondary border-2 border-b-secondary border-slate-900"
                   : ""
@@ -104,10 +116,10 @@ const Site = () => {
               History
             </NavLink>
           </div>
-          <div className="me-2">
+          <div className="">
             <NavLink
               to={`/site/${id}/documents`}
-              className={`inline-block py-3 px-4 ${
+              className={`inline-block py-3 px-3 md:px-4 ${
                 pathname.includes("documents")
                   ? "text-white text-xs bg-secondary border-2 border-b-secondary border-slate-900"
                   : ""
@@ -116,10 +128,10 @@ const Site = () => {
               Documents
             </NavLink>
           </div>
-          {/* <div className="me-2">
+          {/* <div className="">
                             <NavLink to={"/approvals/stogrn"} className={`inline-block p-4 ${pathname.includes("stogrn") ? "text-blue-600 border-blue-600" : ""} border-b-2  rounded-t-lg uppercase`}>STO GRN</NavLink>
                         </div> */}
-          {/* <div className="me-2">
+          {/* <div className="">
                             <NavLink to={"/report/stock"} className={`inline-block p-4 ${pathname.includes("stock") ? "text-blue-600 border-blue-600 " : ""} border-b-2  rounded-t-lg uppercase`} aria-current="page">Stock</NavLink>
                         </div> */}
         </ul>

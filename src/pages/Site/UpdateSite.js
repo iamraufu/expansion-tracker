@@ -250,8 +250,8 @@ const UpdateSite = () => {
       if (responseData.status) {
         await createActivity(
           user._id,
-          "site_create",
-          `${user.name} created an site named: ${values.name}!`
+          "site_update",
+          `${user.name} updated an site named: ${values.name}!`
         );
         console.log(responseData);
         navigate(-1);
