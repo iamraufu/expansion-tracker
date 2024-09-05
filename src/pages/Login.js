@@ -71,7 +71,7 @@ const Login = () => {
       } catch (error) {
         setLoading(false)
         console.log(error);
-        setError("Something wait wrong");
+        setError("Something went wrong");
       }
     };
     fetchData();
