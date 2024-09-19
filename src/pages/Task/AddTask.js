@@ -187,6 +187,7 @@ const AddTask = () => {
       value: "meeting both party / negotiation",
     },
     { label: "outlet opening", value: "outlet opening" },
+    { label: "outlet visit", value: "outlet visit" },
     {
       label: "check outlet opening preparation",
       value: "check outlet opening preparation",
@@ -232,6 +233,7 @@ const AddTask = () => {
         "outlet opening",
         "check outlet opening preparation",
         "primary measurement",
+        "outlet visit",
       ].includes(values.task) &&
       !values.site
     ) {
@@ -501,6 +503,7 @@ const AddTask = () => {
           </>
         );
       case "outlet opening":
+      case "outlet visit":
       case "check outlet opening preparation":
       case "primary measurement":
         return (
