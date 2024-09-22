@@ -188,6 +188,7 @@ const AddTask = () => {
     },
     { label: "outlet opening", value: "outlet opening" },
     { label: "outlet visit", value: "outlet visit" },
+    { label: "head-office visit", value: "head-office visit" },
     {
       label: "check outlet opening preparation",
       value: "check outlet opening preparation",
