@@ -8,7 +8,7 @@ const FunnelCard = ({ getCountByStatus, getSiteLeftForNextStatus, status, durati
     
     
     return (
-        <div className="bg-white w-[130px] flex flex-col justify-center items-center h-[130px] px-5 py-2 rounded-md">
+        <div className="bg-white w-[160px] flex flex-col justify-center items-center h-[130px] px-5 py-2 rounded-md">
             <div className="font-semibold text-yellow-600 text-sm ">
                 <span>{getCountByStatus(status)} </span>
                 <span>{getSiteLeftForNextStatus(status, duration) !== 0 && (

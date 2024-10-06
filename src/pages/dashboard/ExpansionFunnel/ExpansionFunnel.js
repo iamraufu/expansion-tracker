@@ -623,6 +623,82 @@ const ExpansionFunnel = () => {
     ).toFixed(2);
   };
 
+
+  // const findCommonCustomIds = (data, status1, status2) => {
+  //   // Find the two objects based on the status
+  //   const obj1 = data.find(item => item.status === status1);
+  //   const obj2 = data.find(item => item.status === status2);
+  
+  //   if (!obj1 || !obj2) {
+  //     return 0; // Return 0 if either status is not found
+  //   }
+  
+  //   // Extract customIds from both 'sites' arrays
+  //   const customIds1 = obj1.sites.map(site => site.customId);
+  //   const customIds2 = obj2.sites.map(site => site.customId);
+  
+  //   // Find the common customIds
+  //   const commonCustomIds = customIds1.filter(id => customIds2.includes(id));
+  
+  //   // Return the count of common customIds
+  //   return commonCustomIds.length;
+  // };
+
+  const findAverageDaysBetweenStatuses = (data, status1, status2) => {
+    const obj1 = data.find(item => item.status === status1);
+    const obj2 = data.find(item => item.status === status2);
+  
+    if (!obj1 || !obj2) {
+      return 0; // Return 0 if either status is not found
+    }
+  
+    // Helper function to calculate difference in days
+    const getDaysDifference = (date1, date2) => {
+      const diffTime = Math.abs(new Date(date2) - new Date(date1));
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert time difference to days
+    };
+  
+    // Collect all day differences for matching customIds
+    const daysDifferences = obj1.sites.reduce((acc, site1) => {
+      const site2 = obj2.sites.find(site => site.customId === site1.customId);
+  
+      if (site2) {
+        let status1CreatedAt;
+  
+        // Special case: If status1 is "site found", use createdAt from site1 directly
+        if (status1 === "site found") {
+          status1CreatedAt = site1.createdAt;
+        } else {
+          // Find status1 in statusDetails
+          const status1Detail = site1.statusDetails.find(detail => detail.status === status1);
+          if (status1Detail) {
+            status1CreatedAt = status1Detail.createdAt;
+          }
+        }
+  
+        if (status1CreatedAt) {
+          // Find createdAt for status2 from statusDetails in site2
+          const status2Detail = site2.statusDetails.find(detail => detail.status === status2);
+          if (status2Detail) {
+            const status2CreatedAt = status2Detail.createdAt;
+            const daysDifference = getDaysDifference(status1CreatedAt, status2CreatedAt);
+            acc.push(daysDifference); // Add to the accumulator
+          }
+        }
+      }
+  
+      return acc;
+    }, []);
+  
+    // Calculate the average of days differences
+    const averageDays = daysDifferences.reduce((sum, days) => sum + days, 0) / daysDifferences.length;
+  
+    return Math.ceil(averageDays) || 0; // Return 0 if no matching customIds
+  };
+
+
+  // console.log(findAverageDaysBetweenStatuses(funnelData, "site found","site negotiation"));
+
   return (
     <div className="p-4 px-5 font-poppins mx-auto">
       <div className="flex justify-between items-center">
@@ -638,6 +714,10 @@ const ExpansionFunnel = () => {
           <li className="flex font-semibold  justify-start items-center gap-2">
             <p className="w-2 h-2 bg-slate-950 rounded-full"></p>
             <p>Conversion Rate (%)</p>
+          </li>
+          <li className="flex font-semibold  justify-start items-center gap-2">
+            <p className="w-2 h-2 bg-violet-700 rounded-full"></p>
+            <p className="text-violet-600 font-bold">Dynamic Values</p>
           </li>
         </ul>
       </div>
@@ -729,6 +809,9 @@ const ExpansionFunnel = () => {
                 <div className="flex flex-col justify-center items-center">
                   <p className="font-semibold text-base text-rose-600">
                     {getArrowValues(1).days}
+                   <span className="text-violet-700" >
+                      ({findAverageDaysBetweenStatuses(funnelData, "site found","site negotiation")})
+                    </span>
                   </p>
                   <svg
                     width="70"
@@ -757,7 +840,7 @@ const ExpansionFunnel = () => {
 
                   <p className="font-semibold text-base">
                     {getArrowValues(1).percentage}
-                    <span className="text-red-700 mx-1">
+                    <span className="text-violet-700 mx-1">
                       ({dynamicPercentage("site negotiation", "site found")})
                     </span>
                     %
@@ -812,10 +895,10 @@ const ExpansionFunnel = () => {
                       <td className="border px-4 py-2 font-semibold uppercase whitespace-nowrap">
                         {item.month}
                       </td>
-                      <td className="border px-4 py-2 text-red-700 font-semibold">
+                      <td className="border px-4 py-2 text-violet-700 font-semibold">
                         {item.totalSites.toString().padStart(2, "0")}
                       </td>
-                      <td className="border px-4 py-2 text-red-700 font-semibold">
+                      <td className="border px-4 py-2 text-violet-700 font-semibold">
                         {getTotalCountForMonth(item.month)
                           .toString()
                           .padStart(2, "0")}
@@ -831,6 +914,9 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(2).days}
+                  <span className="text-violet-700 mx-1">
+                ({findAverageDaysBetweenStatuses(funnelData, "site negotiation","investor and site confirmation")})
+                </span>
               </p>
               <svg
                 width="70"
@@ -859,7 +945,7 @@ const ExpansionFunnel = () => {
 
               <p className="font-semibold text-base">
                 {getArrowValues(2).percentage}
-                <span className="text-red-700 mx-1 text-sm">
+                <span className="text-violet-700 mx-1 text-sm">
                   (
                   {dynamicPercentage(
                     "investor and site confirmation",
@@ -874,7 +960,7 @@ const ExpansionFunnel = () => {
           {/* col 2 */}
           <div className="bg-lime-100 shadow text-center flex flex-col justify-center items-center px-5 py-2 rounded-xl">
             <p className="font-bold text-yellow-700">
-              {getCountByStatus("investor and site confirmation")}{" "}
+              {getCountByStatus("investor and site confirmation")}
               {getSiteLeftForNextStatus(
                 "investor and site confirmation",
                 15
@@ -908,6 +994,9 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(3).days}
+                <span className="text-violet-700 mx-1">
+                  ({findAverageDaysBetweenStatuses(funnelData, "investor and site confirmation","feasibility study")})
+                </span>
               </p>
               <svg
                 width="70"
@@ -935,7 +1024,7 @@ const ExpansionFunnel = () => {
               </svg>
               <p className="font-semibold text-base">
                 {getArrowValues(3).percentage}
-                <span className="text-red-700 mx-1 text-sm">
+                <span className="text-violet-700 mx-1 text-sm">
                   (
                   {dynamicPercentage(
                     "feasibility study",
@@ -960,7 +1049,10 @@ const ExpansionFunnel = () => {
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center">
                 <p className="font-semibold text-base text-rose-900 mr-2">
-                  {getArrowValues(4).days}
+                  {getArrowValues(4).days} 
+                  <span className="text-violet-700 mx-1">
+                  ({findAverageDaysBetweenStatuses(funnelData,"feasibility study","RMIA validation")})
+                  </span>
                 </p>
                 <svg
                   width="70"
@@ -989,7 +1081,7 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(4).percentage}%
-                  <div className="text-red-700 mx-1 text-sm">
+                  <div className="text-violet-700 mx-1 text-sm">
                     ({dynamicPercentage("RMIA validation", "feasibility study")}
                     )
                   </div>
@@ -1006,8 +1098,12 @@ const ExpansionFunnel = () => {
             {/* middle arrow */}
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center">
-                <p className="font-semibold text-base text-rose-900 mr-2">
+                <p className="font-semibold text-base text-rose-800 mr-2">
                   {getArrowValues(5).days}
+                  <span className="text-violet-700 mx-1">
+
+                  ({findAverageDaysBetweenStatuses(funnelData,"RMIA validation","GMD approval")})
+                  </span>
                 </p>
                 <svg
                   width="70"
@@ -1036,7 +1132,7 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(5).percentage}%
-                  <div className="text-red-700 mx-1 text-sm">
+                  <div className="text-violet-700 mx-1 text-sm">
                     ({dynamicPercentage("GMD approval", "RMIA validation")})
                   </div>
                 </p>
@@ -1055,6 +1151,9 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(6).days}
+                <span className="text-violet-700 mx-1">
+                  ({findAverageDaysBetweenStatuses(funnelData,"GMD approval", "premises agreement")})
+                </span>
               </p>
               <svg
                 width="70"
@@ -1083,7 +1182,7 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base">
                 {getArrowValues(6).percentage}%
               </p>
-              <div className="text-red-700 mx-1 text-sm font-semibold">
+              <div className="text-violet-700 mx-1 text-sm font-semibold">
                 ({dynamicPercentage("premises agreement", "GMD approval")})
               </div>
             </div>
@@ -1107,8 +1206,12 @@ const ExpansionFunnel = () => {
             {/* middle arrow */}
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center my-3">
-                <p className="font-semibold text-base text-rose-900 mr-2">
+                <p className="font-semibold text-base  text-rose-900 mr-2">
                   {getArrowValues(7).days}
+                  <span className="text-violet-700 mx-1">
+
+                    ({findAverageDaysBetweenStatuses(funnelData,"docs collected","layout approved")})
+                  </span>
                 </p>
                 <svg
                   width="70"
@@ -1137,7 +1240,7 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(7).percentage}%
-                  <div className="text-red-700 mx-1 text-sm font-semibold">
+                  <div className="text-violet-700 mx-1 text-sm font-semibold">
                     ({dynamicPercentage("layout approved", "docs collected")})
                   </div>
                 </p>
@@ -1156,6 +1259,10 @@ const ExpansionFunnel = () => {
               <div className="flex justify-center items-center my-3">
                 <p className="font-semibold text-base text-rose-900 mr-2">
                   {getArrowValues(8).days}
+                  <span className="text-violet-700 mx-1">
+
+                  ({findAverageDaysBetweenStatuses(funnelData,"layout approved","franchise agreement")})
+                  </span>
                 </p>
                 <svg
                   width="70"
@@ -1184,7 +1291,7 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(8).percentage}%
-                  <div className="text-red-700 mx-1 text-sm font-semibold">
+                  <div className="text-violet-700 mx-1 text-sm font-semibold">
                     (
                     {dynamicPercentage(
                       "franchise agreement",
@@ -1208,6 +1315,10 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(9).days}
+                <span className="text-violet-700 mx-1">
+
+                ({findAverageDaysBetweenStatuses(funnelData,"franchise agreement","civil work")})
+                </span>
               </p>
               <svg
                 width="70"
@@ -1236,7 +1347,7 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base">
                 {getArrowValues(9).percentage}%
               </p>
-                <div className="text-red-700 mx-1 text-sm font-semibold">
+                <div className="text-violet-700 mx-1 text-sm font-semibold">
                   ({dynamicPercentage("civil work","franchise agreement")}
                   )
                 </div>
@@ -1268,6 +1379,10 @@ const ExpansionFunnel = () => {
               <div className="flex justify-center items-center ">
                 <p className="font-semibold text-base text-rose-900 mr-2">
                   {getArrowValues(10).days}
+                  <span className="text-violet-700 mx-1">
+
+                  ({findAverageDaysBetweenStatuses(funnelData,"equipment order","equipment installation")})
+                  </span>
                 </p>
                 <svg
                   width="70"
@@ -1298,7 +1413,7 @@ const ExpansionFunnel = () => {
                   <p className="font-semibold text-base">
                     {getArrowValues(10).percentage}%
                   </p>
-                  <span className="text-red-700 text-sm font-semibold">
+                  <span className="text-violet-700 text-sm font-semibold">
                     ({dynamicPercentage("equipment installation","equipment order")}
                     )
                   </span>
@@ -1321,6 +1436,10 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(11).days}
+                <span className="text-violet-700 mx-1">
+
+                ({findAverageDaysBetweenStatuses(funnelData,"equipment installation","hr ready")})
+                </span>
               </p>
               <svg
                 width="70"
@@ -1348,7 +1467,7 @@ const ExpansionFunnel = () => {
               </svg>
               <p className="font-semibold text-base">
                 {getArrowValues(11).percentage}%
-              <div className="text-red-700 text-sm font-semibold">
+              <div className="text-violet-700 text-sm font-semibold">
                     ({dynamicPercentage("hr ready","equipment installation")}
                     )
                   </div>
@@ -1391,6 +1510,9 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(12).days}
+                <span className="text-violet-700 mx-1">
+                  ({findAverageDaysBetweenStatuses(funnelData,"branding","inauguration")})
+                </span>
               </p>
               <svg
                 width="70"
@@ -1418,7 +1540,7 @@ const ExpansionFunnel = () => {
               </svg>
               <p className="font-semibold text-base">
                 {getArrowValues(12).percentage}%
-                <div className="text-red-700 text-sm font-semibold">
+                <div className="text-violet-700 text-sm font-semibold">
                     ({dynamicPercentage("branding","inauguration")}
                     )
                   </div>
