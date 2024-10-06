@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import funnelIcon from "../../../assets/icons/funnel.png";
 import FunnelCard from "../../../components/Funnel/FunnelCard";
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 
 const ExpansionFunnel = () => {
   const [, setData] = useState([]);
@@ -151,8 +151,6 @@ const ExpansionFunnel = () => {
   const [InvLed, setInvLed] = useState(null);
   const { user } = useAuth();
 
-
-
   // console.log(user);
 
   const filter =
@@ -189,7 +187,7 @@ const ExpansionFunnel = () => {
   };
 
   function getCountByStatus(status) {
-    console.log({funnelData});
+    console.log({ funnelData });
     const item = funnelData.find((entry) => entry.status === status);
     return item ? item.count : null; // Return null if status is not found
   }
@@ -270,7 +268,7 @@ const ExpansionFunnel = () => {
         if (status === "site found") {
           const sites = siteData.filter((item) => item.status === status);
           const statusWiseSites = sites.map((item) => {
-            let hasPastOrgDate = false
+            let hasPastOrgDate = false;
             // Add totalDays to statDate
             // Add totalDays to statDate
             const newDate = new Date(item.createdAt);
@@ -282,7 +280,7 @@ const ExpansionFunnel = () => {
             const currentDate = new Date();
             if (newDate < currentDate) {
               newDate.setTime(currentDate.getTime());
-              hasPastOrgDate = true
+              hasPastOrgDate = true;
             }
 
             newDate.setDate(newDate.getDate() + totalDays);
@@ -298,7 +296,7 @@ const ExpansionFunnel = () => {
 
           return statusWiseSites;
         } else {
-          let hasPastOrgDate = false
+          let hasPastOrgDate = false;
           const sites = siteData.filter((item) => item.status === status);
           // console.log({sites});
           const statusWiseSites = sites.map((item) => {
@@ -316,7 +314,7 @@ const ExpansionFunnel = () => {
             const currentDate = new Date();
             if (newDate < currentDate) {
               newDate.setTime(currentDate.getTime());
-              hasPastOrgDate = true
+              hasPastOrgDate = true;
             }
 
             newDate.setDate(newDate.getDate() + totalDays);
@@ -326,7 +324,7 @@ const ExpansionFunnel = () => {
               status: item.status,
               createdAt: item.createdAt,
               openingDate: newDate,
-              hasPastOrgDate
+              hasPastOrgDate,
             };
           });
 
@@ -336,7 +334,7 @@ const ExpansionFunnel = () => {
 
       let finalFunnelData = [];
 
-      console.log({funnelDays});
+      console.log({ funnelDays });
 
       funnelDays.forEach((item) => {
         if (item.status !== "site complete") {
@@ -507,10 +505,10 @@ const ExpansionFunnel = () => {
 
   // console.log({ siteOpenings });
 
-  const getSiteLeftForNextStatus = (status, days , sendData = false) => {
+  const getSiteLeftForNextStatus = (status, days, sendData = false) => {
     let siteLeftAfterTimeOver = 0;
     const currentDate = new Date();
-    const stucksites = []
+    const stucksites = [];
     if (status !== "site found") {
       const sites = siteData.filter((item) => item.status === status);
       sites.forEach((item) => {
@@ -524,7 +522,7 @@ const ExpansionFunnel = () => {
         // console.log({ daysDifference, days });
         if (daysDifference > days) {
           // console.log("bartise");
-          stucksites.push(item)
+          stucksites.push(item);
           siteLeftAfterTimeOver = siteLeftAfterTimeOver + 1;
         }
       });
@@ -542,25 +540,25 @@ const ExpansionFunnel = () => {
         // console.log({ daysDifference, days });
         if (daysDifference > days) {
           // console.log("bartise");
-          stucksites.push(item)
+          stucksites.push(item);
           siteLeftAfterTimeOver = siteLeftAfterTimeOver + 1;
         }
       });
     }
 
     // console.log("clicked");
-    if(sendData){
+    if (sendData) {
       console.log(stucksites);
-      exportToExcel(stucksites,['customId','name','division','district','address'],`stuck-list-for-${status}`)
-      return stucksites
-    }else{
+      exportToExcel(
+        stucksites,
+        ["customId", "name", "division", "district", "address"],
+        `stuck-list-for-${status}`
+      );
+      return stucksites;
+    } else {
       return siteLeftAfterTimeOver;
     }
-
   };
-
-
-  
 
   const getArrowValues = (blockNum) => {
     return blockDays.find((block) => block.block === blockNum) || null;
@@ -591,32 +589,38 @@ const ExpansionFunnel = () => {
     (a, b) => parseMonth(a.month) - parseMonth(b.month)
   );
 
+  const exportToExcel = (jsonData, headers, fileName) => {
+    // Create a new workbook and worksheet
+    const wb = XLSX.utils.book_new();
 
-  const exportToExcel = (jsonData,headers,fileName) => {
-        // Create a new workbook and worksheet
-        const wb = XLSX.utils.book_new();
-        
-        // Filter the JSON data based on the selected headers
-        const filteredData = jsonData.map(item =>
-          headers.reduce((obj, header) => {
-            obj[header] = item[header];
-            return obj;
-          }, {})
-        );
-    
-        // Convert filtered data to worksheet
-        const ws = XLSX.utils.json_to_sheet(filteredData);
-    
-        // Append worksheet to workbook
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    
-        // Write workbook and create a Blob
-        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([wbout], { type: 'application/octet-stream' });
-    
-        // Save file
-        saveAs(blob, `${fileName}.xlsx`);
-      };
+    // Filter the JSON data based on the selected headers
+    const filteredData = jsonData.map((item) =>
+      headers.reduce((obj, header) => {
+        obj[header] = item[header];
+        return obj;
+      }, {})
+    );
+
+    // Convert filtered data to worksheet
+    const ws = XLSX.utils.json_to_sheet(filteredData);
+
+    // Append worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    // Write workbook and create a Blob
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([wbout], { type: "application/octet-stream" });
+
+    // Save file
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
+  const dynamicPercentage = (secondVal, firstVal) => {
+    return (
+      (getCountByStatus(secondVal) / getCountByStatus(firstVal)) *
+      100
+    ).toFixed(2);
+  };
 
   return (
     <div className="p-4 px-5 font-poppins mx-auto">
@@ -702,9 +706,14 @@ const ExpansionFunnel = () => {
                 {/* start card */}
                 <div className="bg-gray-400 w-full flex flex-col justify-between items-center px-5 py-2 rounded-md">
                   <p className="font-medium text-yellow-300">
-                    {getCountByStatus("site found")}{" "}
+                    {getCountByStatus("site found")}
                     {getSiteLeftForNextStatus("site found", 20) !== 0 && (
-                      <span className="text-slate-800 cursor-pointer" onClick={()=>getSiteLeftForNextStatus("site found", 10, true)}>
+                      <span
+                        className="text-slate-800 cursor-pointer"
+                        onClick={() =>
+                          getSiteLeftForNextStatus("site found", 10, true)
+                        }
+                      >
                         ({getSiteLeftForNextStatus("site found", 10)})
                       </span>
                     )}
@@ -746,7 +755,11 @@ const ExpansionFunnel = () => {
                   </svg>
 
                   <p className="font-semibold text-base">
-                    {getArrowValues(1).percentage} %
+                    {getArrowValues(1).percentage}
+                    <span className="text-red-700 mx-1">
+                      ({dynamicPercentage("site negotiation", "site found")})
+                    </span>
+                    %
                   </p>
                 </div>
                 {/* end card */}
@@ -754,7 +767,12 @@ const ExpansionFunnel = () => {
                   <p className="font-medium text-yellow-300">
                     {getCountByStatus("site negotiation")}{" "}
                     {getSiteLeftForNextStatus("site negotiation", 15) !== 0 && (
-                      <span className="text-slate-800 cursor-pointer" onClick={()=>getSiteLeftForNextStatus("site negotiation", 15, true)}>
+                      <span
+                        className="text-slate-800 cursor-pointer"
+                        onClick={() =>
+                          getSiteLeftForNextStatus("site negotiation", 15, true)
+                        }
+                      >
                         ({getSiteLeftForNextStatus("site negotiation", 15)})
                       </span>
                     )}
@@ -839,7 +857,16 @@ const ExpansionFunnel = () => {
               </svg>
 
               <p className="font-semibold text-base">
-                {getArrowValues(2).percentage} %
+                {getArrowValues(2).percentage}
+                <span className="text-red-700 mx-1 text-sm">
+                  (
+                  {dynamicPercentage(
+                    "investor and site confirmation",
+                    "site negotiation"
+                  )}
+                  )
+                </span>
+                %
               </p>
             </div>
           </div>
@@ -851,7 +878,16 @@ const ExpansionFunnel = () => {
                 "investor and site confirmation",
                 15
               ) !== 0 && (
-                <span  className="text-slate-800 cursor-pointer" onClick={()=>getSiteLeftForNextStatus("investor and site confirmation", 15, true)}>
+                <span
+                  className="text-slate-800 cursor-pointer"
+                  onClick={() =>
+                    getSiteLeftForNextStatus(
+                      "investor and site confirmation",
+                      15,
+                      true
+                    )
+                  }
+                >
                   (
                   {getSiteLeftForNextStatus(
                     "investor and site confirmation",
@@ -897,7 +933,16 @@ const ExpansionFunnel = () => {
                 </g>
               </svg>
               <p className="font-semibold text-base">
-                {getArrowValues(3).percentage}%
+                {getArrowValues(3).percentage}
+                <span className="text-red-700 mx-1 text-sm">
+                  (
+                  {dynamicPercentage(
+                    "feasibility study",
+                    "investor and site confirmation"
+                  )}
+                  )
+                </span>
+                %
               </p>
             </div>
           </div>
@@ -943,6 +988,10 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(4).percentage}%
+                  <div className="text-red-700 mx-1 text-sm">
+                    ({dynamicPercentage("RMIA validation", "feasibility study")}
+                    )
+                  </div>
                 </p>
               </div>
             </div>
@@ -986,6 +1035,9 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(5).percentage}%
+                  <div className="text-red-700 mx-1 text-sm">
+                    ({dynamicPercentage("GMD approval", "RMIA validation")})
+                  </div>
                 </p>
               </div>
             </div>
@@ -1030,6 +1082,9 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base">
                 {getArrowValues(6).percentage}%
               </p>
+              <div className="text-red-700 mx-1 text-sm font-semibold">
+                ({dynamicPercentage("premises agreement", "GMD approval")})
+              </div>
             </div>
           </div>
           {/* col 4 */}
@@ -1081,6 +1136,9 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(7).percentage}%
+                  <div className="text-red-700 mx-1 text-sm font-semibold">
+                    ({dynamicPercentage("layout approved", "docs collected")})
+                  </div>
                 </p>
               </div>
             </div>
@@ -1125,6 +1183,14 @@ const ExpansionFunnel = () => {
 
                 <p className="font-semibold text-base">
                   {getArrowValues(8).percentage}%
+                  <div className="text-red-700 mx-1 text-sm font-semibold">
+                    (
+                    {dynamicPercentage(
+                      "franchise agreement",
+                      "layout approved"
+                    )}
+                    )
+                  </div>
                 </p>
               </div>
             </div>
@@ -1169,6 +1235,10 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base">
                 {getArrowValues(9).percentage}%
               </p>
+                <div className="text-red-700 mx-1 text-sm font-semibold">
+                  ({dynamicPercentage("civil work","franchise agreement")}
+                  )
+                </div>
             </div>
           </div>
 
@@ -1222,10 +1292,16 @@ const ExpansionFunnel = () => {
                     />
                   </g>
                 </svg>
+                  <div>
 
-                <p className="font-semibold text-base">
-                  {getArrowValues(10).percentage}%
-                </p>
+                  <p className="font-semibold text-base">
+                    {getArrowValues(10).percentage}%
+                  </p>
+                  <span className="text-red-700 text-sm font-semibold">
+                    ({dynamicPercentage("equipment installation","equipment order")}
+                    )
+                  </span>
+                  </div>
               </div>
             </div>
             <div className="bg-slate-300 flex flex-col self-end rounded-xl text-center p-4">
@@ -1271,6 +1347,10 @@ const ExpansionFunnel = () => {
               </svg>
               <p className="font-semibold text-base">
                 {getArrowValues(11).percentage}%
+              <div className="text-red-700 text-sm font-semibold">
+                    ({dynamicPercentage("hr ready","equipment installation")}
+                    )
+                  </div>
               </p>
             </div>
           </div>
@@ -1337,6 +1417,10 @@ const ExpansionFunnel = () => {
               </svg>
               <p className="font-semibold text-base">
                 {getArrowValues(12).percentage}%
+                <div className="text-red-700 text-sm font-semibold">
+                    ({dynamicPercentage("branding","inauguration")}
+                    )
+                  </div>
               </p>
             </div>
           </div>
@@ -1401,7 +1485,7 @@ const ExpansionFunnel = () => {
                       {site.status}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {site.hasPastOrgDate? "Yes" : "No"}
+                      {site.hasPastOrgDate ? "Yes" : "No"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(site.createdAt).toLocaleDateString("en-GB", {
