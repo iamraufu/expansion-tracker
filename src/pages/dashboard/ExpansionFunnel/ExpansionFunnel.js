@@ -11,6 +11,7 @@ const ExpansionFunnel = () => {
   const [siteData, setSiteData] = useState(null);
   const [funnelData, setFunnelData] = useState([]);
   const [funnledFinalData, setFunnledFinalData] = useState([]);
+  const [activeFunnelData, setActiveFunnelData] = useState([]);
   const api_url = process.env.REACT_APP_API_URL;
   const [funnelDays, setfunnelDays] = useState([
     {
@@ -175,6 +176,7 @@ const ExpansionFunnel = () => {
       if (json.status) {
         setData(json.data);
         setFunnelData(json.funnelData);
+        setActiveFunnelData(json.onlyFunnelData);
         setSiteData(json.allSites);
         setTotalInv(json.allIvestors);
         setInvLed(json.aggreedInvestors);
@@ -189,6 +191,11 @@ const ExpansionFunnel = () => {
   function getCountByStatus(status) {
     console.log({ funnelData });
     const item = funnelData.find((entry) => entry.status === status);
+    return item ? item.count : null; // Return null if status is not found
+  }
+  function getCountByStatusActive(status) {
+    console.log({ activeFunnelData });
+    const item = activeFunnelData.find((entry) => entry.status === status);
     return item ? item.count : null; // Return null if status is not found
   }
 
@@ -337,10 +344,10 @@ const ExpansionFunnel = () => {
       console.log({ funnelDays });
 
       funnelDays.forEach((item) => {
-        // if (item.status !== "site complete") {
-        //   finalFunnelData.push(funnelFinal(item.status, item.totalDays));
-        // }
-        finalFunnelData.push(funnelFinal(item.status, item.totalDays));
+        if (item.status !== "site complete") {
+          finalFunnelData.push(funnelFinal(item.status, item.totalDays));
+        }
+        // finalFunnelData.push(funnelFinal(item.status, item.totalDays));
       });
 
       console.log({ finalFunnelData: finalFunnelData.flat(Infinity) });
@@ -409,7 +416,7 @@ const ExpansionFunnel = () => {
         };
 
         const groupedSites = groupByOpeningMonth(siteData);
-        console.log({ groupedSites });
+        // console.log({ groupedSites });
 
         const transformedData = {};
 
@@ -489,8 +496,8 @@ const ExpansionFunnel = () => {
   }, [funnelDays, siteData]);
 
   function getTotalCountForMonth(month) {
-    console.log(month);
-    console.log(funnledFinalData);
+    // console.log(month);
+    // console.log(funnledFinalData);
     const monthData = funnledFinalData[month];
     if (!monthData) {
       return `No data available for month: ${month}`;
@@ -623,79 +630,86 @@ const ExpansionFunnel = () => {
     ).toFixed(2);
   };
 
-
   // const findCommonCustomIds = (data, status1, status2) => {
   //   // Find the two objects based on the status
   //   const obj1 = data.find(item => item.status === status1);
   //   const obj2 = data.find(item => item.status === status2);
-  
+
   //   if (!obj1 || !obj2) {
   //     return 0; // Return 0 if either status is not found
   //   }
-  
+
   //   // Extract customIds from both 'sites' arrays
   //   const customIds1 = obj1.sites.map(site => site.customId);
   //   const customIds2 = obj2.sites.map(site => site.customId);
-  
+
   //   // Find the common customIds
   //   const commonCustomIds = customIds1.filter(id => customIds2.includes(id));
-  
+
   //   // Return the count of common customIds
   //   return commonCustomIds.length;
   // };
 
   const findAverageDaysBetweenStatuses = (data, status1, status2) => {
-    const obj1 = data.find(item => item.status === status1);
-    const obj2 = data.find(item => item.status === status2);
-  
+    const obj1 = data.find((item) => item.status === status1);
+    const obj2 = data.find((item) => item.status === status2);
+
     if (!obj1 || !obj2) {
       return 0; // Return 0 if either status is not found
     }
-  
+
     // Helper function to calculate difference in days
     const getDaysDifference = (date1, date2) => {
       const diffTime = Math.abs(new Date(date2) - new Date(date1));
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert time difference to days
     };
-  
+
     // Collect all day differences for matching customIds
     const daysDifferences = obj1.sites.reduce((acc, site1) => {
-      const site2 = obj2.sites.find(site => site.customId === site1.customId);
-  
+      const site2 = obj2.sites.find((site) => site.customId === site1.customId);
+
       if (site2) {
         let status1CreatedAt;
-  
+
         // Special case: If status1 is "site found", use createdAt from site1 directly
         if (status1 === "site found") {
           status1CreatedAt = site1.createdAt;
         } else {
           // Find status1 in statusDetails
-          const status1Detail = site1.statusDetails.find(detail => detail.status === status1);
+          const status1Detail = site1.statusDetails.find(
+            (detail) => detail.status === status1
+          );
           if (status1Detail) {
             status1CreatedAt = status1Detail.createdAt;
           }
         }
-  
+
         if (status1CreatedAt) {
           // Find createdAt for status2 from statusDetails in site2
-          const status2Detail = site2.statusDetails.find(detail => detail.status === status2);
+          const status2Detail = site2.statusDetails.find(
+            (detail) => detail.status === status2
+          );
           if (status2Detail) {
             const status2CreatedAt = status2Detail.createdAt;
-            const daysDifference = getDaysDifference(status1CreatedAt, status2CreatedAt);
+            const daysDifference = getDaysDifference(
+              status1CreatedAt,
+              status2CreatedAt
+            );
             acc.push(daysDifference); // Add to the accumulator
           }
         }
       }
-  
+
       return acc;
     }, []);
-  
+
     // Calculate the average of days differences
-    const averageDays = daysDifferences.reduce((sum, days) => sum + days, 0) / daysDifferences.length;
-  
+    const averageDays =
+      daysDifferences.reduce((sum, days) => sum + days, 0) /
+      daysDifferences.length;
+
     return Math.ceil(averageDays) || 0; // Return 0 if no matching customIds
   };
-
 
   // console.log(findAverageDaysBetweenStatuses(funnelData, "site found","site negotiation"));
 
@@ -731,12 +745,13 @@ const ExpansionFunnel = () => {
             <div className="inline-block p-4 bg-blue-100">
               <div className="flex  text-center justify-center gap-4">
                 {/* start card */}
-                <div className="bg-gray-400 w-full flex flex-col justify-between items-center px-5 py-2 rounded-md">
-                  <p className="font-medium text-yellow-300">{totalInv}</p>
+                <div className="bg-gray-400 w-full flex flex-col justify-center items-center px-5 py-2 rounded-md">
+                  <p className="font-medium text-base text-yellow-300">
+                    {totalInv}
+                  </p>
                   <p className="font-medium text-white my-4">
                     Investor <br /> Lead
                   </p>
-                  <p className="invisible ">Investor Lead</p>
                 </div>
 
                 {/* arrow */}
@@ -770,13 +785,14 @@ const ExpansionFunnel = () => {
                   <p className="font-semibold text-base">75%</p>
                 </div>
                 {/* end card */}
-                <div className="bg-gray-400 w-full flex flex-col justify-between items-center px-5 py-2 rounded-md">
-                  <p className="font-medium text-yellow-300">{InvLed}</p>
+                <div className="bg-gray-400 w-full flex flex-col justify-center items-center px-5 py-6 rounded-md">
+                  <p className="font-medium text-base text-yellow-300">
+                    {InvLed}
+                  </p>
                   <p className="font-medium text-white my-4">
                     Agreed <br />
                     Investors
                   </p>
-                  <p className="invisible ">Agreed</p>
                 </div>
               </div>
             </div>
@@ -785,12 +801,12 @@ const ExpansionFunnel = () => {
             <div className="inline-block p-4 bg-blue-100">
               <div className="flex  text-center justify-center gap-4">
                 {/* start card */}
-                <div className="bg-gray-400 w-full flex flex-col justify-between items-center px-5 py-2 rounded-md">
-                  <p className="font-medium text-yellow-300">
-                    {getCountByStatus("site found")}
+                <div className="bg-gray-400 w-full flex flex-col justify-center items-center px-5 py-2 rounded-md">
+                  <p className="font-medium text-yellow-300 text-base">
+                    {getCountByStatusActive("site found")}
                     {getSiteLeftForNextStatus("site found", 20) !== 0 && (
                       <span
-                        className="text-slate-800 cursor-pointer"
+                        className="text-slate-800 cursor-pointer mx-1"
                         onClick={() =>
                           getSiteLeftForNextStatus("site found", 10, true)
                         }
@@ -802,15 +818,21 @@ const ExpansionFunnel = () => {
                   <p className="font-medium text-white my-4">
                     Site <br /> Found
                   </p>
-                  <p className="invisible ">Site Found</p>
+                  {/* <p className="invisible ">Site Found</p> */}
                 </div>
 
                 {/* arrow */}
                 <div className="flex flex-col justify-center items-center">
                   <p className="font-semibold text-base text-rose-600">
                     {getArrowValues(1).days}
-                   <span className="text-violet-700" >
-                      ({findAverageDaysBetweenStatuses(funnelData, "site found","site negotiation")})
+                    <span className="text-violet-700 mx-1">
+                      (
+                      {findAverageDaysBetweenStatuses(
+                        funnelData,
+                        "site found",
+                        "site negotiation"
+                      )}
+                      )
                     </span>
                   </p>
                   <svg
@@ -839,20 +861,19 @@ const ExpansionFunnel = () => {
                   </svg>
 
                   <p className="font-semibold text-base">
-                    {getArrowValues(1).percentage}
-                    <span className="text-violet-700 mx-1">
-                      ({dynamicPercentage("site negotiation", "site found")})
-                    </span>
-                    %
+                    {getArrowValues(1).percentage}%
                   </p>
+                  <span className="text-violet-700 mx-1 font-semibold text-base">
+                    ({dynamicPercentage("site negotiation", "site found")})
+                  </span>
                 </div>
                 {/* end card */}
-                <div className="bg-gray-400 flex flex-col justify-between items-center px-5 py-2 rounded-md w-full">
-                  <p className="font-medium text-yellow-300">
-                    {getCountByStatus("site negotiation")}{" "}
+                <div className="bg-gray-400 flex flex-col justify-center items-center px-5 py-6 rounded-md w-full">
+                  <p className="font-medium text-yellow-300 text-base">
+                    {getCountByStatusActive("site negotiation")}
                     {getSiteLeftForNextStatus("site negotiation", 15) !== 0 && (
                       <span
-                        className="text-slate-800 cursor-pointer"
+                        className="text-slate-800 cursor-pointer mx-1"
                         onClick={() =>
                           getSiteLeftForNextStatus("site negotiation", 15, true)
                         }
@@ -864,7 +885,6 @@ const ExpansionFunnel = () => {
                   <p className="font-medium text-white my-4">
                     Site <br /> Negotiation
                   </p>
-                  <p className="invisible ">Site Negotiation</p>
                 </div>
               </div>
             </div>
@@ -895,10 +915,10 @@ const ExpansionFunnel = () => {
                       <td className="border px-4 py-2 font-semibold uppercase whitespace-nowrap">
                         {item.month}
                       </td>
-                      <td className="border px-4 py-2 text-violet-700 font-semibold">
+                      <td className="border px-4 py-2 text-red-500 font-semibold">
                         {item.totalSites.toString().padStart(2, "0")}
                       </td>
-                      <td className="border px-4 py-2 text-violet-700 font-semibold">
+                      <td className="border px-4 py-2 text-red-500 font-semibold">
                         {getTotalCountForMonth(item.month)
                           .toString()
                           .padStart(2, "0")}
@@ -914,8 +934,14 @@ const ExpansionFunnel = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(2).days}
-                  <span className="text-violet-700 mx-1">
-                ({findAverageDaysBetweenStatuses(funnelData, "site negotiation","investor and site confirmation")})
+                <span className="text-violet-700 mx-1">
+                  (
+                  {findAverageDaysBetweenStatuses(
+                    funnelData,
+                    "site negotiation",
+                    "investor and site confirmation"
+                  )}
+                  )
                 </span>
               </p>
               <svg
@@ -944,29 +970,28 @@ const ExpansionFunnel = () => {
               </svg>
 
               <p className="font-semibold text-base">
-                {getArrowValues(2).percentage}
-                <span className="text-violet-700 mx-1 text-sm">
-                  (
-                  {dynamicPercentage(
-                    "investor and site confirmation",
-                    "site negotiation"
-                  )}
-                  )
-                </span>
-                %
+                {getArrowValues(2).percentage}%
               </p>
+              <span className="text-violet-700 font-semibold text-base mx-1">
+                (
+                {dynamicPercentage(
+                  "investor and site confirmation",
+                  "site negotiation"
+                )}
+                )
+              </span>
             </div>
           </div>
           {/* col 2 */}
           <div className="bg-lime-100 shadow text-center flex flex-col justify-center items-center px-5 py-2 rounded-xl">
             <p className="font-bold text-yellow-700">
-              {getCountByStatus("investor and site confirmation")}
+              {getCountByStatusActive("investor and site confirmation")}
               {getSiteLeftForNextStatus(
                 "investor and site confirmation",
                 15
               ) !== 0 && (
                 <span
-                  className="text-slate-800 cursor-pointer"
+                  className="text-slate-800 cursor-pointer mx-1"
                   onClick={() =>
                     getSiteLeftForNextStatus(
                       "investor and site confirmation",
@@ -995,7 +1020,13 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(3).days}
                 <span className="text-violet-700 mx-1">
-                  ({findAverageDaysBetweenStatuses(funnelData, "investor and site confirmation","feasibility study")})
+                  (
+                  {findAverageDaysBetweenStatuses(
+                    funnelData,
+                    "investor and site confirmation",
+                    "feasibility study"
+                  )}
+                  )
                 </span>
               </p>
               <svg
@@ -1023,17 +1054,16 @@ const ExpansionFunnel = () => {
                 </g>
               </svg>
               <p className="font-semibold text-base">
-                {getArrowValues(3).percentage}
-                <span className="text-violet-700 mx-1 text-sm">
-                  (
-                  {dynamicPercentage(
-                    "feasibility study",
-                    "investor and site confirmation"
-                  )}
-                  )
-                </span>
-                %
+                {getArrowValues(3).percentage}%
               </p>
+              <span className="text-violet-700 mx-1 text-sm font-semibold">
+                (
+                {dynamicPercentage(
+                  "feasibility study",
+                  "investor and site confirmation"
+                )}
+                )
+              </span>
             </div>
           </div>
           {/* col 3 */}
@@ -1041,7 +1071,7 @@ const ExpansionFunnel = () => {
             {/* small card 1 */}
             <FunnelCard
               duration={3}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"feasibility study"}
             />
@@ -1049,9 +1079,15 @@ const ExpansionFunnel = () => {
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center">
                 <p className="font-semibold text-base text-rose-900 mr-2">
-                  {getArrowValues(4).days} 
+                  {getArrowValues(4).days}
                   <span className="text-violet-700 mx-1">
-                  ({findAverageDaysBetweenStatuses(funnelData,"feasibility study","RMIA validation")})
+                    (
+                    {findAverageDaysBetweenStatuses(
+                      funnelData,
+                      "feasibility study",
+                      "RMIA validation"
+                    )}
+                    )
                   </span>
                 </p>
                 <svg
@@ -1091,7 +1127,7 @@ const ExpansionFunnel = () => {
             {/* small card 2 */}
             <FunnelCard
               duration={1}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"RMIA validation"}
             />
@@ -1101,8 +1137,13 @@ const ExpansionFunnel = () => {
                 <p className="font-semibold text-base text-rose-800 mr-2">
                   {getArrowValues(5).days}
                   <span className="text-violet-700 mx-1">
-
-                  ({findAverageDaysBetweenStatuses(funnelData,"RMIA validation","GMD approval")})
+                    (
+                    {findAverageDaysBetweenStatuses(
+                      funnelData,
+                      "RMIA validation",
+                      "GMD approval"
+                    )}
+                    )
                   </span>
                 </p>
                 <svg
@@ -1141,7 +1182,7 @@ const ExpansionFunnel = () => {
             {/* small card 3 */}
             <FunnelCard
               duration={10}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"GMD approval"}
             />
@@ -1152,7 +1193,13 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(6).days}
                 <span className="text-violet-700 mx-1">
-                  ({findAverageDaysBetweenStatuses(funnelData,"GMD approval", "premises agreement")})
+                  (
+                  {findAverageDaysBetweenStatuses(
+                    funnelData,
+                    "GMD approval",
+                    "premises agreement"
+                  )}
+                  )
                 </span>
               </p>
               <svg
@@ -1188,18 +1235,18 @@ const ExpansionFunnel = () => {
             </div>
           </div>
           {/* col 4 */}
-          <div className="bg-slate-300 flex flex-col gap-2 rounded-xl text-center p-4">
+          <div className="bg-slate-300 flex flex-col justify-between gap-2 rounded-xl text-center p-4">
             {/* small card 1 */}
             <FunnelCard
               duration={0}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"premises agreement"}
             />
 
             <FunnelCard
               duration={3}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"docs collected"}
             />
@@ -1209,8 +1256,13 @@ const ExpansionFunnel = () => {
                 <p className="font-semibold text-base  text-rose-900 mr-2">
                   {getArrowValues(7).days}
                   <span className="text-violet-700 mx-1">
-
-                    ({findAverageDaysBetweenStatuses(funnelData,"docs collected","layout approved")})
+                    (
+                    {findAverageDaysBetweenStatuses(
+                      funnelData,
+                      "docs collected",
+                      "layout approved"
+                    )}
+                    )
                   </span>
                 </p>
                 <svg
@@ -1249,7 +1301,7 @@ const ExpansionFunnel = () => {
             {/* small card 2 */}
             <FunnelCard
               duration={2}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"layout approved"}
             />
@@ -1260,8 +1312,13 @@ const ExpansionFunnel = () => {
                 <p className="font-semibold text-base text-rose-900 mr-2">
                   {getArrowValues(8).days}
                   <span className="text-violet-700 mx-1">
-
-                  ({findAverageDaysBetweenStatuses(funnelData,"layout approved","franchise agreement")})
+                    (
+                    {findAverageDaysBetweenStatuses(
+                      funnelData,
+                      "layout approved",
+                      "franchise agreement"
+                    )}
+                    )
                   </span>
                 </p>
                 <svg
@@ -1305,7 +1362,7 @@ const ExpansionFunnel = () => {
             {/* small card 3 */}
             <FunnelCard
               duration={15}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"franchise agreement"}
             />
@@ -1316,8 +1373,13 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(9).days}
                 <span className="text-violet-700 mx-1">
-
-                ({findAverageDaysBetweenStatuses(funnelData,"franchise agreement","civil work")})
+                  (
+                  {findAverageDaysBetweenStatuses(
+                    funnelData,
+                    "franchise agreement",
+                    "civil work"
+                  )}
+                  )
                 </span>
               </p>
               <svg
@@ -1347,10 +1409,9 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base">
                 {getArrowValues(9).percentage}%
               </p>
-                <div className="text-violet-700 mx-1 text-sm font-semibold">
-                  ({dynamicPercentage("civil work","franchise agreement")}
-                  )
-                </div>
+              <div className="text-violet-700 mx-1 text-sm font-semibold">
+                ({dynamicPercentage("civil work", "franchise agreement")})
+              </div>
             </div>
           </div>
 
@@ -1360,7 +1421,7 @@ const ExpansionFunnel = () => {
               {/* small card 1 */}
               <FunnelCard
                 duration={20}
-                getCountByStatus={getCountByStatus}
+                getCountByStatus={getCountByStatusActive}
                 getSiteLeftForNextStatus={getSiteLeftForNextStatus}
                 status={"civil work"}
               />
@@ -1368,7 +1429,7 @@ const ExpansionFunnel = () => {
               {/* small card 2 */}
               <FunnelCard
                 duration={20}
-                getCountByStatus={getCountByStatus}
+                getCountByStatus={getCountByStatusActive}
                 getSiteLeftForNextStatus={getSiteLeftForNextStatus}
                 status={"equipment order"}
               />
@@ -1380,8 +1441,13 @@ const ExpansionFunnel = () => {
                 <p className="font-semibold text-base text-rose-900 mr-2">
                   {getArrowValues(10).days}
                   <span className="text-violet-700 mx-1">
-
-                  ({findAverageDaysBetweenStatuses(funnelData,"equipment order","equipment installation")})
+                    (
+                    {findAverageDaysBetweenStatuses(
+                      funnelData,
+                      "equipment order",
+                      "equipment installation"
+                    )}
+                    )
                   </span>
                 </p>
                 <svg
@@ -1408,16 +1474,19 @@ const ExpansionFunnel = () => {
                     />
                   </g>
                 </svg>
-                  <div>
-
+                <div>
                   <p className="font-semibold text-base">
                     {getArrowValues(10).percentage}%
                   </p>
                   <span className="text-violet-700 text-sm font-semibold">
-                    ({dynamicPercentage("equipment installation","equipment order")}
+                    (
+                    {dynamicPercentage(
+                      "equipment installation",
+                      "equipment order"
+                    )}
                     )
                   </span>
-                  </div>
+                </div>
               </div>
             </div>
             <div className="bg-slate-300 flex flex-col self-end rounded-xl text-center p-4">
@@ -1425,20 +1494,25 @@ const ExpansionFunnel = () => {
 
               <FunnelCard
                 duration={6}
-                getCountByStatus={getCountByStatus}
+                getCountByStatus={getCountByStatusActive}
                 getSiteLeftForNextStatus={getSiteLeftForNextStatus}
                 status={"equipment installation"}
               />
             </div>
           </div>
 
-          <div className="middleArrow self-end mb-40">
+          <div className="middleArrow self-end mb-72">
             <div className="flex flex-col justify-center items-center">
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(11).days}
                 <span className="text-violet-700 mx-1">
-
-                ({findAverageDaysBetweenStatuses(funnelData,"equipment installation","hr ready")})
+                  (
+                  {findAverageDaysBetweenStatuses(
+                    funnelData,
+                    "equipment installation",
+                    "hr ready"
+                  )}
+                  )
                 </span>
               </p>
               <svg
@@ -1467,10 +1541,9 @@ const ExpansionFunnel = () => {
               </svg>
               <p className="font-semibold text-base">
                 {getArrowValues(11).percentage}%
-              <div className="text-violet-700 text-sm font-semibold">
-                    ({dynamicPercentage("hr ready","equipment installation")}
-                    )
-                  </div>
+                <div className="text-violet-700 text-sm font-semibold">
+                  ({dynamicPercentage("hr ready", "equipment installation")})
+                </div>
               </p>
             </div>
           </div>
@@ -1480,28 +1553,28 @@ const ExpansionFunnel = () => {
             {/* small card 0 */}
             <FunnelCard
               duration={1}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"hr ready"}
             />
             {/* small card 1 */}
             <FunnelCard
               duration={1}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"product receiving"}
             />
             {/* small card 2 */}
             <FunnelCard
               duration={1}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"merchandising"}
             />
             {/* small card 3 */}
             <FunnelCard
               duration={1}
-              getCountByStatus={getCountByStatus}
+              getCountByStatus={getCountByStatusActive}
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"branding"}
             />
@@ -1511,7 +1584,13 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base text-rose-600">
                 {getArrowValues(12).days}
                 <span className="text-violet-700 mx-1">
-                  ({findAverageDaysBetweenStatuses(funnelData,"branding","inauguration")})
+                  (
+                  {findAverageDaysBetweenStatuses(
+                    funnelData,
+                    "branding",
+                    "inauguration"
+                  )}
+                  )
                 </span>
               </p>
               <svg
@@ -1541,9 +1620,8 @@ const ExpansionFunnel = () => {
               <p className="font-semibold text-base">
                 {getArrowValues(12).percentage}%
                 <div className="text-violet-700 text-sm font-semibold">
-                    ({dynamicPercentage("branding","inauguration")}
-                    )
-                  </div>
+                  ({dynamicPercentage("branding", "inauguration")})
+                </div>
               </p>
             </div>
           </div>
@@ -1563,7 +1641,7 @@ const ExpansionFunnel = () => {
             <div className="bg-slate-300 flex flex-col justify-between rounded-xl text-center p-4">
               <FunnelCard
                 duration={1}
-                getCountByStatus={getCountByStatus}
+                getCountByStatus={getCountByStatusActive}
                 getSiteLeftForNextStatus={getSiteLeftForNextStatus}
                 status={"inauguration"}
               />
