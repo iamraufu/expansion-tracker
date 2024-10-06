@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import funnelIcon from "../../../assets/icons/funnel.png";
 import FunnelCard from "../../../components/Funnel/FunnelCard";
-// import { MdArrowRightAlt } from "react-icons/md";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 const ExpansionFunnel = () => {
   const [, setData] = useState([]);
@@ -150,6 +151,8 @@ const ExpansionFunnel = () => {
   const [InvLed, setInvLed] = useState(null);
   const { user } = useAuth();
 
+
+
   // console.log(user);
 
   const filter =
@@ -186,6 +189,7 @@ const ExpansionFunnel = () => {
   };
 
   function getCountByStatus(status) {
+    console.log({funnelData});
     const item = funnelData.find((entry) => entry.status === status);
     return item ? item.count : null; // Return null if status is not found
   }
@@ -331,6 +335,8 @@ const ExpansionFunnel = () => {
       };
 
       let finalFunnelData = [];
+
+      console.log({funnelDays});
 
       funnelDays.forEach((item) => {
         if (item.status !== "site complete") {
@@ -499,11 +505,12 @@ const ExpansionFunnel = () => {
     return <p>Loading...</p>;
   }
 
-  console.log({ siteOpenings });
+  // console.log({ siteOpenings });
 
-  const getSiteLeftForNextStatus = (status, days) => {
+  const getSiteLeftForNextStatus = (status, days , sendData = false) => {
     let siteLeftAfterTimeOver = 0;
     const currentDate = new Date();
+    const stucksites = []
     if (status !== "site found") {
       const sites = siteData.filter((item) => item.status === status);
       sites.forEach((item) => {
@@ -517,6 +524,7 @@ const ExpansionFunnel = () => {
         // console.log({ daysDifference, days });
         if (daysDifference > days) {
           // console.log("bartise");
+          stucksites.push(item)
           siteLeftAfterTimeOver = siteLeftAfterTimeOver + 1;
         }
       });
@@ -534,13 +542,25 @@ const ExpansionFunnel = () => {
         // console.log({ daysDifference, days });
         if (daysDifference > days) {
           // console.log("bartise");
+          stucksites.push(item)
           siteLeftAfterTimeOver = siteLeftAfterTimeOver + 1;
         }
       });
     }
 
-    return siteLeftAfterTimeOver;
+    // console.log("clicked");
+    if(sendData){
+      console.log(stucksites);
+      exportToExcel(stucksites,['customId','name','division','district','address'],`stuck-list-for-${status}`)
+      return stucksites
+    }else{
+      return siteLeftAfterTimeOver;
+    }
+
   };
+
+
+  
 
   const getArrowValues = (blockNum) => {
     return blockDays.find((block) => block.block === blockNum) || null;
@@ -570,6 +590,33 @@ const ExpansionFunnel = () => {
   const sortedSiteOpenings = siteOpenings.sort(
     (a, b) => parseMonth(a.month) - parseMonth(b.month)
   );
+
+
+  const exportToExcel = (jsonData,headers,fileName) => {
+        // Create a new workbook and worksheet
+        const wb = XLSX.utils.book_new();
+        
+        // Filter the JSON data based on the selected headers
+        const filteredData = jsonData.map(item =>
+          headers.reduce((obj, header) => {
+            obj[header] = item[header];
+            return obj;
+          }, {})
+        );
+    
+        // Convert filtered data to worksheet
+        const ws = XLSX.utils.json_to_sheet(filteredData);
+    
+        // Append worksheet to workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+        // Write workbook and create a Blob
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([wbout], { type: 'application/octet-stream' });
+    
+        // Save file
+        saveAs(blob, `${fileName}.xlsx`);
+      };
 
   return (
     <div className="p-4 px-5 font-poppins mx-auto">
@@ -657,8 +704,7 @@ const ExpansionFunnel = () => {
                   <p className="font-medium text-yellow-300">
                     {getCountByStatus("site found")}{" "}
                     {getSiteLeftForNextStatus("site found", 20) !== 0 && (
-                      <span className="text-slate-800">
-                        {" "}
+                      <span className="text-slate-800 cursor-pointer" onClick={()=>getSiteLeftForNextStatus("site found", 10, true)}>
                         ({getSiteLeftForNextStatus("site found", 10)})
                       </span>
                     )}
@@ -708,7 +754,7 @@ const ExpansionFunnel = () => {
                   <p className="font-medium text-yellow-300">
                     {getCountByStatus("site negotiation")}{" "}
                     {getSiteLeftForNextStatus("site negotiation", 15) !== 0 && (
-                      <span className="text-slate-800">
+                      <span className="text-slate-800 cursor-pointer" onClick={()=>getSiteLeftForNextStatus("site negotiation", 15, true)}>
                         ({getSiteLeftForNextStatus("site negotiation", 15)})
                       </span>
                     )}
@@ -805,7 +851,7 @@ const ExpansionFunnel = () => {
                 "investor and site confirmation",
                 15
               ) !== 0 && (
-                <span className="text-slate-800">
+                <span  className="text-slate-800 cursor-pointer" onClick={()=>getSiteLeftForNextStatus("investor and site confirmation", 15, true)}>
                   (
                   {getSiteLeftForNextStatus(
                     "investor and site confirmation",
@@ -907,7 +953,6 @@ const ExpansionFunnel = () => {
               getSiteLeftForNextStatus={getSiteLeftForNextStatus}
               status={"RMIA validation"}
             />
-
             {/* middle arrow */}
             <div className="middleArrow self-center">
               <div className="flex justify-center items-center">
