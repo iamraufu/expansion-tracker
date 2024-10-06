@@ -337,9 +337,10 @@ const ExpansionFunnel = () => {
       console.log({ funnelDays });
 
       funnelDays.forEach((item) => {
-        if (item.status !== "site complete") {
-          finalFunnelData.push(funnelFinal(item.status, item.totalDays));
-        }
+        // if (item.status !== "site complete") {
+        //   finalFunnelData.push(funnelFinal(item.status, item.totalDays));
+        // }
+        finalFunnelData.push(funnelFinal(item.status, item.totalDays));
       });
 
       console.log({ finalFunnelData: finalFunnelData.flat(Infinity) });
