@@ -172,7 +172,7 @@ const ExpansionFunnel = () => {
         body: JSON.stringify(filter),
       });
       const json = await response.json();
-      console.log(json);
+      // console.log(json);
       if (json.status) {
         setData(json.data);
         setFunnelData(json.funnelData);
@@ -189,12 +189,12 @@ const ExpansionFunnel = () => {
   };
 
   function getCountByStatus(status) {
-    console.log({ funnelData });
+    // console.log({ funnelData });
     const item = funnelData.find((entry) => entry.status === status);
     return item ? item.count : null; // Return null if status is not found
   }
   function getCountByStatusActive(status) {
-    console.log({ activeFunnelData });
+    // console.log({ activeFunnelData });
     const item = activeFunnelData.find((entry) => entry.status === status);
     return item ? item.count : null; // Return null if status is not found
   }
@@ -301,6 +301,8 @@ const ExpansionFunnel = () => {
             };
           });
 
+          
+
           return statusWiseSites;
         } else {
           let hasPastOrgDate = false;
@@ -312,11 +314,14 @@ const ExpansionFunnel = () => {
             );
 
             // Add totalDays to statDate
-            const newDate = new Date(stat.createdAt);
+            const newDate = new Date(stat.updatedAt);
             // console.log({newDate});
+            
+                        // if(status === "equipment installation"){
+                          
+                        // }
             newDate.setDate(newDate.getDate() + totalDays);
             // console.log({newDate});
-
             // Check if the newDate is in the past
             const currentDate = new Date();
             if (newDate < currentDate) {
@@ -335,22 +340,22 @@ const ExpansionFunnel = () => {
             };
           });
 
+          console.log({status,statusWiseSites});
+
           return statusWiseSites;
         }
       };
 
       let finalFunnelData = [];
 
-      console.log({ funnelDays });
+      // console.log({ funnelDays });
 
       funnelDays.forEach((item) => {
         if (item.status !== "site complete") {
           finalFunnelData.push(funnelFinal(item.status, item.totalDays));
         }
-        // finalFunnelData.push(funnelFinal(item.status, item.totalDays));
       });
 
-      console.log({ finalFunnelData: finalFunnelData.flat(Infinity) });
 
       function updateStatusCountsByMonth(monthData) {
         const statusLevels = {};
@@ -393,12 +398,11 @@ const ExpansionFunnel = () => {
           }));
         }
 
-        console.log({ result });
+        // console.log({ result });
         setFunnledFinalData(result);
       }
 
       const getMonthlySiteOpenings = (siteData) => {
-        console.log({ siteData });
         setIndividualSiteOpenings(siteData);
 
         // Function to group sites by opening month
@@ -439,7 +443,7 @@ const ExpansionFunnel = () => {
           );
         }
 
-        console.log({ transformedData });
+        // console.log({ transformedData });
 
         updateStatusCountsByMonth(transformedData);
 
@@ -486,11 +490,15 @@ const ExpansionFunnel = () => {
         return result;
       };
 
+      console.log({finalFunnelData});
+      console.log({finalFunnelData:  finalFunnelData.flat(Infinity)});
+
       const monthlySiteOpenings = getMonthlySiteOpenings(
         finalFunnelData.flat(Infinity)
       );
 
-      // console.log({monthlySiteOpenings});
+
+      console.log({monthlySiteOpenings});
       setSiteOpenings(monthlySiteOpenings);
     }
   }, [funnelDays, siteData]);
