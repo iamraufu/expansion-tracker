@@ -280,7 +280,7 @@ const ExpansionFunnel = () => {
             // Add totalDays to statDate
             const newDate = new Date(item.createdAt);
             // console.log({newDate});
-            newDate.setDate(newDate.getDate() + totalDays);
+            // newDate.setDate(newDate.getDate() + totalDays);
             // console.log({newDate});
 
             // Check if the newDate is in the past
@@ -312,15 +312,15 @@ const ExpansionFunnel = () => {
             const stat = item.statusDetails.find(
               (item) => item.status === status
             );
-
             // Add totalDays to statDate
             const newDate = new Date(stat.updatedAt);
-            // console.log({newDate});
-            
-                        // if(status === "equipment installation"){
-                          
-                        // }
-            newDate.setDate(newDate.getDate() + totalDays);
+            if(status === "civil work"){
+              console.log({old:newDate});
+            }
+            if(status === "civil work"){
+              console.log({old:newDate});
+            }
+            // newDate.setDate(newDate.getDate() + totalDays);
             // console.log({newDate});
             // Check if the newDate is in the past
             const currentDate = new Date();
