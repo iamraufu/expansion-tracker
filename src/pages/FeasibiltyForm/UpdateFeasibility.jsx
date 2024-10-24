@@ -190,14 +190,16 @@ const UpdateFeasibility = () => {
 
             const responseData = await response.json();
             if (responseData.status) {
-                toast.success(responseData.message);
                 await createActivity(
                     user._id,
                     "site_create",
                     `${user.name} created an site id: ${id}!`
                 );
                 console.log(responseData);
-                // navigate(-1);
+                toast.success(responseData.message);
+                setTimeout(() => {
+                    navigate(-1);
+                }, 1000);
             } else {
                 console.log(response);
                 console.error("Failed to submit form");
