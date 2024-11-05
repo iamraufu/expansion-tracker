@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import partnerAcquisitionIcon from "../../assets/icons/partnerAcquisitionIcon.png";
 import toast, { Toaster } from "react-hot-toast";
 import LocationsData from "../../data/Locations.json";
+import proffessionData from "../../data/proffessions.json"; 
 
 import Map from ".././Map";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,6 +24,7 @@ const UpdateInvestor = () => {
     dob: "",
     gender: "",
     profession: "",
+    profession_nature: "",
     education: "",
     investmentBudget: "",
     possibleInvestmentDate: "",
@@ -41,6 +44,7 @@ const UpdateInvestor = () => {
   const [missingFields, setMissingFields] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedProffesion, setSelectedProffesion] = useState("");
   // eslint-disable-next-line
   const [selectedUpazila, setSelectedUpazila] = useState("");
   const { createActivity } = useActivity();
@@ -192,6 +196,7 @@ const UpdateInvestor = () => {
       // "dob",
       "gender",
       "profession",
+      "profession_nature",
       "education",
       "investmentBudget",
       "possibleInvestmentDate",
@@ -272,6 +277,12 @@ const UpdateInvestor = () => {
   const filteredUpazilas = LocationsData.filter(
     (item) => item.Zila === selectedDistrict
   );
+
+    // Filter upazilas based on selected district
+    const profNature = proffessionData.filter(
+      (item) => item.profession === selectedProffesion
+    );
+
 
   const calculateMaxDate = () => {
     const today = new Date();
@@ -409,14 +420,18 @@ const UpdateInvestor = () => {
             </select>
           </div>
           {/* profession */}
+          {/* profession */}
           <div className="flex items-center">
             <label htmlFor="profession" className="mr-2">
-              Profession:
+              Profession:*
             </label>
             <select
               name="profession"
               value={values.profession}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e)
+                setSelectedProffesion(e.target.value)
+              }}
               className={`input-field ${
                 isFieldMissing("profession")
                   ? "border-red-500"
@@ -424,13 +439,43 @@ const UpdateInvestor = () => {
               }`}
             >
               <option value="">Select Profession</option>
-              {professionOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              {Array.from(
+                new Set(proffessionData.map((item) => item.profession))
+              ).map((option) => (
+                <option className="capitalize" key={option} value={option}>
+                  {option}
                 </option>
               ))}
             </select>
           </div>
+          {/* profession nature */}
+          <div className="flex items-center">
+            <label htmlFor="profession_nature" className="mr-2">
+              Nature:*
+            </label>
+            <select
+              name="profession_nature"
+              value={values.profession_nature}
+              onChange={(e) => {
+                handleChange(e)
+              }}
+              className={`input-field ${
+                isFieldMissing("profession_nature")
+                  ? "border-red-500"
+                  : "border-[#8D8D8D] "
+              }`}
+            >
+              <option value="">Select Profession nature</option>
+              {Array.from(
+                new Set(profNature.map((item) => item.nature))
+              ).map((option) => (
+                <option className="capitalize" key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          
 
           {/* education */}
           <div className="flex items-center">

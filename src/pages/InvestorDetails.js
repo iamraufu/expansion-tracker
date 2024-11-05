@@ -94,6 +94,14 @@ const InvestorDetails = () => {
             <p className="capitalize">{data?.gender}</p>
           </div>
           <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Profession:</h1>
+            <p className="capitalize">{data?.profession}</p>
+          </div>
+          <div className="flex gap-2 p-1">
+            <h1 className="w-40 font-medium">Profession Nature:</h1>
+            <p className="capitalize">{data?.profession_nature}</p>
+          </div>
+          <div className="flex gap-2 p-1">
             <h1 className="w-40 font-medium">Address:</h1>
             <p className="capitalize">{data?.address}</p>
           </div>

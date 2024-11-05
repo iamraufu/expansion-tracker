@@ -21,6 +21,7 @@ const AddInvestor = () => {
     dob: "",
     gender: "",
     profession: "",
+    profession_nature: "",
     education: "",
     investmentBudget: "",
     possibleInvestmentDate: "",
@@ -118,6 +119,7 @@ const AddInvestor = () => {
       // "dob",
       "gender",
       "profession",
+      "profession_nature",
       "education",
       "investmentBudget",
       "possibleInvestmentDate",
@@ -363,6 +365,33 @@ const AddInvestor = () => {
               <option value="">Select Profession</option>
               {Array.from(
                 new Set(proffessionData.map((item) => item.profession))
+              ).map((option) => (
+                <option className="capitalize" key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* profession nature */}
+          <div className="flex items-center">
+            <label htmlFor="profession_nature" className="mr-2">
+              Nature:*
+            </label>
+            <select
+              name="profession_nature"
+              value={values.profession_nature}
+              onChange={(e) => {
+                handleChange(e)
+              }}
+              className={`input-field ${
+                isFieldMissing("profession_nature")
+                  ? "border-red-500"
+                  : "border-[#8D8D8D] "
+              }`}
+            >
+              <option value="">Select Profession nature</option>
+              {Array.from(
+                new Set(profNature.map((item) => item.nature))
               ).map((option) => (
                 <option className="capitalize" key={option} value={option}>
                   {option}
