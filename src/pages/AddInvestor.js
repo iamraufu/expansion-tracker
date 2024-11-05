@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import partnerAcquisitionIcon from "../assets/icons/partnerAcquisitionIcon.png";
 import toast, { Toaster } from "react-hot-toast";
-import LocationsData from "../data/Locations.json";
+import LocationsData from "../data/Locations.json"; 
+import proffessionData from "../data/proffessions.json"; 
 
 import Map from "./Map";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +39,7 @@ const AddInvestor = () => {
   const [missingFields, setMissingFields] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedProffesion, setSelectedProffesion] = useState("");
   // eslint-disable-next-line
   const [selectedUpazila, setSelectedUpazila] = useState("");
   const { createActivity } = useActivity();
@@ -196,6 +199,12 @@ const AddInvestor = () => {
     (item) => item.Zila === selectedDistrict
   );
 
+
+  // Filter upazilas based on selected district
+  const profNature = proffessionData.filter(
+    (item) => item.profession === selectedProffesion
+  );
+
   const calculateMaxDate = () => {
     const today = new Date();
     const maxDate = new Date(today.setFullYear(today.getFullYear() - 18));
@@ -341,7 +350,10 @@ const AddInvestor = () => {
             <select
               name="profession"
               value={values.profession}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e)
+                setSelectedProffesion(e.target.value)
+              }}
               className={`input-field ${
                 isFieldMissing("profession")
                   ? "border-red-500"
@@ -349,9 +361,11 @@ const AddInvestor = () => {
               }`}
             >
               <option value="">Select Profession</option>
-              {professionOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              {Array.from(
+                new Set(proffessionData.map((item) => item.profession))
+              ).map((option) => (
+                <option className="capitalize" key={option} value={option}>
+                  {option}
                 </option>
               ))}
             </select>
