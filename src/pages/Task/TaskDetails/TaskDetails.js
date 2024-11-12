@@ -126,7 +126,7 @@ const TaskDetails = () => {
                 navigate(`/investor/${data.investor._id}/`);
               }}
             >
-              {data.investor.customId} - {data.investor.name}
+              {data.investor?.customId} - {data.investor?.name}
             </p>
           </div>
         );
@@ -142,7 +142,7 @@ const TaskDetails = () => {
                 navigate(`/landlord/${data.landlord._id}/`);
               }}
             >
-              {data.landlord.customId} - {data.landlord.name}
+              {data.landlord?.customId} - {data.landlord?.name}
             </p>
           </div>
         );
@@ -191,7 +191,7 @@ const TaskDetails = () => {
                   navigate(`/site/${data.site._id}/info`);
                 }}
               >
-                {data.site.customId} - {data.site.name}
+                {data.site?.customId} - {data.site?.name}
               </p>
             </div>
           </>

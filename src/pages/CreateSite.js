@@ -1039,6 +1039,7 @@ const CreateSite = () => {
                                 onClick={modalClose}
                             ></div>
 
+
                             {/* Modal content */}
                             <div className="fixed inset-0 flex items-center justify-center z-50 p-3">
                                 <div className=" bg-white p-6 rounded shadow-lg max-w-md w-full">
