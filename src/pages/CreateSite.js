@@ -53,7 +53,7 @@ const CreateSite = () => {
     const api_url = process.env.REACT_APP_API_URL;
     const [selectedDivision, setSelectedDivision] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
-    const [totalIncome,setTotalIncome] = useState("")
+    const [totalIncome, setTotalIncome] = useState("");
     // eslint-disable-next-line
     const [selectedUpazila, setSelectedUpazila] = useState("");
     const [clusterCode, setClusterCode] = useState();
@@ -118,15 +118,19 @@ const CreateSite = () => {
             // console.log(json.message);
             if (json.status) {
                 // Monthly Forecasted Sales
-                const sales = (parseFloat(benchMarkSite?.maxSales)*(parseFloat(finalData.totalScore)/100));
+                setBenchMarkSite(json.outlet);
+                const sales =
+                    parseFloat(json.outlet?.maxSales) *
+                    (parseFloat(finalData.totalScore) / 100);
                 // console.log({sales});
                 const GPV =
                     sales *
                     (json.outlet.pnp.toLowerCase() === "pnp" ? 0.15 : 0.136);
                 const otherIncome = sales * 0.03;
                 const totalIncome = GPV + otherIncome;
-                setTotalIncome(totalIncome)
-                console.log({sales,GPV,otherIncome,totalIncome});
+                console.log({ fT: totalIncome });
+                setTotalIncome(totalIncome);
+                console.log({ sales, GPV, otherIncome, totalIncome });
                 // Monthly Forecasted Partner Expense
                 // decoration
                 const decorationCost =
@@ -168,7 +172,6 @@ const CreateSite = () => {
                 // console.log({sales,GPV,otherIncome,totalIncome});
                 // console.log({rent});
                 // console.log({partnerExpense , partnerCommission,partnerMonthlyPBT,shwapnoMonthlyPBT});
-                setBenchMarkSite(json.outlet);
             } else {
                 setBenchMarkSite([]);
             }
@@ -214,6 +217,7 @@ const CreateSite = () => {
     };
 
     const modalClose = () => {
+        setBenchMarkSite(null);
         setIsOpen(false);
     };
 
@@ -253,7 +257,7 @@ const CreateSite = () => {
     };
 
     const handleMapModal = () => {
-        console.log("clicked");
+        // console.log("clicked");
         scrollToTop();
         toggleScroll();
         setIsMapOpen(!isMapOpen);
@@ -503,6 +507,8 @@ const CreateSite = () => {
             toast.error("There is a problem with the server!");
         }
     };
+
+    console.log({ totalIncome });
 
     if (!data) {
         return <p>Loading...</p>;
@@ -1039,7 +1045,6 @@ const CreateSite = () => {
                                 onClick={modalClose}
                             ></div>
 
-
                             {/* Modal content */}
                             <div className="fixed inset-0 flex items-center justify-center z-50 p-3">
                                 <div className=" bg-white p-6 rounded shadow-lg max-w-md w-full">
@@ -1056,42 +1061,50 @@ const CreateSite = () => {
                                             <RxCross2 />
                                         </button>
                                     </div>
-                                   {benchMarkSite &&
-                                        benchMarkSite?.length !== 0  && <p className="mt-4 px-1 font-bold text-sm">Benchmark Data</p>}
+                                    {benchMarkSite &&
+                                        benchMarkSite?.length !== 0 && (
+                                            <p className="mt-4 px-1 font-bold text-sm">
+                                                Benchmark Data
+                                            </p>
+                                        )}
                                     <div className="flex flex-col  items-start justify-between gap-2  my-2 bg-blue-50 p-3 shadow rounded">
+                                    <div className="flex items-center justify-center gap-2">
+                                                        <p className="font-medium text-sm">
+                                                            Cluster:
+                                                        </p>
 
-                                        {
-                                            benchMarkSite &&
-                                            benchMarkSite?.length !== 0  &&
-                                            <>
-                                            <div className="flex items-center justify-center gap-2">
-                                            <p className="font-medium text-sm">
-                                                Cluster:
-                                            </p>
+                                                        <p className="text-sm font-medium text-blue-900">
+                                                            {clusterCode}
+                                                        </p>
+                                                    </div>
+                                        {benchMarkSite &&
+                                            benchMarkSite?.length !== 0 && (
+                                                <>
+                                                    
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <h1 className="font-medium text-sm">
+                                                            Outlet:
+                                                        </h1>
+                                                        <p className="text-sm font-medium text-blue-900">
+                                                            {
+                                                                benchMarkSite?.name
+                                                            }
+                                                        </p>
+                                                    </div>
 
-                                            <p className="text-sm font-medium text-blue-900">
-                                                {clusterCode}
-                                            </p>
-                                        </div>
-                                            <div className="flex items-center justify-center gap-2">
-                                                <h1 className="font-medium text-sm">
-                                                    Outlet:
-                                                </h1>
-                                                <p className="text-sm font-medium text-blue-900">
-                                                    {benchMarkSite?.name}
-                                                </p>
-                                            </div>
-                                            
-                                            <div className="flex items-center justify-center gap-2">
-                                                <h1 className="font-medium text-sm">
-                                                    Avg Sales:
-                                                </h1>
-                                                <p className="text-sm font-medium text-blue-900">
-                                                    {benchMarkSite?.maxSales}
-                                                </p>
-                                            </div>
-                                        </>}
-                                        
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <h1 className="font-medium text-sm">
+                                                            Avg Sales:
+                                                        </h1>
+                                                        <p className="text-sm font-medium text-blue-900">
+                                                            {
+                                                               Math.round(parseFloat(benchMarkSite?.maxSales)).toLocaleString()
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </>
+                                            )}
+
                                         <div className="flex items-center justify-center gap-2">
                                             <p className="font-medium text-sm">
                                                 Score:
@@ -1104,18 +1117,37 @@ const CreateSite = () => {
                                             </p>
                                         </div>
                                     </div>
-                                   {benchMarkSite &&
-                                        benchMarkSite?.length !== 0 && <p className="mt-4 px-1 font-bold text-sm">Forcasting Data</p>}
+                                    {benchMarkSite &&
+                                        benchMarkSite?.length !== 0 && (
+                                            <p className="mt-4 px-1 font-bold text-sm">
+                                                Forcasting Data
+                                            </p>
+                                        )}
                                     {benchMarkSite &&
                                         benchMarkSite?.length !== 0 && (
                                             <>
-                                                <div className={`flex flex-col  items-start justify-between gap-2  my-2 ${ (shwapnoMPBT <= 0 || partnerMPBT <= 0) ? "bg-rose-50" : "bg-green-50"} p-3 shadow rounded`}>
+                                                <div
+                                                    className={`flex flex-col  items-start justify-between gap-2  my-2 ${
+                                                        shwapnoMPBT <= 0 ||
+                                                        partnerMPBT <= 0
+                                                            ? "bg-rose-50"
+                                                            : "bg-green-50"
+                                                    } p-3 shadow rounded`}
+                                                >
                                                     <div className="flex items-center justify-center gap-2">
                                                         <h1 className="font-medium text-sm">
                                                             Monthly Sales:
                                                         </h1>
                                                         <p className="text-base font-medium text-slate-900">
-                                                        {(parseFloat(benchMarkSite?.maxSales)*(parseFloat(finalData.totalScore)/100)).toFixed(2)}
+                                                            {Math.round(
+                                                                parseFloat(
+                                                                    benchMarkSite?.maxSales
+                                                                ) *
+                                                                (parseFloat(
+                                                                    finalData.totalScore
+                                                                ) /
+                                                                    100)
+                                                            ).toLocaleString()}
                                                         </p>
                                                     </div>
                                                     <div className="flex items-center justify-center gap-2">
@@ -1123,29 +1155,43 @@ const CreateSite = () => {
                                                             Total Income:
                                                         </h1>
                                                         <p className="text-base font-medium text-slate-900">
-                                                        {parseFloat(totalIncome).toFixed(2)}
+                                                            {Math.round(parseFloat(
+                                                                totalIncome
+                                                            )).toLocaleString()}
                                                         </p>
                                                     </div>
                                                     <div className="flex items-center justify-center gap-2">
                                                         <h1 className="font-medium text-sm">
                                                             Shwapno’s Profit:
                                                         </h1>
-                                                        <p className={`text-base font-medium ${ (shwapnoMPBT <= 0) ?"text-red-500": "text-green-500"}`}>
-                                                            {shwapnoMPBT.toFixed(2)}
+                                                        <p
+                                                            className={`text-base font-medium ${
+                                                                shwapnoMPBT <= 0
+                                                                    ? "text-red-500"
+                                                                    : "text-green-500"
+                                                            }`}
+                                                        >
+                                                            {Math.round(shwapnoMPBT)?.toLocaleString()}
                                                         </p>
                                                     </div>
                                                     <div className="flex items-center justify-center gap-2">
                                                         <h1 className="font-medium text-sm">
                                                             Investor Profit:
                                                         </h1>
-                                                        <p className={`text-base font-medium ${ (partnerMPBT <= 0) ?"text-red-500": "text-green-500"}`}>
-                                                            {partnerMPBT.toFixed(2)}
+                                                        <p
+                                                            className={`text-base font-medium ${
+                                                                partnerMPBT <= 0
+                                                                    ? "text-red-500"
+                                                                    : "text-green-500"
+                                                            }`}
+                                                        >
+                                                            {Math.round(partnerMPBT)?.toLocaleString()}
                                                         </p>
                                                     </div>
-                                                    
-                                                    
                                                 </div>
-                                                   { (shwapnoMPBT <= 0 || partnerMPBT <= 0) &&<div
+                                                {(shwapnoMPBT <= 0 ||
+                                                    partnerMPBT <= 0) && (
+                                                    <div
                                                         id="alert-border-4"
                                                         className="flex shadow items-center p-3 my-4 text-red-800 border-t-4 border-red-300 bg-red-50"
                                                         role="alert"
@@ -1160,11 +1206,12 @@ const CreateSite = () => {
                                                             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                                                         </svg>
                                                         <div className="ms-3 text-sm font-medium">
-                                                            Your site does not meet
-                                                            the standard feasibility
+                                                            Your site does not
+                                                            meet the standard
+                                                            feasibility
                                                         </div>
-                                                    </div>}
-                                            
+                                                    </div>
+                                                )}
                                             </>
                                         )}
                                     <button
