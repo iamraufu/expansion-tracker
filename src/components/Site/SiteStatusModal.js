@@ -140,7 +140,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
         },
         {
             level: 7,
-            label: "premises agreement",
+            label: "premises agreement handover",
             value: "premises agreement",
         },
         {
@@ -1057,7 +1057,7 @@ const SiteStatusModal = ({ data, handleModalSwitch, investors, fetchData }) => {
     };
 
 
-    
+
 
     return (
         <div className="absolute bg-black/30 h-[100dvh] top-0 left-0 w-full flex justify-center items-center">
