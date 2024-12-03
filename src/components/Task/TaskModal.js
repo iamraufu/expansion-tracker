@@ -639,86 +639,86 @@ const TaskModal = ({
 
     // console.log(data.task);
 
-    if (data.task === "outlet opening") {
-      if (openingDate === "") {
-        toast.error("Please select a Date");
-        return;
-      }
+    // if (data.task === "outlet opening") {
+    //   if (openingDate === "") {
+    //     toast.error("Please select a Date");
+    //     return;
+    //   }
 
-      const isReady = data.site.statusDetails.find(
-        (item) => item.status === "product arrived"
-      );
+    //   const isReady = data.site.statusDetails.find(
+    //     (item) => item.status === "product arrived"
+    //   );
 
-      if (!isReady) {
-        toast.error("Site is not ready to open");
-        return;
-      }
+    //   if (!isReady) {
+    //     toast.error("Site is not ready to open");
+    //     return;
+    //   }
 
-      const lastStatus =
-        data.site.siteHistory[data.site.siteHistory.length - 1];
-      const newStatusEntry = {
-        status: "ready to open",
-        startTime: lastStatus ? lastStatus.endTime : new Date().toISOString(),
-        endTime: new Date().toISOString(),
-      };
+    //   const lastStatus =
+    //     data.site.siteHistory[data.site.siteHistory.length - 1];
+    //   const newStatusEntry = {
+    //     status: "ready to open",
+    //     startTime: lastStatus ? lastStatus.endTime : new Date().toISOString(),
+    //     endTime: new Date().toISOString(),
+    //   };
 
-      let siteUpdateData = {
-        status: "ready to open",
-        siteHistory: [...data.site.siteHistory, newStatusEntry],
-        statusDetails: [
-          ...data.site.statusDetails,
+    //   let siteUpdateData = {
+    //     status: "ready to open",
+    //     siteHistory: [...data.site.siteHistory, newStatusEntry],
+    //     statusDetails: [
+    //       ...data.site.statusDetails,
 
-          {
-            status: "ready to open",
-            remarks: "",
-            approvedBy: "",
-            equipmentOptions: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            openingDate: openingDate,
+    //       {
+    //         status: "ready to open",
+    //         remarks: "",
+    //         approvedBy: "",
+    //         equipmentOptions: [],
+    //         createdAt: new Date().toISOString(),
+    //         updatedAt: new Date().toISOString(),
+    //         openingDate: openingDate,
             
-          },
-        ],
-      };
+    //       },
+    //     ],
+    //   };
 
-      console.log(siteUpdateData);
+    //   console.log(siteUpdateData);
 
-      try {
-        const response = await fetch(
-          `${api_url}/site/update/${data.site._id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `${user.token}`,
-            },
-            body: JSON.stringify(siteUpdateData),
-          }
-        );
+    //   try {
+    //     const response = await fetch(
+    //       `${api_url}/site/update/${data.site._id}`,
+    //       {
+    //         method: "PATCH",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: `${user.token}`,
+    //         },
+    //         body: JSON.stringify(siteUpdateData),
+    //       }
+    //     );
 
-        const responseData = await response.json();
-        if (responseData.status) {
-          toast.success(responseData.message);
-          await createActivity(
-            user._id,
-            "status_update",
-            `${user.name} updated status in site: ${
-              data.site.customId
-            } status: ${"ready to open"}!`
-          );
-          // fetchData();
+    //     const responseData = await response.json();
+    //     if (responseData.status) {
+    //       toast.success(responseData.message);
+    //       await createActivity(
+    //         user._id,
+    //         "status_update",
+    //         `${user.name} updated status in site: ${
+    //           data.site.customId
+    //         } status: ${"ready to open"}!`
+    //       );
+    //       // fetchData();
 
-          // handleModalSwitch();
-        } else {
-          toast.error(responseData.message);
-          return;
-        }
-      } catch (error) {
-        toast.error(error.message);
-        console.error(error);
-        return;
-      }
-    }
+    //       // handleModalSwitch();
+    //     } else {
+    //       toast.error(responseData.message);
+    //       return;
+    //     }
+    //   } catch (error) {
+    //     toast.error(error.message);
+    //     console.error(error);
+    //     return;
+    //   }
+    // }
 
 
 
