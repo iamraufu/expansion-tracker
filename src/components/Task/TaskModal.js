@@ -10,6 +10,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { expansionDB } from "../../firebase/config";
 
 const TaskModal = ({
+  
   data,
   handleModalSwitch,
   investors,
