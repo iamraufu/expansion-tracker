@@ -32,6 +32,7 @@ import ExpansionFunnel from "./pages/dashboard/ExpansionFunnel/ExpansionFunnel";
 import FeasibiltyForm from "./pages/FeasibiltyForm/FeasibiltyForm";
 import SiteFesibilty from "./pages/Site/SiteTabs/SiteFesibilty";
 import UpdateFeasibility from "./pages/FeasibiltyForm/UpdateFeasibility";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   const { pathname } = useLocation();
@@ -58,6 +59,7 @@ function App() {
 
             <Route path="/addSite" element={<CreateSite />} />
             <Route path="/siteList" element={<SiteList />} />
+            <Route path="/changePass" element={<ChangePassword />} />
 
             <Route path="/investor/update/:id" element={<UpdateInvestor />} />
             <Route path="/landlord/update/:id" element={<UpdateLandlord />} />
